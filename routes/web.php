@@ -16,6 +16,10 @@ use App\Http\Controllers\ExampleController;
 */
 
 $router->get('/', 'DashboardController@index');
+$router->group(['prefix' => 'calibration'], function() use ($router){
+    $router->get('/manual', 'CalibrationController@manual');
+
+});
 /**
  * API
  */

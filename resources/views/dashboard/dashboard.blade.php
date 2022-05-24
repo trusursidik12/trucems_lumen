@@ -31,17 +31,14 @@
                         @endforeach
                     </div>
                 </div>
-                <div class="w-1/3 flex flex-col space-y-3">
-                    <a href="" class="block w-full 
-                    bg-gray-500 text-white px-5 text-center py-3 uppercase">Auto CAL</a>
-                    <a href="" class="block w-full 
-                    bg-gray-500 text-white px-5 text-center py-3 uppercase">Manual CAL</a>
-                    <a href="" class="block w-full 
-                    bg-gray-500 text-white px-5 text-center py-3 uppercase">Data Log</a>
-                    <a href="" class="block w-full 
-                    bg-gray-500 text-white px-5 text-center py-3 uppercase">Setting</a>
-                    <a href="" class="block w-full 
-                    bg-gray-500 text-white px-5 text-center py-3 uppercase">Baku Mutu</a>
+                <div class="w-1/3">
+                    <nav class="sidebar flex flex-col space-y-3">
+                        <a href="{{ url("calibration/auto") }}">Auto CAL</a>
+                        <a href="{{ url("calibration/manual") }}">Manual CAL</a>
+                        <a href="{{ url("data-logs") }}">Data Log</a>
+                        <a href="{{ url("settings") }}">Setting</a>
+                        <a href="{{ url("quality-standards") }}">Baku Mutu</a>
+                    </nav>
                 </div>
             </div>
         </div>

@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar > a{
+    @apply block w-full bg-gray-500 text-white px-5 py-3 text-center uppercase
+}
+.sidebar > a.active{
+    @apply bg-indigo-500
+}
