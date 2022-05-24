@@ -19,7 +19,7 @@ $router->get('/', 'DashboardController@index');
 /**
  * API
  */
-$router->group(['prefix' => '/api'], function() use ($router){
+$router->group(['prefix' => 'api'], function() use ($router){
     /**
      * Sensor Value Logs
      */
