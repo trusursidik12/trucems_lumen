@@ -15,9 +15,7 @@ use App\Http\Controllers\ExampleController;
 |
 */
 
-$router->get('/', function () use ($router) {
-    
-});
+$router->get('/', 'DashboardController@index');
 /**
  * API
  */
