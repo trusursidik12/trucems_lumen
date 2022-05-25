@@ -10,20 +10,22 @@ use Illuminate\Http\Request;
 
 class CalibrationLogsController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $limit = request()->has('limit') ? request()->limit : 30;
-        $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name','sensor.unit:id,name'])
-        ->orderBy("id","desc")->limit($limit)->get();
+        $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
+            ->orderBy("id", "desc")->limit($limit)->get();
         return response()->json(['success' => true, 'data' => $calibrationLogs]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $config = Configuration::find(1);
-            $column = $this->validate($request,[
+            $column = $this->validate($request, [
                 // 'sensor_id' => 'required|numeric',
                 'value' => 'required|numeric',
-            ],[
+            ], [
                 // "sensor_id.required" => "Sensor cant be empty!",
                 "value.required" => "Value cant be empty!",
                 // "sensor_id.numeric" => "Invalid data type sensor_id!",
@@ -39,11 +41,18 @@ class CalibrationLogsController extends Controller
         }
     }
 
-    public function destroy(){
+    public function destroy()
+    {
         $calibrationLogs = CalibrationLog::first();
         $sum = CalibrationLog::sum("value");
         $rowCount = CalibrationLog::get()->count();
-        $avg = ($sum/$rowCount);
+        if ($sum == 0 && $rowCount == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Successfully averaging calibration'
+            ]);
+        }
+        $avg = ($sum / $rowCount);
         CalibrationAvgLog::create([
             'sensor_id' => $calibrationLogs->sensor_id,
             'row_count' => $rowCount,
@@ -58,9 +67,8 @@ class CalibrationLogsController extends Controller
         //
         CalibrationLog::truncate();
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => 'Successfully averaging calibration'
         ]);
     }
-
 }
