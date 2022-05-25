@@ -53,6 +53,9 @@
                     let section = $('#section-values')
                     let sectionLogs = $('#section-logs')
                     if(data.success){
+                        if(data.remaining_time <= 0){
+                            window.history.go(-1)
+                        }
                         let sensorValues = data.sensor_values
                         sensorValues.map(function(value){
                             let div = section.find(`.section-value[data-sensor-id=${value.sensor_id}]`)
