@@ -117,10 +117,10 @@
             * Allow or prevent real/physical keyboard usage. Prevented when "false"
             * In addition, the "allowMobileKeyboard" option must be "true" as well, if the real/physical keyboard has wanted to be used.
             */
-            allowRealKeyboard: false,
+            allowRealKeyboard: true,
 
-            // Allow or prevent mobile keyboard usage. Prevented when "false"
-            allowMobileKeyboard: false,
+            // Allow or prevent mobile keyboard usage. Prevented when "true"
+            allowMobileKeyboard: true,
 
             // CSS animations for opening or closing the keyboard
             cssAnimations: false,
