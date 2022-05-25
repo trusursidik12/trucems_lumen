@@ -16,15 +16,22 @@ class CreateConfigurationsTable extends Migration
     {
         Schema::create('configurations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
             $table->string('schedule_auto_calibration')->default('1')->nullable()->comment('Separate days with comma');
-            $table->integer('is_calibration')->default(0)->nullable();
-            $table->integer('default_zero_loop')->default(0)->nullable();
-            $table->integer('default_span_loop')->default(0)->nullable();
-            $table->integer('time_zero_loop')->default(0)->nullable()->comment('Second');
-            $table->integer('time_span_loop')->default(0)->nullable()->comment('Second');
-            $table->integer('max_span_ppm')->default(0)->nullable();
-            $table->timestamp('start_calibration_at')->default(null)->nullable();
+            $table->integer('a_is_calibration')->default(0)->nullable();
+            $table->integer('a_default_zero_loop')->default(0)->nullable();
+            $table->integer('a_default_span_loop')->default(0)->nullable();
+            $table->integer('a_time_zero_loop')->default(0)->nullable()->comment('Second');
+            $table->integer('a_time_span_loop')->default(0)->nullable()->comment('Second');
+            $table->integer('a_max_span_ppm')->default(0)->nullable();
+            $table->smallInteger('a_calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
+            $table->integer('m_is_calibration')->default(0)->nullable();
+            $table->integer('m_default_zero_loop')->default(0)->nullable();
+            $table->integer('m_default_span_loop')->default(0)->nullable();
+            $table->integer('m_time_zero_loop')->default(0)->nullable()->comment('Second');
+            $table->integer('m_time_span_loop')->default(0)->nullable()->comment('Second');
+            $table->integer('m_max_span_ppm')->default(0)->nullable();
+            $table->smallInteger('m_calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
+            $table->timestamp('m_start_calibration_at')->default(null)->nullable();
             $table->timestamp('date_and_time')->default(DB::raw('current_timestamp()'))->nullable();
             $table->timestamps();
         });
