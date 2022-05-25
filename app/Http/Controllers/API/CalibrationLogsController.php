@@ -19,15 +19,18 @@ class CalibrationLogsController extends Controller
 
     public function store(Request $request){
         try {
+            $config = Configuration::find(1);
             $column = $this->validate($request,[
-                'sensor_id' => 'required|numeric',
+                // 'sensor_id' => 'required|numeric',
                 'value' => 'required|numeric',
             ],[
-                "sensor_id.required" => "Sensor cant be empty!",
+                // "sensor_id.required" => "Sensor cant be empty!",
                 "value.required" => "Value cant be empty!",
-                "sensor_id.numeric" => "Invalid data type sensor_id!",
+                // "sensor_id.numeric" => "Invalid data type sensor_id!",
                 "value.numeric" => "Value must be numeric format!"
             ]);
+            $column['sensor_id'] = 1;
+            $column['calibration_type'] = $config->calibration_type;
             CalibrationLog::create($column);
 
             return response()->json(["success" => true, "message" => "Successfully insert calibration logs!"]);
