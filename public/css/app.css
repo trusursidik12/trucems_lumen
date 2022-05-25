@@ -465,7 +465,40 @@ Ensure the default browser behavior of the `hidden` attribute.
 .hidden {
   display: none;
 }
+.h-screen {
+  height: 100vh;
+}
+.h-\[700px\] {
+  height: 700px;
+}
+.h-\[100vh\] {
+  height: 100vh;
+}
+.h-\[88vh\] {
+  height: 88vh;
+}
+.h-\[86vh\] {
+  height: 86vh;
+}
+.h-\[85vh\] {
+  height: 85vh;
+}
+.h-\[83vh\] {
+  height: 83vh;
+}
+.h-14 {
+  height: 3.5rem;
+}
+.h-64 {
+  height: 16rem;
+}
+.max-h-\[20px\] {
+  max-height: 20px;
+}
 .min-h-\[100vh\] {
+  min-height: 100vh;
+}
+.min-h-screen {
   min-height: 100vh;
 }
 .w-1\/2 {
@@ -579,11 +612,39 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-left: 1.25rem;
   padding-right: 1.25rem;
 }
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.pt-16 {
+  padding-top: 4rem;
+}
+.pt-\[30vh\] {
+  padding-top: 30vh;
+}
+.pt-\[20vh\] {
+  padding-top: 20vh;
+}
+.pt-\[10vh\] {
+  padding-top: 10vh;
+}
+.pt-\[0vh\] {
+  padding-top: 0vh;
+}
+.pt-\[17vh\] {
+  padding-top: 17vh;
+}
+.pt-\[13vh\] {
+  padding-top: 13vh;
+}
 .text-left {
   text-align: left;
 }
 .text-center {
   text-align: center;
+}
+.align-middle {
+  vertical-align: middle;
 }
 .font-sans {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

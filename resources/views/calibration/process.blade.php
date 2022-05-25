@@ -4,13 +4,8 @@
 @endsection
 @section('content')
 <div class="px-6 py-3 bg-gray-200 rounded">
-    <div class="flex justify-start mb-3">
-        <a href="#" role="button" disabled class="btn-back px-4 py-2 bg-gray-500 text-white">
-            Back
-        </a>
-    </div>
-    <div class="flex justify-content-betwen bg-gray-300 px-4 py-3">
-        <div class="w-1/2 border-r border-gray-400 block">
+    <div class="flex justify-content-betwen items-center h-[88vh] bg-gray-300 px-4 py-3">
+        <div class="w-1/2 border-r border-gray-400 block items-center">
             <p class="block font-semibold text-sm text-indigo-700">Realtime Value : </p>
             <span class="block ml-3" id="section-logs">
             </span>

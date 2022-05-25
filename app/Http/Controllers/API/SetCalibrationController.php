@@ -17,18 +17,18 @@ class SetCalibrationController extends Controller
             $column = $this->validate($request,[
                 'm_default_zero_loop' => 'required|numeric',
                 'm_time_zero_loop' => 'required|numeric',
-                'm_span_loop' => 'required|numeric',
+                'm_default_span_loop' => 'required|numeric',
                 'm_time_span_loop' => 'required|numeric',
                 'm_max_span_ppm' => 'required|numeric',
             ],[
                 'm_default_zero_loop.required' => 'Default Zero Loop cant empty!',
                 'm_time_zero_loop.required' => 'Time Zero Loop cant empty!',
-                'm_span_loop.required' => 'Span Zero Loop cant empty!',
+                'm_default_span_loop.required' => 'Span Zero Loop cant empty!',
                 'm_time_span_loop.required' => 'Time Span Loop cant empty!',
                 'm_max_span_ppm.required' => 'Max PPM cant empty!',
                 'm_default_zero_loop.numeric' => 'Default Zero Loop must be numeric!',
                 'm_time_zero_loop.numeric' => 'Time Zero Loop must be numeric!',
-                'm_span_loop.numeric' => 'Span Zero Loop must be numeric!',
+                'm_default_span_loop.numeric' => 'Span Zero Loop must be numeric!',
                 'm_time_span_loop.numeric' => 'Time Span Loop must be numeric!',
                 'm_max_span_ppm.numeric' => 'Max PPM must be numeric!',
             ]);
