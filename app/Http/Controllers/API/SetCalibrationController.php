@@ -34,6 +34,7 @@ class SetCalibrationController extends Controller
             ]);
             $now = Carbon::now('Asia/Jakarta');
             $endAt = $now->addSeconds(($type == "span" ? $column['m_time_span_loop'] : $column['m_time_zero_loop']));
+            $endAt = $endAt->addSeconds(1);
             $endAt = $endAt->format("Y-m-d H:i:s");
             $column['is_calibration'] = 2; // 2 = Manual Cal
             $column['calibration_type'] = ($type == "span" ? 2 : ($type == "zero" ? 1 : 0));
