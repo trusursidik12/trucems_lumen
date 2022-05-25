@@ -27,6 +27,8 @@ class Configuration extends Model
         'm_time_zero_loop',
         'm_time_span_loop',
         'm_max_span_ppm',
+        'a_start_calibration_at',
+        'm_start_calibration_at',
         'date_and_time',
     ];
 }

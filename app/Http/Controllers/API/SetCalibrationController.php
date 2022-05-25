@@ -39,4 +39,8 @@ class SetCalibrationController extends Controller
         }
     }
 
+    public function checkRemaining($type){
+        
+    }
+
 }
