@@ -30,7 +30,9 @@ class CreateConfigurationsTable extends Migration
             $table->integer('m_time_span_loop')->default(0)->nullable()->comment('Second');
             $table->integer('m_max_span_ppm')->default(0)->nullable();
             $table->timestamp('m_start_calibration_at')->default(null)->nullable();
+            $table->timestamp('m_end_calibration_at')->default(null)->nullable();
             $table->timestamp('a_start_calibration_at')->default(null)->nullable();
+            $table->timestamp('a_end_calibration_at')->default(null)->nullable();
             $table->timestamp('date_and_time')->default(DB::raw('current_timestamp()'))->nullable();
             $table->timestamps();
         });

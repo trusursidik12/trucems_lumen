@@ -22,6 +22,7 @@ class CreateCalibrationAvgLogsTable extends Migration
                 ->onDelete('set null');
             $table->integer('row_count')->default(1)->nullable();
             $table->double('value')->default(0)->nullable();
+            $table->smallInteger('calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
             $table->timestamps();
         });
     }

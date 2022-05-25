@@ -29,6 +29,8 @@ class Configuration extends Model
         'm_max_span_ppm',
         'a_start_calibration_at',
         'm_start_calibration_at',
+        'a_end_calibration_at',
+        'm_end_calibration_at',
         'date_and_time',
     ];
 }

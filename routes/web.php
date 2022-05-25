@@ -31,7 +31,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
      * Set Calibration
      */
     $router->patch('/set-calibration/manual/{type}','API\SetCalibrationController@setManualCal');
-    $router->get('/calibration/check-remaining/{type}','API\SetCalibrationController@checkRemaining');
+    $router->get('/calibration/check-remaining/{mode}/{type}','API\SetCalibrationController@checkRemaining');
     /**
      * Sensor Value Logs
      */
@@ -43,6 +43,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
      */
     $router->post('/calibration-logs', 'API\CalibrationLogsController@store');
     $router->get('/calibration-logs', 'API\CalibrationLogsController@index');
+    $router->delete('/calibration-logs', 'API\CalibrationLogsController@destroy');
     /**
      * Calibration AVG Logs
      */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalibrationAvgLog;
 use App\Models\SensorValue;
 
 class CalibrationController extends Controller
@@ -28,7 +29,8 @@ class CalibrationController extends Controller
                 break;
         }
         $sensorValues = SensorValue::limit(10)->get();
-        return view('calibration.process', compact('type','mode','sensorValues'));
+        $lastAvg = CalibrationAvgLog::select("value")->orderBy("id","desc")->first();
+        return view('calibration.process', compact('type','mode','sensorValues','lastAvg'));
 
     }
 }

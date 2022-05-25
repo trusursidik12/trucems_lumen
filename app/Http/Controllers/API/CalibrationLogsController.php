@@ -34,4 +34,8 @@ class CalibrationLogsController extends Controller
         }
     }
 
+    public function destroy(){
+        
+    }
+
 }

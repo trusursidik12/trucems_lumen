@@ -21,6 +21,7 @@ class CreateCalibrationLogsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('set null');
             $table->double('value')->default(0)->nullable();
+            $table->smallInteger('calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
             $table->timestamps();
         });
     }
