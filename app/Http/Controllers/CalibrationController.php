@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalibrationAvgLog;
+use Illuminate\Http\Request;
 
 class CalibrationController extends Controller
 {
@@ -13,7 +14,6 @@ class CalibrationController extends Controller
         return view('calibration.manual');
     }
     public function logs(){
-        $calibrationAvgLogs = CalibrationAvgLog::orderBy("id","desc")->paginate(10);
-        return view('calibration.logs', compact('calibrationAvgLogs'));
+        return view('calibration.logs');
     }
 }

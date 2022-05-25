@@ -7,7 +7,7 @@
             Back
         </a>
     </div>
-    <form action="" class="bg-gray-300">
+    <form action="" class="bg-gray-300" id="form">
         <div class="flex justify-between space-x-3">
             <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
                 <div class="flex my-2 justify-between items-center">
@@ -15,7 +15,7 @@
                         <span class="uppercase font-semibold">Default Zero Loop</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="1" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" name="m_default_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="1" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -23,7 +23,7 @@
                         <span class="uppercase font-semibold">Time Zero Loop <small class="font-thin text-xs lowercase">(sec)</small></span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" name="m_time_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 {{-- Margin --}}
@@ -36,7 +36,8 @@
                     </span>
                 </div>
                 {{-- End Margin --}}
-                <button class="w-full py-2 bg-indigo-500 text-white">Start Zero Manual Calibration</button>
+                <button data-type="zero" type="button" class="btn-start w-full py-2 bg-indigo-500 text-white">Start Zero Manual Calibration</button>
+           
             </div>
             <div class="w-1/2 px-6 py-3">
                 <div class="flex my-2 justify-between items-center">
@@ -44,7 +45,7 @@
                         <span class="uppercase font-semibold">Default Span Loop</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="1" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" name="m_span_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="1" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -52,7 +53,7 @@
                         <span class="uppercase font-semibold">Time Span Loop <small class="font-thin text-xs lowercase">(sec)</small></span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" name="m_time_span_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -60,10 +61,10 @@
                         <span class="uppercase font-semibold">Max Span PPM</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" name="m_max_span_ppm" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
                     </span>
                 </div>
-                <button class="w-full px-3 py-2 bg-indigo-500 text-white">Start Span Manual Calibration</button>
+                <button data-type="span" type="button" class="btn-start w-full px-3 py-2 bg-indigo-500 text-white">Start Span Manual Calibration</button>
             </div>
         </div>
     </form>
@@ -159,5 +160,25 @@
              
          })
     })
+ </script>
+
+ <script>
+     $(document).ready(function(){
+         $('.btn-start').click(function(){
+             let type = $(this).data('type');
+             $.ajax({
+                 url : `{{ url("api/set-calibration/manual") }}/${type}`,
+                 type : 'PATCH',
+                 dataType : 'json',
+                 data : $('#form').serialize(),
+                 success : function(data){
+                     console.log(data)
+                 },
+                 error : function(xhr, status, err){
+                     
+                 }
+             })
+         })
+     })
  </script>
 @endsection

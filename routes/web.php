@@ -27,6 +27,10 @@ $router->group(['prefix' => 'calibration'], function() use ($router){
  */
 $router->group(['prefix' => 'api'], function() use ($router){
     /**
+     * Set Calibration
+     */
+    $router->patch('/set-calibration/manual/{type}','API\SetCalibrationController@setManualCal');
+    /**
      * Sensor Value Logs
      */
     $router->patch('/sensor-value/{sensorId}', 'API\ValueLogsController@update');
@@ -38,10 +42,11 @@ $router->group(['prefix' => 'api'], function() use ($router){
     $router->post('/calibration-logs', 'API\CalibrationLogsController@store');
     $router->get('/calibration-logs', 'API\CalibrationLogsController@index');
     /**
-     * Calibration Logs
+     * Calibration AVG Logs
      */
-    $router->post('/calibration-avg-logs', 'API\CalibrationLogsController@store');
-    $router->get('/calibration-avg-logs', 'API\CalibrationLogsController@index');
+    $router->post('/calibration-avg-logs', 'API\CalibrationAvgLogsController@store');
+    $router->get('/calibration-avg-logs', 'API\CalibrationAvgLogsController@index');
+    $router->get('/calibration-avg-logs/paginate', 'API\CalibrationAvgLogsController@logs');
     /**
      * Configurations
      */
