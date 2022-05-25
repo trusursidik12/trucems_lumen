@@ -8,3 +8,17 @@
 .sidebar > a.active{
     @apply bg-indigo-500
 }
+
+.table thead  th,
+.table tbody td{
+    @apply px-2 py-1 border border-gray-700
+}
+.table thead th{
+    @apply font-bold text-gray-900
+}
+.table tbody td{
+    @apply text-gray-700
+}
+.table tbody tr{
+    @apply odd:bg-slate-400 even:bg-transparent
+}
