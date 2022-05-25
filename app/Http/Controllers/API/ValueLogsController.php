@@ -8,22 +8,24 @@ use Illuminate\Http\Request;
 
 class ValueLogsController extends Controller
 {
-    public function index(){
-        $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name','sensor.unit:id,name'])
-        ->orderBy("id","desc")->get();
+    public function index()
+    {
+        $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
+            ->orderBy("id", "desc")->get();
         return response()->json(['success' => true, 'data' => $sensorValues]);
     }
 
-    public function update($sensorId, Request $request){
+    public function update($sensorId, Request $request)
+    {
         $sensorValue = SensorValue::where(["sensor_id" => $sensorId])->first();
         try {
-            $column = $this->validate($request,[
-                'value' => 'required|numeric'
-            ],[
+            $column = $this->validate($request, [
+                'value' => 'required'
+            ], [
                 "value.required" => "Value cant be empty!",
-                "value.numeric" => "Invalid data type, value must be numeric!"
+                // "value.numeric" => "Invalid data type, value must be numeric!"
             ]);
-            
+
             $sensorValue->update($column);
 
             return response()->json(["success" => true, "message" => "Successfully update sensor value!"]);
@@ -31,5 +33,4 @@ class ValueLogsController extends Controller
             return response()->json(["success" => false, "errors" => $e->response->original]);
         }
     }
-
 }
