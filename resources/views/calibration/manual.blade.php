@@ -7,6 +7,9 @@
             Back
         </a>
     </div>
+    <div id="error-msg">
+       
+    </div>
     <form action="" class="bg-gray-300" id="form">
         <div class="flex justify-between space-x-3">
             <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
@@ -172,7 +175,18 @@
                  dataType : 'json',
                  data : $('#form').serialize(),
                  success : function(data){
-                     console.log(data)
+                     if(data.success){
+                         return window.location.href = `{{ url('calibration/manual/') }}/${type}/process`
+                     }else{
+                        let html = ``;
+                        Object.keys(data.errors).map(function(index){
+                            let errors = data.errors[index]
+                            errors.map(function(error){
+                                html+=` <p class="p-1 bg-red-500 text-white mb-2">${error}</p>`
+                            })
+                        })
+                        $('#error-msg').html(html)
+                     }
                  },
                  error : function(xhr, status, err){
                      

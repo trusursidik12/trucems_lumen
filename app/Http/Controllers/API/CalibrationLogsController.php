@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 class CalibrationLogsController extends Controller
 {
     public function index(){
+        $limit = request()->has('limit') ? request()->limit : 30;
         $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name','sensor.unit:id,name'])
-        ->orderBy("id","desc")->limit(30)->get();
+        ->orderBy("id","desc")->limit($limit)->get();
         return response()->json(['success' => true, 'data' => $calibrationLogs]);
     }
 
