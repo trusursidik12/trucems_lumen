@@ -16,17 +16,15 @@ use App\Http\Controllers\ExampleController;
 */
 
 $router->get('/', 'DashboardController@index');
-$router->group(['prefix' => 'calibration'], function() use ($router){
+$router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
     $router->get('/auto', 'CalibrationController@auto');
     $router->get('/logs', 'CalibrationController@logs');
-    $router->get('/{mode}/{type}/process', 'CalibrationController@processCal');
-
 });
 /**
  * API
  */
-$router->group(['prefix' => 'api'], function() use ($router){
+$router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * Set Calibration
      */
@@ -53,8 +51,6 @@ $router->group(['prefix' => 'api'], function() use ($router){
     /**
      * Configurations
      */
-    $router->get('/configurations','API\ConfigurationController@index');
-    $router->patch('/configurations','API\ConfigurationController@update');
-
-    
+    $router->get('/configurations', 'API\ConfigurationController@index');
+    $router->patch('/configurations', 'API\ConfigurationController@update');
 });
