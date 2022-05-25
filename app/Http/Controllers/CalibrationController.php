@@ -11,4 +11,7 @@ class CalibrationController extends Controller
     public function manual(){
         return view('calibration.manual');
     }
+    public function logs(){
+        return view('calibration.logs');
+    }
 }

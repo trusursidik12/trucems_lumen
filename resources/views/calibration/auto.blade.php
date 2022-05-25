@@ -7,15 +7,15 @@
             Back
         </a>
     </div>
-    <form action="">
+    <form action="" class="bg-gray-300">
         <div class="flex justify-between space-x-3">
-            <div class="w-1/2 px-6 py-3 border-r-2 border-gray-300">
+            <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
                 <div class="flex my-2 justify-between items-center">
                     <span class="w-2/2">
                         <span class="uppercase font-semibold">Default Zero Loop</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="1" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" value="1" disabled class="px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -23,9 +23,20 @@
                         <span class="uppercase font-semibold">Time Zero Loop <small class="font-thin text-xs lowercase">(sec)</small></span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" value="200" disabled class="px-3 py-1 outline-none w-full">
                     </span>
                 </div>
+                {{-- Margin --}}
+                <div class="invisible flex my-2 justify-between items-center">
+                    <span class="w-2/2">
+                        <span class="uppercase font-semibold">Max Zero PPM</span>
+                    </span>
+                    <span class="w-1/3">
+                        <input type="text" class="px-3 py-1 outline-none w-full">
+                    </span>
+                </div>
+                {{-- End Margin --}}
+                <button class="w-full px-3 py-2 bg-indigo-500 text-white">Start Auto Zero Calibration</button>
             </div>
             <div class="w-1/2 px-6 py-3">
                 <div class="flex my-2 justify-between items-center">
@@ -33,7 +44,7 @@
                         <span class="uppercase font-semibold">Default Span Loop</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="1" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" value="1" disabled class="px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -41,7 +52,7 @@
                         <span class="uppercase font-semibold">Time Span Loop <small class="font-thin text-xs lowercase">(sec)</small></span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" value="200" disabled class="px-3 py-1 outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -49,10 +60,10 @@
                         <span class="uppercase font-semibold">Max Span PPM</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="200" class="js-virtual-keyboard px-3 py-1 outline-none w-full">
+                        <input type="text" value="200" disabled class="px-3 py-1 outline-none w-full">
                     </span>
                 </div>
-                <button class="w-full px-3 py-2 bg-indigo-500 text-white">Start Manual Calibration</button>
+                <button class="w-full px-3 py-2 bg-indigo-500 text-white">Start Auto Span Calibration</button>
             </div>
         </div>
     </form>

@@ -18,12 +18,16 @@ class ConfigurationSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         Configuration::truncate();
         Configuration::create([
-            'name' => 'TruCEMS v.1.0.1',
-            'default_zero_loop' => 7,
-            'default_span_loop' => 7,
-            'time_zero_loop' => 120,
-            'time_span_loop' => 120,
-            'max_span_ppm' => 1000,
+            'a_default_zero_loop' => 7,
+            'a_default_span_loop' => 7,
+            'a_time_zero_loop' => 120,
+            'a_time_span_loop' => 120,
+            'a_max_span_ppm' => 1000,
+            'm_default_zero_loop' => 7,
+            'm_default_span_loop' => 7,
+            'm_time_zero_loop' => 120,
+            'm_time_span_loop' => 120,
+            'm_max_span_ppm' => 1000,
         ]);
     }
 }
