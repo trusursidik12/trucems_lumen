@@ -436,25 +436,34 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bottom-0 {
   bottom: 0px;
 }
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
 .mb-3 {
   margin-bottom: 0.75rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.ml-3 {
+  margin-left: 0.75rem;
+}
+.block {
+  display: block;
 }
 .flex {
   display: flex;
 }
+.table {
+  display: table;
+}
 .hidden {
   display: none;
-}
-.min-h-full {
-  min-height: 100%;
 }
 .min-h-\[100vh\] {
   min-height: 100vh;
@@ -505,29 +514,35 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-r-2 {
   border-right-width: 2px;
 }
-.border-gray-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+.border-r {
+  border-right-width: 1px;
 }
 .border-gray-400 {
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
 }
-.bg-gray-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
 .bg-gray-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 .bg-indigo-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(99 102 241 / var(--tw-bg-opacity));
 }
-.bg-gray-300 {
+.bg-gray-200 {
   --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+.p-1 {
+  padding: 0.25rem;
 }
 .px-6 {
   padding-left: 1.5rem;
@@ -553,13 +568,38 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
 }
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+.text-8xl {
+  font-size: 6rem;
+  line-height: 1;
 }
 .text-2xl {
   font-size: 1.5rem;
@@ -588,6 +628,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+.text-indigo-700 {
+  --tw-text-opacity: 1;
+  color: rgb(67 56 202 / var(--tw-text-opacity));
+}
 .text-gray-800 {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
@@ -615,3 +659,190 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-bg-opacity: 1;
   background-color: rgb(99 102 241 / var(--tw-bg-opacity));
 }
+
+.table thead  th, .table tbody td {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(55 65 81 / var(--tw-border-opacity));
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.table thead th {
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+.table tbody td {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+.table tbody tr:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 163 184 / var(--tw-bg-opacity));
+}
+.table tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+
+/* Loading CSS */
+.wrapper {
+    position: relative;
+    width: 50px;
+    height: 100px;
+    transform-origin: center center;
+    -webkit-animation: rotate 3s 0.75s ease-in-out infinite;
+            animation: rotate 3s 0.75s ease-in-out infinite;
+}
+.wrapper:before, .wrapper:after {
+    z-index: -1;
+    content: "";
+    border: solid 4px rgba(0, 0, 0, .2);
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 50%;
+    -webkit-clip-path: inset(0 60% 0 0);
+            clip-path: inset(0 60% 0 0);
+    width: 100%;
+    height: 50%;
+    -webkit-animation: shadow 3s 0.75s linear infinite;
+            animation: shadow 3s 0.75s linear infinite;
+    opacity: 0;
+}
+.wrapper:after {
+    position: absolute;
+    top: -1px;
+    left: -18px;
+}
+.wrapper:before {
+    position: absolute;
+    bottom: -1px;
+    right: -18px;
+    transform: rotate(180deg);
+}
+
+
+.clock {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-top-width: 50px;
+    border-bottom-width: 25px;
+    border-left-width: 25px;
+    border-right-width: 25px;
+    --tw-border-opacity: 1;
+    border-top-color: rgb(67 56 202 / var(--tw-border-opacity));
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent}
+.clock:before, .clock:after {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: -47px;
+    width: 0;
+    height: 0;
+    border-top: solid 44px #f3f3f3;
+    border-bottom: solid 20px transparent;
+    border-left: solid 20px transparent;
+    border-right: solid 20px transparent;
+}
+.clock:after {
+    border-top: solid 44px rgb(67 56 202 / 1);
+    will-change: transform;
+    -webkit-animation: clock1 3s linear infinite;
+            animation: clock1 3s linear infinite;
+}
+.clock:last-child {
+    transform: rotate(180deg) translateY(50px);
+}
+.clock:last-child:after {
+    transform: scale(0);
+    -webkit-animation: clock2 3s linear infinite;
+            animation: clock2 3s linear infinite;
+}
+@-webkit-keyframes clock1 {
+	20%, 50% {
+		transform: scale(0);
+	}
+	70%, 100% {
+		transform: scale(1);
+	}
+}
+@keyframes clock1 {
+	20%, 50% {
+		transform: scale(0);
+	}
+	70%, 100% {
+		transform: scale(1);
+	}
+}
+
+@-webkit-keyframes clock2 {
+	20%, 50% {
+		transform: scale(1);
+	}
+	70%,100% {
+		transform: scale(0);
+	}
+}
+
+@keyframes clock2 {
+	20%, 50% {
+		transform: scale(1);
+	}
+	70%,100% {
+		transform: scale(0);
+	}
+}
+
+@-webkit-keyframes shadow {
+	10% {
+		opacity: 1;
+	}
+	20%, 50% {
+		opacity: 0; 
+	}
+	60%{
+		opacity: 1;
+	}
+	70%,100%{
+		opacity: 0;
+	}
+}
+
+@keyframes shadow {
+	10% {
+		opacity: 1;
+	}
+	20%, 50% {
+		opacity: 0; 
+	}
+	60%{
+		opacity: 1;
+	}
+	70%,100%{
+		opacity: 0;
+	}
+}
+
+@-webkit-keyframes rotate {
+	20%, 50% {
+		transform: rotate(180deg); 
+	}
+	70%, 100% {
+		transform: rotate(360deg); 
+	}
+}
+
+@keyframes rotate {
+	20%, 50% {
+		transform: rotate(180deg); 
+	}
+	70%, 100% {
+		transform: rotate(360deg); 
+	}
+}
+

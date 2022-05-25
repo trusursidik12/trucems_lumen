@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\CalibrationAvgLog;
+use App\Models\Configuration;
 use Illuminate\Http\Request;
 
 class CalibrationAvgLogsController extends Controller
@@ -34,5 +35,13 @@ class CalibrationAvgLogsController extends Controller
             return response()->json(["success" => false, "errors" => $e->response->original]);
         }
     }
+
+    public function logs(){
+        $calibrationAvgLogs = CalibrationAvgLog::with(["sensor:id,unit_id,name","sensor.unit:id,name"])
+        ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
+        ->orderBy("id","desc")->paginate(1);
+        return $calibrationAvgLogs;
+    }
+
 
 }
