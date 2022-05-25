@@ -20,10 +20,10 @@ class ValueLogsController extends Controller
         $sensorValue = SensorValue::where(["sensor_id" => $sensorId])->first();
         try {
             $column = $this->validate($request, [
-                'value' => 'required'
+                'value' => 'required|numeric'
             ], [
                 "value.required" => "Value cant be empty!",
-                // "value.numeric" => "Invalid data type, value must be numeric!"
+                "value.numeric" => "Invalid data type, value must be numeric!"
             ]);
 
             $sensorValue->update($column);
