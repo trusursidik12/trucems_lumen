@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\CalibrationAvgLog;
 use App\Models\CalibrationLog;
+use App\Models\Configuration;
 use Illuminate\Http\Request;
 
 class CalibrationLogsController extends Controller
@@ -35,7 +37,27 @@ class CalibrationLogsController extends Controller
     }
 
     public function destroy(){
-        
+        $calibrationLogs = CalibrationLog::first();
+        $sum = CalibrationLog::sum("value");
+        $rowCount = CalibrationLog::get()->count();
+        $avg = ($sum/$rowCount);
+        CalibrationAvgLog::create([
+            'sensor_id' => $calibrationLogs->sensor_id,
+            'row_count' => $rowCount,
+            'value' => $avg,
+            'calibration_type' => $calibrationLogs->calibration_type,
+        ]);
+        $config = Configuration::find(1);
+        $config->update([
+            'is_calibration' => 0,
+            'calibration_type' => 0,
+        ]);
+        //
+        CalibrationLog::truncate();
+        return response()->json([
+            'success' => true, 
+            'message' => 'Successfully averaging calibration'
+        ]);
     }
 
 }

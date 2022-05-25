@@ -14,7 +14,7 @@ class CalibrationLog extends Model
      * @var array
      */
     protected $fillable = [
-        'sensor_id', 'value' 
+        'sensor_id', 'value', 'calibration_type'
     ];
 
     public function Sensor(){

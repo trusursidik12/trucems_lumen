@@ -66,7 +66,7 @@ class SetCalibrationController extends Controller
         $endAt = Carbon::parse($endAt);
         $diff = $now->diffInSeconds($endAt,false);
         if($diff <= 0){
-            $config->update(['is_calibration' => 0]);
+            $config->update(['is_calibration' => 3]);
         }
         $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->get();

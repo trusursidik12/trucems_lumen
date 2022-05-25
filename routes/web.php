@@ -43,7 +43,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
      */
     $router->post('/calibration-logs', 'API\CalibrationLogsController@store');
     $router->get('/calibration-logs', 'API\CalibrationLogsController@index');
-    $router->delete('/calibration-logs', 'API\CalibrationLogsController@destroy');
+    $router->get('/calibration-logs/delete', 'API\CalibrationLogsController@destroy');
     /**
      * Calibration AVG Logs
      */
