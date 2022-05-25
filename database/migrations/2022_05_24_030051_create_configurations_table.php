@@ -17,6 +17,7 @@ class CreateConfigurationsTable extends Migration
         Schema::create('configurations', function (Blueprint $table) {
             $table->id();
             $table->string('schedule_auto_calibration')->default('1')->nullable()->comment('Separate days with comma');
+            $table->smallInteger('is_calibration_history')->default(0)->nullable()->comment("0 = Nothing, 1 = Auto, 2 = Manual");
             $table->smallInteger('is_calibration')->default(0)->nullable()->comment("0 = Nothing, 1 = Auto, 2 = Manual");
             $table->smallInteger('calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
             $table->integer('a_default_zero_loop')->default(0)->nullable();
@@ -29,6 +30,7 @@ class CreateConfigurationsTable extends Migration
             $table->integer('m_time_zero_loop')->default(0)->nullable()->comment('Second');
             $table->integer('m_time_span_loop')->default(0)->nullable()->comment('Second');
             $table->integer('m_max_span_ppm')->default(0)->nullable();
+            $table->integer('loop_count')->default(0)->nullable();
             $table->timestamp('m_start_calibration_at')->default(null)->nullable();
             $table->timestamp('m_end_calibration_at')->default(null)->nullable();
             $table->timestamp('a_start_calibration_at')->default(null)->nullable();

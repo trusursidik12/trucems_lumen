@@ -16,6 +16,7 @@ class Configuration extends Model
     protected $fillable = [
         'schedule_auto_calibration',
         'is_calibration',
+        'is_calibration_history',
         'calibration_type',
         'a_default_zero_loop',
         'a_default_span_loop',
@@ -27,6 +28,7 @@ class Configuration extends Model
         'm_time_zero_loop',
         'm_time_span_loop',
         'm_max_span_ppm',
+        'loop_count',
         'a_start_calibration_at',
         'm_start_calibration_at',
         'a_end_calibration_at',

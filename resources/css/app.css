@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .sidebar > a{
-    @apply block w-full bg-gray-500 text-white px-5 py-3 text-center uppercase
+    @apply block w-full bg-gray-500 text-white text-3xl px-5 py-3 text-center uppercase
 }
 .sidebar > a.active{
     @apply bg-indigo-500

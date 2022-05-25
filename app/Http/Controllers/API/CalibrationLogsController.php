@@ -59,12 +59,6 @@ class CalibrationLogsController extends Controller
             'value' => $avg,
             'calibration_type' => $calibrationLogs->calibration_type,
         ]);
-        $config = Configuration::find(1);
-        $config->update([
-            'is_calibration' => 0,
-            'calibration_type' => 0,
-        ]);
-        //
         CalibrationLog::truncate();
         return response()->json([
             'success' => true,
