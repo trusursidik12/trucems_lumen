@@ -70,6 +70,8 @@
                         sensorValues.map(function(value){
                             if(unit === "m/g"){
                                 concentrate = Math.round((0.0409 * value.value * 34.08) * 100) / 100
+                                // Formula is (0.0409 * concentrate * 34.08)
+                                // * 100 and / 100 is for rounding 2 decimal places
                             }else{
                                 concentrate = value.value
                             }
