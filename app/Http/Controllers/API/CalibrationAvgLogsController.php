@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\CalibrationAvgLog;
-use App\Models\Configuration;
 use Illuminate\Http\Request;
 
 class CalibrationAvgLogsController extends Controller
@@ -39,8 +38,41 @@ class CalibrationAvgLogsController extends Controller
     public function logs(){
         $calibrationAvgLogs = CalibrationAvgLog::with(["sensor:id,unit_id,name","sensor.unit:id,name"])
         ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
-        ->orderBy("id","desc")->paginate(5);
+        ->orderBy("id","desc")->paginate(10);
         return $calibrationAvgLogs;
+    }
+
+    public function export(){
+        $now = date("Y-m-d")."-".rand(99,999);
+        $fileName = $now."-calibration-averaging-logs.csv";
+        $calibrationLogs = CalibrationAvgLog::orderBy("id","desc")->limit(500)->get();
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('Date Time', 'Parameter', 'Concentrate', 'Unit');
+
+        $callback = function() use($calibrationLogs, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($calibrationLogs as $log) {
+                $row['DateTime']  = $log->created_at;
+                $row['Parameter']    = strtoupper($log->sensor->code);
+                $row['Concentrate']    = $log->value;
+                $row['Unit']  = $log->sensor->unit->name;
+
+                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Concentrate'], $row['Unit']));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
 

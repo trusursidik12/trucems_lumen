@@ -14,7 +14,7 @@
     @apply px-2 py-1 border border-gray-700
 }
 .table thead th{
-    @apply font-bold text-gray-900
+    @apply font-bold text-white bg-indigo-500
 }
 .table tbody td{
     @apply text-gray-700
