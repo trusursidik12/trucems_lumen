@@ -44,13 +44,13 @@
         $('#btn-switch').click(function(){
             let unit = localStorage.getItem("unit")
             if(unit === "ppm"){
-                $('.sensor-unit').html(unit)
+                $('.sensor-unit').html("m/g")
                 localStorage.setItem("unit","m/g")
-                $(this).html("m/g")
+                $(this).html(unit)
             }else{
-                $('.sensor-unit').html(unit)
+                $('.sensor-unit').html("ppm")
                 localStorage.setItem("unit","ppm")
-                $(this).html("ppm")
+                $(this).html(unit)
             }
         })
         function getValues(){
@@ -61,12 +61,20 @@
                 dataType : 'json',
                 data : $(this).serialize(),
                 success : function(data){
+                    let concentrate = 0
+                    // 0.0409 * konsentrasi * 34.08
+                    let unit = localStorage.getItem("unit")
                     let section = $('#section-values')
                     if(data.success){
                         let sensorValues = data.data
                         sensorValues.map(function(value){
+                            if(unit === "m/g"){
+                                concentrate = Math.round((0.0409 * value.value * 34.08) * 100) / 100
+                            }else{
+                                concentrate = value.value
+                            }
                             let div = section.find(`.sensor_id[value=${value.sensor_id}]`).parent()
-                            div.find('.sensor-value').html(`${value.value}`)
+                            div.find('.sensor-value').html(`${concentrate}`)
                         })
                     }
                 }
