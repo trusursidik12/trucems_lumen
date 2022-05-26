@@ -5,7 +5,7 @@
 @section('content')
 <div class="px-6 py-3 bg-gray-200 rounded">
     <div class="flex justify-content-betwen items-center h-[88vh] bg-gray-300 px-4 py-3">
-        <div class="w-1/2 border-r border-gray-400 block items-center">
+        <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
             <p class="block font-semibold text-sm text-indigo-700">Realtime Value : </p>
             <span class="block ml-3" id="section-logs">
             </span>
@@ -20,7 +20,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="w-1/2">
+        <div class="w-1/2" id="section-right">
             <div class="wrapper mx-auto">
                 <div class="clock"></div>
                 <div class="clock"></div>
@@ -49,7 +49,14 @@
                     let sectionLogs = $('#section-logs')
                     if(data.success){
                         if(data.remaining_time <= 0){
-                            window.history.go(-1)
+                            $('#section-left').removeClass('block')
+                            $('#section-left').addClass('hidden')
+                            $('#section-right').removeClass('w-1/2')
+                            $('#section-right').addClass('w-full')
+                            $('#remaining').addClass('hidden')
+                            setTimeout(() => {
+                                window.history.go(-1)
+                            }, 5000); //5 sec
                         }
                         let sensorValues = data.sensor_values
                         sensorValues.map(function(value){
