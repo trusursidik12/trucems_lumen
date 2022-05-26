@@ -1,16 +1,4 @@
 {
     "/js/app.js": "/js/app.js",
-    "/js/kioskboard/kioskboard-2.2.0.min.css": "/js/kioskboard/kioskboard-2.2.0.min.css",
-    "/js/kioskboard/kioskboard-2.2.0.min.js": "/js/kioskboard/kioskboard-2.2.0.min.js",
-    "/js/kioskboard/kioskboard-aio-2.2.0.min.js": "/js/kioskboard/kioskboard-aio-2.2.0.min.js",
-    "/js/kioskboard/kioskboard-keys-arabic.json": "/js/kioskboard/kioskboard-keys-arabic.json",
-    "/js/kioskboard/kioskboard-keys-english.json": "/js/kioskboard/kioskboard-keys-english.json",
-    "/js/kioskboard/kioskboard-keys-french.json": "/js/kioskboard/kioskboard-keys-french.json",
-    "/js/kioskboard/kioskboard-keys-german.json": "/js/kioskboard/kioskboard-keys-german.json",
-    "/js/kioskboard/kioskboard-keys-hungarian.json": "/js/kioskboard/kioskboard-keys-hungarian.json",
-    "/js/kioskboard/kioskboard-keys-persian.json": "/js/kioskboard/kioskboard-keys-persian.json",
-    "/js/kioskboard/kioskboard-keys-russian.json": "/js/kioskboard/kioskboard-keys-russian.json",
-    "/js/kioskboard/kioskboard-keys-spanish.json": "/js/kioskboard/kioskboard-keys-spanish.json",
-    "/js/kioskboard/kioskboard-keys-turkish.json": "/js/kioskboard/kioskboard-keys-turkish.json",
     "/css/app.css": "/css/app.css"
 }
