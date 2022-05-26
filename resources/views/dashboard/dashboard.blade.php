@@ -41,17 +41,31 @@
         if(localStorage.getItem("unit") === undefined){
             localStorage.setItem("unit","ppm")
         }
-        $('#btn-switch').click(function(){
+        function switchUnit(isBtn=false){
             let unit = localStorage.getItem("unit")
             if(unit === "ppm"){
-                $('.sensor-unit').html("m/g")
-                localStorage.setItem("unit","m/g")
-                $(this).html(unit)
+                if(isBtn){
+                    $('.sensor-unit').html("m/g")
+                    localStorage.setItem("unit","m/g")
+                    $('#btn-switch').html(unit)
+                }else{
+                    $('#btn-switch').html("m/g")
+                    $('.sensor-unit').html(unit)
+                }
             }else{
-                $('.sensor-unit').html("ppm")
-                localStorage.setItem("unit","ppm")
-                $(this).html(unit)
+                if(isBtn){
+                    $('.sensor-unit').html("ppm")
+                    localStorage.setItem("unit","ppm")
+                    $('#btn-switch').html(unit)
+                }else{
+                    $('#btn-switch').html("ppm")
+                    $('.sensor-unit').html(unit)
+                }
             }
+        }
+        switchUnit()
+        $('#btn-switch').click(function(){
+            switchUnit(true)
         })
         function getValues(){
             let random = Math.floor(Math.random() * 100)
