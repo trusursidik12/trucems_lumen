@@ -86,8 +86,13 @@ try:
                 data_value = data.replace("[b'", "").replace(
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                 print(data_value)
-                if(json_get_configuration["data"]["loop_count"] == 0):
-                    patch_payload_configuration = 'is_calibration=0&calibration_type=0&is_calibration_history=0'
+
+                if(json_get_configuration["data"]["loop_count"] != 0):
+                    loop_count = json_get_configuration["data"]["loop_count"] - 1
+                    patch_payload_configuration = 'is_calibration='+str(json_get_configuration["data"]["is_calibration_history"])+'&calibration_type=' + \
+                        str(json_get_configuration["data"]
+                            ["calibration_type"])+'&loop_count='+str(loop_count)
+                    print("=====================")
                     response = requests.request(
                         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     print(response.text)
@@ -95,10 +100,8 @@ try:
                     response = requests.request(
                         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
                 else:
-                    loop_count = json_get_configuration["data"]["loop_count"] - 1
-                    patch_payload_configuration = 'is_calibration='+str(json_get_configuration["data"]["is_calibration_history"])+'&calibration_type=' + \
-                        str(json_get_configuration["data"]
-                            ["calibration_type"])+'&loop_count='+str(loop_count)
+                    # if(json_get_configuration["data"]["loop_count"] == 0):
+                    patch_payload_configuration = 'is_calibration=0&calibration_type=0&is_calibration_history=0&loop_count=0'
                     response = requests.request(
                         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     print(response.text)
@@ -108,8 +111,19 @@ try:
 
             # is span calibration
             if(json_get_configuration["data"]["is_calibration"] == 3 and json_get_configuration["data"]["calibration_type"] == 2):
-                if(json_get_configuration["data"]["loop_count"] == 0):
-                    patch_payload_configuration = 'is_calibration=0&calibration_type=0&is_calibration_history=0'
+                msg = bytes.fromhex("08 00 00 00 00 00 55 00")
+                result = ser.write(msg)
+                data = str(ser.readlines(1))
+                data_value = data.replace("[b'", "").replace(
+                    "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
+                print(data_value)
+
+                if(json_get_configuration["data"]["loop_count"] != 0):
+                    loop_count = json_get_configuration["data"]["loop_count"] - 1
+                    patch_payload_configuration = 'is_calibration='+str(json_get_configuration["data"]["is_calibration_history"])+'&calibration_type=' + \
+                        str(json_get_configuration["data"]
+                            ["calibration_type"])+'&loop_count='+str(loop_count)
+                    print("=====================")
                     response = requests.request(
                         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     print(response.text)
@@ -117,10 +131,7 @@ try:
                     response = requests.request(
                         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
                 else:
-                    loop_count = json_get_configuration["data"]["loop_count"] + 1
-                    patch_payload_configuration = 'is_calibration='+str(json_get_configuration["data"]["is_calibration_history"])+'&calibration_type=' + \
-                        str(json_get_configuration["data"]
-                            ["calibration_type"])+'&loop_count='+str(loop_count)
+                    patch_payload_configuration = 'is_calibration=0&calibration_type=0&is_calibration_history=0&loop_count=0'
                     response = requests.request(
                         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     print(response.text)
@@ -129,7 +140,7 @@ try:
                         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
         else:
             print(json_get_configuration["message"])
-        time.sleep(0.5)
+        time.sleep(1)
         # ser.close()  # Close serial port
 except Exception as e:
     print("[X]  Not connected " + e)
