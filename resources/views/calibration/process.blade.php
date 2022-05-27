@@ -79,7 +79,7 @@
                                         
                                     }else{
                                         setTimeout(() => {
-                                            window.history.go(-1)
+                                            window.location.href = `{{ url("calibration/".strtolower($mode)) }}`
                                         }, 5000); //5 sec
                                     }
                                 }
