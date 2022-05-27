@@ -12,15 +12,16 @@ use Illuminate\Http\Request;
 
 class SetCalibrationController extends Controller
 {
-    public function setManualCal($type, Request $request){
+    public function setManualCal($type, Request $request)
+    {
         try {
-            $column = $this->validate($request,[
+            $column = $this->validate($request, [
                 'm_default_zero_loop' => 'required|numeric',
                 'm_time_zero_loop' => 'required|numeric',
                 'm_default_span_loop' => 'required|numeric',
                 'm_time_span_loop' => 'required|numeric',
                 'm_max_span_ppm' => 'required|numeric',
-            ],[
+            ], [
                 'm_default_zero_loop.required' => 'Default Zero Loop cant empty!',
                 'm_time_zero_loop.required' => 'Time Zero Loop cant empty!',
                 'm_default_span_loop.required' => 'Span Zero Loop cant empty!',
@@ -49,40 +50,40 @@ class SetCalibrationController extends Controller
         }
     }
 
-    public function checkRemaining($mode,$type){
+    public function checkRemaining($mode, $type)
+    {
         $config = Configuration::find(1);
         switch ($mode) {
             case 'manual':
                 $endAt = $config->m_end_calibration_at;
                 break;
-                
+
             case 'auto':
             default:
                 $endAt = $config->a_end_calibration_at;
                 break;
         }
-        if(empty($startAt)){
-            return response()->json(['success' => false, 'message' => 'Calibration is not started!']);
-        }
+        // if(empty($startAt)){
+        //     return response()->json(['success' => false, 'message' => 'Calibration is not started!']);
+        // }
         $now = Carbon::now();
         $endAt = Carbon::parse($endAt);
-        $diff = $now->diffInSeconds($endAt,false);
-        if($diff <= 0){
+        $diff = $now->diffInSeconds($endAt, false);
+        if ($diff <= 0) {
             $config->update(['is_calibration' => 3]);
         }
         $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->get();
         $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->withCasts(["created_at" => "datetime:H:i:s"])
-            ->limit(3)->orderBy("id","desc")->get();
+            ->limit(3)->orderBy("id", "desc")->get();
         // $lastCalibrationAvg = CalibrationAvgLog::orderBy("id","desc")->first();
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'end_at' => $endAt->format("Y-m-d H:i:s"),
             'remaining_time' => $diff,
             'calibration_logs' => $calibrationLogs,
             'sensor_values' => $sensorValues,
         ]);
     }
-
 }
