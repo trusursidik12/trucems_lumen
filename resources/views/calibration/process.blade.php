@@ -36,16 +36,17 @@
 @endsection
 @section('js')
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         let internvalRealtime = setInterval(getRealtimeValue, 1000);
-        function getRealtimeValue(){
+
+        function getRealtimeValue() {
             let random = Math.floor(Math.random() * 100)
             $.ajax({
-                url : `{{ url('api/calibration/check-remaining')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
-                type : 'get',
-                dataType : 'json',
-                data : $(this).serialize(),
-                success : function(data){
+                url: `{{ url('api/calibration/check-remaining')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
+                type: 'get',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function(data) {
                     let section = $('#section-values')
                     let sectionLogs = $('#section-logs')
                     if(data.success){
@@ -87,7 +88,7 @@
                             
                         }
                         let sensorValues = data.sensor_values
-                        sensorValues.map(function(value){
+                        sensorValues.map(function(value) {
                             let div = section.find(`.section-value[data-sensor-id=${value.sensor_id}]`)
                             div.find('.sensor-value').html(`${value.value}`)
                         })
@@ -96,12 +97,12 @@
                         let i = 2
                         let logs = []
                         let html = ``
-                        calibrationLogs.map(function(value){
-                            logs[i] =` <p class="block text-xs">${value.value} ${value.sensor.unit.name} - ${value.created_at}</p>`
+                        calibrationLogs.map(function(value) {
+                            logs[i] = ` <p class="block text-xs">${value.value} ${value.sensor.unit.name} - ${value.created_at}</p>`
                             i--
                         })
-                        logs.map(function(element){
-                            html+=element
+                        logs.map(function(element) {
+                            html += element
                         })
                         sectionLogs.html(html)
                         $('#remaining').html(`${data.remaining_time} sec`)
@@ -111,7 +112,7 @@
             })
             // setTimeout(getRealtimeValue, 1000);
         }
-        
+
     })
 </script>
 @endsection

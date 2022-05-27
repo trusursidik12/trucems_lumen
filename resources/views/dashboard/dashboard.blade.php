@@ -35,60 +35,62 @@
             </nav>
         </div>
     </div>
-</div>    
+</div>
 @endsection
 @section('js')
 <script>
-    $(document).ready(function(){
-        if(localStorage.getItem("unit") === undefined){
-            localStorage.setItem("unit","ppm")
+    $(document).ready(function() {
+        if (localStorage.getItem("unit") === undefined) {
+            localStorage.setItem("unit", "ppm")
         }
-        function switchUnit(isBtn=false){
+
+        function switchUnit(isBtn = false) {
             let unit = localStorage.getItem("unit")
-            if(unit === "ppm"){
-                if(isBtn){
+            if (unit === "ppm") {
+                if (isBtn) {
                     $('.sensor-unit').html("m/g")
-                    localStorage.setItem("unit","m/g")
+                    localStorage.setItem("unit", "m/g")
                     $('#btn-switch').html(unit)
-                }else{
+                } else {
                     $('#btn-switch').html("m/g")
                     $('.sensor-unit').html(unit)
                 }
-            }else{
-                if(isBtn){
+            } else {
+                if (isBtn) {
                     $('.sensor-unit').html("ppm")
-                    localStorage.setItem("unit","ppm")
+                    localStorage.setItem("unit", "ppm")
                     $('#btn-switch').html(unit)
-                }else{
+                } else {
                     $('#btn-switch').html("ppm")
                     $('.sensor-unit').html(unit)
                 }
             }
         }
         switchUnit()
-        $('#btn-switch').click(function(){
+        $('#btn-switch').click(function() {
             switchUnit(true)
         })
-        function getValues(){
+
+        function getValues() {
             let random = Math.floor(Math.random() * 100)
             $.ajax({
-                url : `{{ url('api/sensor-value-logs') }}?t=${random}`,
-                type : 'get',
-                dataType : 'json',
-                data : $(this).serialize(),
-                success : function(data){
+                url: `{{ url('api/sensor-value-logs') }}?t=${random}`,
+                type: 'get',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function(data) {
                     let concentrate = 0
                     // 0.0409 * konsentrasi * 34.08
                     let unit = localStorage.getItem("unit")
                     let section = $('#section-values')
-                    if(data.success){
+                    if (data.success) {
                         let sensorValues = data.data
-                        sensorValues.map(function(value){
-                            if(unit === "m/g"){
+                        sensorValues.map(function(value) {
+                            if (unit === "m/g") {
                                 concentrate = Math.round((0.0409 * value.value * 34.08) * 1000) / 1000
                                 // Formula is (0.0409 * concentrate * 34.08)
                                 // * 1000 and / 1000 is for rounding 3 decimal places
-                            }else{
+                            } else {
                                 concentrate = value.value
                             }
                             let div = section.find(`.sensor_id[value=${value.sensor_id}]`).parent()
