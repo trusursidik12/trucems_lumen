@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CalibrationAvgLog;
 use App\Models\CalibrationLog;
 use App\Models\Configuration;
+use Exception;
 use Illuminate\Http\Request;
 
 class CalibrationLogsController extends Controller
@@ -16,6 +17,15 @@ class CalibrationLogsController extends Controller
         $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->limit($limit)->get();
         return response()->json(['success' => true, 'data' => $calibrationLogs]);
+    }
+
+    public function getLast(){
+        try{
+            $calibrationLogs = CalibrationLog::orderBy("id","desc")->first();
+            return response()->json(['success' => true, 'data' => $calibrationLogs]);
+        }catch(Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function store(Request $request)

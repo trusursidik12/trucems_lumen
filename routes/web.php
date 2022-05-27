@@ -41,6 +41,7 @@ $router->group(['prefix' => 'api'], function() use ($router){
     /**
      * Calibration Logs
      */
+    $router->get('/calibration-logs/get-last', 'API\CalibrationLogsController@getLast');
     $router->post('/calibration-logs', 'API\CalibrationLogsController@store');
     $router->get('/calibration-logs', 'API\CalibrationLogsController@index');
     $router->delete('/calibration-logs', 'API\CalibrationLogsController@destroy');
