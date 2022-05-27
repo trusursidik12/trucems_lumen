@@ -63,10 +63,9 @@
                                     dataType : 'json',
                                     data : $(this).serialize(),
                                     success : function(data){
-                                        
-                                    },
-                                    error : function(xhr, status, err){
-                                        
+                                        if(data.is_retry){
+                                            window.location.reload()
+                                        }
                                     }
                                 })
 
