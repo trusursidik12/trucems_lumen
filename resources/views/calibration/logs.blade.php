@@ -16,6 +16,7 @@
                 <th>Date Time</th>
                 <th>Parameter</th>
                 <th>Concentrate</th>
+                <th>Row Count</th>
                 <th>Unit</th>
             </thead>
             <tbody id="tbody-logs">
@@ -48,6 +49,7 @@ $(document).ready(function(){
                                 <td>${log.created_at}</td>
                                 <td>${log.sensor.name}</td>
                                 <td>${log.value}</td>
+                                <td>${log.row_count}</td>
                                 <td>${log.sensor.unit.name}</td>
                             </tr>`
                 })

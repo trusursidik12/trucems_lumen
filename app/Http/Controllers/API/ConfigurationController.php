@@ -4,14 +4,19 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
+use Exception;
 use Illuminate\Http\Request;
 
 class ConfigurationController extends Controller
 {
     public function index()
     {
-        $configurations = Configuration::find(1);
-        return response()->json(['success' => true, 'data' => $configurations]);
+        try{
+            $configurations = Configuration::find(1);
+            return response()->json(['success' => true, 'data' => $configurations]);
+        }catch(Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function update(Request $request)

@@ -49,7 +49,7 @@ class CalibrationLogsController extends Controller
         if ($sum == 0 && $rowCount == 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Successfully averaging calibration'
+                'message' => 'You have to calibrate first'
             ]);
         }
         $avg = ($sum / $rowCount);

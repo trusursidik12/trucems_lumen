@@ -37,6 +37,7 @@ class SetCalibrationController extends Controller
             $endAt = $endAt->addSeconds(1);
             $endAt = $endAt->format("Y-m-d H:i:s");
             $column['is_calibration'] = 2; // 2 = Manual Cal
+            $column['is_calibration_history'] = 2; // 2 = Manual Cal
             $column['calibration_type'] = ($type == "span" ? 2 : ($type == "zero" ? 1 : 0));
             $column['m_start_calibration_at'] = $now->format("Y-m-d H:i:s");
             $column['m_end_calibration_at'] = $endAt;
@@ -60,9 +61,9 @@ class SetCalibrationController extends Controller
                 $endAt = $config->a_end_calibration_at;
                 break;
         }
-        // if(empty($startAt)){
-        //     return response()->json(['success' => false, 'message' => 'Calibration is not started!']);
-        // }
+        if(empty($startAt)){
+            return response()->json(['success' => false, 'message' => 'Calibration is not started!']);
+        }
         $now = Carbon::now();
         $endAt = Carbon::parse($endAt);
         $diff = $now->diffInSeconds($endAt,false);

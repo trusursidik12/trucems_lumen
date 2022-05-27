@@ -54,7 +54,7 @@ class CalibrationAvgLogsController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Date Time', 'Parameter', 'Concentrate', 'Unit');
+        $columns = array('Date Time', 'Parameter', 'Concentrate', 'Row Count', 'Unit');
 
         $callback = function() use($calibrationLogs, $columns) {
             $file = fopen('php://output', 'w');
@@ -64,9 +64,10 @@ class CalibrationAvgLogsController extends Controller
                 $row['DateTime']  = $log->created_at;
                 $row['Parameter']    = strtoupper($log->sensor->code);
                 $row['Concentrate']    = $log->value;
+                $row['Row Count']    = $log->row_count;
                 $row['Unit']  = $log->sensor->unit->name;
 
-                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Concentrate'], $row['Unit']));
+                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Concentrate'], $row['Row Count'], $row['Unit']));
             }
 
             fclose($file);

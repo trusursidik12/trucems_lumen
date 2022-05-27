@@ -83,9 +83,9 @@
                         let sensorValues = data.data
                         sensorValues.map(function(value){
                             if(unit === "m/g"){
-                                concentrate = Math.round((0.0409 * value.value * 34.08) * 100) / 100
+                                concentrate = Math.round((0.0409 * value.value * 34.08) * 1000) / 1000
                                 // Formula is (0.0409 * concentrate * 34.08)
-                                // * 100 and / 100 is for rounding 2 decimal places
+                                // * 1000 and / 1000 is for rounding 3 decimal places
                             }else{
                                 concentrate = value.value
                             }
