@@ -33,6 +33,8 @@ $router->group(['prefix' => 'api'], function() use ($router){
     $router->patch('/set-calibration/{mode}/{type}','API\SetCalibrationController@setCalibration');
     $router->get('/calibration/check-remaining/{mode}/{type}','API\SetCalibrationController@checkRemaining');
     $router->get('/calibration/check-retry/{mode}/{type}','API\SetCalibrationController@retryCalibration');
+    $router->get('/calibration/update-calibration/{mode}/{type}','API\SetCalibrationController@updateStatusCalibration');
+    $router->patch('/calibration/update-time-calibration/{mode}/{type}','API\SetCalibrationController@updateTimeCalibration');
     /**
      * Sensor Value Logs
      */

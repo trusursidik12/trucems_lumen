@@ -45,17 +45,15 @@ class SetCalibrationController extends Controller
                 $initialMode.'_max_span_ppm.numeric' => 'Max PPM must be numeric!',
             ]);
             $now = Carbon::now('Asia/Jakarta');
-            $endAt = $now->addSeconds($column[$fieldTimeLoop]);
-            $endAt = $endAt->addSeconds(1);
+            $endAt = $now->addSeconds($column[$fieldTimeLoop] + 1);
             $endAt = $endAt->format("Y-m-d H:i:s");
             $column['is_calibration'] = 2; // 2 = Manual Cal
             $column['is_calibration_history'] = 2; // 2 = Manual Cal
             $column['calibration_type'] = ($type == "span" ? 2 : ($type == "zero" ? 1 : 0));
-            $column['m_start_calibration_at'] = $now->format("Y-m-d H:i:s");
+            $column['m_start_calibration_at'] = date('Y-m-d H:i:s');
             $column['m_end_calibration_at'] = $endAt;
             $column['loop_count'] = $column[$fieldLoop];
             $configuration = Configuration::find(1);
-            // dd($column);
             $configuration->update($column);
             return response()->json(["success" => true, "message" => "Successfully update!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -79,9 +77,6 @@ class SetCalibrationController extends Controller
         $now = Carbon::now();
         $endAt = Carbon::parse($endAt);
         $diff = $now->diffInSeconds($endAt, false);
-        if ($diff <= 0) {
-            $config->update(['is_calibration' => 3]);
-        }
         $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->get();
         $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
@@ -96,29 +91,62 @@ class SetCalibrationController extends Controller
         ]);
     }
 
-    public function retryCalibration($mode, $type){
+    public function updateStatusCalibration($mode, $type){
+        try{
+            $is_retry = $this->isRetry($mode, $type);
+            $config = Configuration::find(1);
+            $config->update(['is_calibration' => 3]);
+            return response()->json([
+                'success' => true, 
+                'is_retry' => $is_retry,
+                'message' => 'Update Status Calibration Success!'
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'is_retry' => $is_retry,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateTimeCalibration($mode, $type){
         try{
             $config = Configuration::find(1);
             $initialMode = substr($mode,0,1); // is m_ or a_
-            $isCalibration = $config->is_calibration;
-            $fieldTimeLoop = $initialMode."_time_".strtolower($type)."_loop";
+            $fieldLoop = substr($mode,0,1)."_time_".strtolower($type)."_loop";
             $fieldStartAt = $initialMode."_start_calibration_at";
             $fieldEndAt = $initialMode."_end_calibration_at";
+            $startAt = date('Y-m-d H:i:s');
+            $endAt = Carbon::now('Asia/Jakarta')->addSeconds($config->$fieldLoop + 1)
+            ->format('Y-m-d H:i:s');
+            // dd($startAt,$endAt,$config->$fieldLoop);
+            // $config->$fieldStartAt = $startAt;
+            // $config->$fieldStartAt = $endAt;
+            // $config->update();
+            $config->update([
+                $fieldStartAt => $startAt,
+                $fieldEndAt => $endAt,
+            ]);
+            return response()->json(["success" => true, "message" => 'Success update time']);
+        }catch(Exception $e){
+            return response()->json(["success" => false, "errors" => $e->getMessage()]);
+
+        }
+    }
+
+    public function isRetry($mode, $type){
+        try{
+            $config = Configuration::find(1);
+            $isCalibration = $config->is_calibration;
             if($isCalibration == 1 || $isCalibration == 2){
-                $now = Carbon::now('Asia/Jakarta');
-                $endAt = $now->addSeconds($config->$fieldTimeLoop);
-                $endAt = $endAt->addSeconds(1);
-                $endAt = $endAt->format("Y-m-d H:i:s");
-                $config->$fieldStartAt = $now->format("Y-m-d H:i:s");
-                $config->$fieldEndAt = $endAt;
-                $config->save();
                 $retry = true;
             }else{
                 $retry = false;
             }
-            return response()->json(['success' => true, 'is_retry' => $retry]);
+            return $retry;
         }catch(Exception $e){
-            return response()->json(['success' => false, 'is_retry' => false,'message' => $e->getMessage()]);
+            return false;
         }
     }
 

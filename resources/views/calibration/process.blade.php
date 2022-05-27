@@ -49,30 +49,43 @@
                 success: function(data) {
                     let section = $('#section-values')
                     let sectionLogs = $('#section-logs')
-                    if (data.success) {
-                        if (data.remaining_time <= 0) {
+                    if(data.success){
+                        if(data.remaining_time < 0){
                             clearInterval(internvalRealtime)
                             $('#section-left').removeClass('block')
                             $('#section-left').addClass('hidden')
                             $('#section-right').removeClass('w-1/2')
                             $('#section-right').addClass('w-full')
                             $('#remaining').addClass('hidden')
-                            setTimeout(() => {
-                                $.ajax({
-                                    url: `{{ url('api/calibration/check-retry/'.strtolower($mode)."/".strtolower($type)) }}`,
-                                    type: '',
-                                    dataType: 'json',
-                                    data: $(this).serialize(),
-                                    success: function(data) {
-                                        alert(data.is_retry)
-                                        if (data.is_retry) {
-                                            window.location.reload()
-                                        } else {
+                            $.ajax({
+                                url : `{{ url('api/calibration/update-calibration')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
+                                type : 'get',
+                                dataType : 'json',
+                                success : function(data){
+                                    if(data.is_retry){
+                                        setTimeout(() => {
+                                            $.ajax({
+                                                url : `{{ url('api/calibration/update-time-calibration')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
+                                                type : 'PATCH',
+                                                dataType : 'json',
+                                                success : function(data){
+                                                    if(data.success){
+                                                        console.log(data.message)
+                                                        location.reload()
+                                                    }
+                                                }
+                                            })
+                                        }, 5000); //5 se
+                                        
+                                    }else{
+                                        setTimeout(() => {
                                             window.history.go(-1)
-                                        }
+                                        }, 5000); //5 sec
                                     }
-                                })
-                            }, 5000); //5 sec
+                                }
+                            })
+                            
+                            
                         }
                         let sensorValues = data.sensor_values
                         sensorValues.map(function(value) {
@@ -93,6 +106,7 @@
                         })
                         sectionLogs.html(html)
                         $('#remaining').html(`${data.remaining_time} sec`)
+
                     }
                 }
             })
