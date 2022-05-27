@@ -24,6 +24,7 @@ class SetCalibrationController extends Controller
     public function setCalibration($mode, $type, Request $request){
         try {
             $fieldTimeLoop = substr($mode,0,1)."_time_".strtolower($type)."_loop";
+            $fieldLoop = substr($mode,0,1)."_default_".strtolower($type)."_loop";
             $initialMode = substr($mode,0,1); // is m_ or a_
             $column = $this->validate($request,[
                 'm_default_zero_loop' => 'required|numeric',
@@ -52,6 +53,7 @@ class SetCalibrationController extends Controller
             $column['calibration_type'] = ($type == "span" ? 2 : ($type == "zero" ? 1 : 0));
             $column['m_start_calibration_at'] = $now->format("Y-m-d H:i:s");
             $column['m_end_calibration_at'] = $endAt;
+            $column['loop_count'] = $column[$fieldLoop];
             $configuration = Configuration::find(1);
             $configuration->update($column);
             return response()->json(["success" => true, "message" => "Successfully update!"]);
