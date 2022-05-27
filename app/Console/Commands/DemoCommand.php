@@ -38,7 +38,7 @@ class DemoCommand extends Command{
                 }
                 if($config->is_calibration > 2 ){ //
                     // When Analyzer done for calibration
-                    if($config->loop_count > 0){
+                    if($config->loop_count >= 1){
                         $column = [
                             'loop_count' => ($config->loop_count - 1),
                             'is_calibration' => $config->is_calibration_history,

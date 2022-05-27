@@ -134,6 +134,9 @@ class SetCalibrationController extends Controller
     public function isRetry($mode, $type){
         try{
             $config = Configuration::find(1);
+            if($config->loop_count <= 0){
+                return true;
+            }
             $isCalibration = $config->is_calibration;
             if($isCalibration == 1 || $isCalibration == 2){
                 $retry = true;
