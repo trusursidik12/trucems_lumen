@@ -52,7 +52,7 @@ class SetCalibrationController extends Controller
             $column['calibration_type'] = ($type == "span" ? 2 : ($type == "zero" ? 1 : 0));
             $column['m_start_calibration_at'] = date('Y-m-d H:i:s');
             $column['m_end_calibration_at'] = $endAt;
-            $column['loop_count'] = $column[$fieldLoop];
+            $column['loop_count'] = ($column[$fieldLoop] - 1);
             $configuration = Configuration::find(1);
             $configuration->update($column);
             return response()->json(["success" => true, "message" => "Successfully update!"]);
@@ -120,10 +120,6 @@ class SetCalibrationController extends Controller
             $startAt = date('Y-m-d H:i:s');
             $endAt = Carbon::now('Asia/Jakarta')->addSeconds($config->$fieldLoop + 1)
             ->format('Y-m-d H:i:s');
-            // dd($startAt,$endAt,$config->$fieldLoop);
-            // $config->$fieldStartAt = $startAt;
-            // $config->$fieldStartAt = $endAt;
-            // $config->update();
             $config->update([
                 $fieldStartAt => $startAt,
                 $fieldEndAt => $endAt,
