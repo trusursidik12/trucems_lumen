@@ -55,6 +55,7 @@ class SetCalibrationController extends Controller
             $column['m_end_calibration_at'] = $endAt;
             $column['loop_count'] = $column[$fieldLoop];
             $configuration = Configuration::find(1);
+            // dd($column);
             $configuration->update($column);
             return response()->json(["success" => true, "message" => "Successfully update!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {

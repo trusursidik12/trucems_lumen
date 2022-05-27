@@ -49,7 +49,7 @@
                     let section = $('#section-values')
                     let sectionLogs = $('#section-logs')
                     if(data.success){
-                        if(data.remaining_time <= 0){
+                        if(data.remaining_time < 0){
                             clearInterval(internvalRealtime)
                             $('#section-left').removeClass('block')
                             $('#section-left').addClass('hidden')
