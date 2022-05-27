@@ -30,8 +30,9 @@ $router->group(['prefix' => 'api'], function() use ($router){
     /**
      * Set Calibration
      */
-    $router->patch('/set-calibration/manual/{type}','API\SetCalibrationController@setManualCal');
+    $router->patch('/set-calibration/{mode}/{type}','API\SetCalibrationController@setCalibration');
     $router->get('/calibration/check-remaining/{mode}/{type}','API\SetCalibrationController@checkRemaining');
+    $router->get('/calibration/check-retry/{mode}/{type}','API\SetCalibrationController@retryCalibration');
     /**
      * Sensor Value Logs
      */

@@ -14,10 +14,12 @@
             </div>
             <div id="section-values">
                 @foreach ($sensorValues as $value)
-                <div class="flex justify-between items-center space-x-3">
+                <div class="flex justify-between items-start space-x-3">
                     <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
                     <span class="text-2xl sensor-name">{!! $value->sensor->name !!}</span>
-                    <span class="text-8xl font-bold sensor-value">{{ $value->value }}</span>
+                    <span class="text-8xl font-bold sensor-value h-64 flex items-center">
+                        <span>{{ $value->value }}</span>
+                    </span>
                     <span class="text-2xl sensor-unit">{{ $value->sensor->unit->name }}</span>
                 </div>
                 @endforeach

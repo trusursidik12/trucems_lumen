@@ -37,6 +37,7 @@
 @section('js')
 <script>
     $(document).ready(function(){
+        let internvalRealtime = setInterval(getRealtimeValue, 1000);
         function getRealtimeValue(){
             let random = Math.floor(Math.random() * 100)
             $.ajax({
@@ -49,12 +50,26 @@
                     let sectionLogs = $('#section-logs')
                     if(data.success){
                         if(data.remaining_time <= 0){
+                            clearInterval(internvalRealtime)
                             $('#section-left').removeClass('block')
                             $('#section-left').addClass('hidden')
                             $('#section-right').removeClass('w-1/2')
                             $('#section-right').addClass('w-full')
                             $('#remaining').addClass('hidden')
                             setTimeout(() => {
+                                $.ajax({
+                                    url : `{{ url('api/calibration/check-retry/'.strtolower($mode)."/".strtolower($type)) }}`,
+                                    type : '',
+                                    dataType : 'json',
+                                    data : $(this).serialize(),
+                                    success : function(data){
+                                        
+                                    },
+                                    error : function(xhr, status, err){
+                                        
+                                    }
+                                })
+
                                 window.history.go(-1)
                             }, 5000); //5 sec
                         }
@@ -77,14 +92,12 @@
                         })
                         sectionLogs.html(html)
                         $('#remaining').html(`${data.remaining_time} sec`)
-
-
                     }
                 }
             })
-            setTimeout(getRealtimeValue, 1000);
+            // setTimeout(getRealtimeValue, 1000);
         }
-        getRealtimeValue()
+        
     })
 </script>
 @endsection
