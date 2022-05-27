@@ -36,20 +36,21 @@
 @endsection
 @section('js')
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         let internvalRealtime = setInterval(getRealtimeValue, 1000);
-        function getRealtimeValue(){
+
+        function getRealtimeValue() {
             let random = Math.floor(Math.random() * 100)
             $.ajax({
-                url : `{{ url('api/calibration/check-remaining')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
-                type : 'get',
-                dataType : 'json',
-                data : $(this).serialize(),
-                success : function(data){
+                url: `{{ url('api/calibration/check-remaining')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
+                type: 'get',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function(data) {
                     let section = $('#section-values')
                     let sectionLogs = $('#section-logs')
-                    if(data.success){
-                        if(data.remaining_time <= 0){
+                    if (data.success) {
+                        if (data.remaining_time <= 0) {
                             clearInterval(internvalRealtime)
                             $('#section-left').removeClass('block')
                             $('#section-left').addClass('hidden')
@@ -58,14 +59,15 @@
                             $('#remaining').addClass('hidden')
                             setTimeout(() => {
                                 $.ajax({
-                                    url : `{{ url('api/calibration/check-retry/'.strtolower($mode)."/".strtolower($type)) }}`,
-                                    type : '',
-                                    dataType : 'json',
-                                    data : $(this).serialize(),
-                                    success : function(data){
-                                        if(data.is_retry){
+                                    url: `{{ url('api/calibration/check-retry/'.strtolower($mode)."/".strtolower($type)) }}`,
+                                    type: '',
+                                    dataType: 'json',
+                                    data: $(this).serialize(),
+                                    success: function(data) {
+                                        alert(data.is_retry)
+                                        if (data.is_retry) {
                                             window.location.reload()
-                                        }else{
+                                        } else {
                                             window.history.go(-1)
                                         }
                                     }
@@ -73,7 +75,7 @@
                             }, 5000); //5 sec
                         }
                         let sensorValues = data.sensor_values
-                        sensorValues.map(function(value){
+                        sensorValues.map(function(value) {
                             let div = section.find(`.section-value[data-sensor-id=${value.sensor_id}]`)
                             div.find('.sensor-value').html(`${value.value}`)
                         })
@@ -82,12 +84,12 @@
                         let i = 2
                         let logs = []
                         let html = ``
-                        calibrationLogs.map(function(value){
-                            logs[i] =` <p class="block text-xs">${value.value} ${value.sensor.unit.name} - ${value.created_at}</p>`
+                        calibrationLogs.map(function(value) {
+                            logs[i] = ` <p class="block text-xs">${value.value} ${value.sensor.unit.name} - ${value.created_at}</p>`
                             i--
                         })
-                        logs.map(function(element){
-                            html+=element
+                        logs.map(function(element) {
+                            html += element
                         })
                         sectionLogs.html(html)
                         $('#remaining').html(`${data.remaining_time} sec`)
@@ -96,7 +98,7 @@
             })
             // setTimeout(getRealtimeValue, 1000);
         }
-        
+
     })
 </script>
 @endsection

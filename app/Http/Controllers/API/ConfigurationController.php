@@ -11,10 +11,10 @@ class ConfigurationController extends Controller
 {
     public function index()
     {
-        try{
+        try {
             $configurations = Configuration::find(1);
             return response()->json(['success' => true, 'data' => $configurations]);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
