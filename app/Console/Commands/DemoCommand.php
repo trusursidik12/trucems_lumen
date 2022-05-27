@@ -38,40 +38,31 @@ class DemoCommand extends Command{
                 }
                 if($config->is_calibration > 2 ){ //
                     // When Analyzer done for calibration
-                    $now = Carbon::now('Asia/Jakarta');
-                    $endAt = ($config->is_calibration_history == 1 ? $config->a_end_calibration : $config->a_end_calibration);
-                    // Is Auto / Manual
-                    $endAt = Carbon::parse($endAt);
-                    $diff = $now->diffInSeconds($endAt);
-                   
-                    if($diff <= 0){
-                        if($config->loop_count > 0){
-                            $column = [
-                                'loop_count' => ($config->loop_count - 1),
-                                'is_calibration' => $config->is_calibration_history,
-                            ]; 
-                        }else{
-                            $column = [
-                                'loop_count' => 0,
-                                'is_calibration' => 0,
-                            ];
-                        }
-                        $config->update($column);
+                    if($config->loop_count > 0){
+                        $column = [
+                            'loop_count' => ($config->loop_count - 1),
+                            'is_calibration' => $config->is_calibration_history,
+                        ]; 
+                    }else{
+                        $column = [
+                            'loop_count' => 0,
+                            'is_calibration' => 0,
+                        ];
+                    }
+                    $config->update($column);
 
-                        $calibrationLogs = CalibrationLog::first();
-                        if(!empty($calibrationLogs)){
-                            $sum = CalibrationLog::sum("value");
-                            $rowCount = CalibrationLog::get()->count();
-                            $avg = $rowCount > 0 ? ($sum / $rowCount) : 0;
-                            CalibrationAvgLog::create([
-                                'sensor_id' => $calibrationLogs->sensor_id,
-                                'row_count' => $rowCount,
-                                'value' => $avg,
-                                'calibration_type' => $calibrationLogs->calibration_type,
-                            ]);
-                            CalibrationLog::truncate();
-                        }
-                        
+                    $calibrationLogs = CalibrationLog::first();
+                    if(!empty($calibrationLogs)){
+                        $sum = CalibrationLog::sum("value");
+                        $rowCount = CalibrationLog::get()->count();
+                        $avg = $rowCount > 0 ? ($sum / $rowCount) : 0;
+                        CalibrationAvgLog::create([
+                            'sensor_id' => $calibrationLogs->sensor_id,
+                            'row_count' => $rowCount,
+                            'value' => $avg,
+                            'calibration_type' => $calibrationLogs->calibration_type,
+                        ]);
+                        CalibrationLog::truncate();
                     }
                 }
             }
