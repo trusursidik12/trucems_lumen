@@ -19,11 +19,12 @@ class CalibrationLogsController extends Controller
         return response()->json(['success' => true, 'data' => $calibrationLogs]);
     }
 
-    public function getLast(){
-        try{
-            $calibrationLogs = CalibrationLog::orderBy("id","desc")->first();
+    public function getLast()
+    {
+        try {
+            $calibrationLogs = CalibrationLog::orderBy("id", "desc")->first();
             return response()->json(['success' => true, 'data' => $calibrationLogs]);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -66,7 +67,7 @@ class CalibrationLogsController extends Controller
         CalibrationAvgLog::create([
             'sensor_id' => $calibrationLogs->sensor_id,
             'row_count' => $rowCount,
-            'value' => $avg,
+            'value' => round($avg, 3),
             'calibration_type' => $calibrationLogs->calibration_type,
         ]);
         CalibrationLog::truncate();
