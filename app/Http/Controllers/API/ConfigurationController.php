@@ -20,7 +20,9 @@ class ConfigurationController extends Controller
         try {
             $column = $this->validate($request, [
                 "schedule_auto_calibration" => "string",
-                "is_calibration" => "string",
+                "is_calibration" => "numeric",
+                "is_calibration_history" => "numeric",
+                "loop_count" => "numeric",
                 "calibration_type" => "string",
                 "a_default_zero_loop" => "numeric",
                 "a_default_span_loop" => "numeric",
