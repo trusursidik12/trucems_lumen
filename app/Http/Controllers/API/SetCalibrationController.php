@@ -8,33 +8,43 @@ use App\Models\CalibrationLog;
 use App\Models\Configuration;
 use App\Models\SensorValue;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 
 class SetCalibrationController extends Controller
 {
-    public function setManualCal($type, Request $request)
-    {
+    /**
+     * set Calibration function
+     *
+     * @param [string] $mode is condition calibration manual or auto
+     * @param [string] $type is condition span or zero
+     * @param Request $request
+     * @return json
+     */
+    public function setCalibration($mode, $type, Request $request){
         try {
-            $column = $this->validate($request, [
+            $fieldTimeLoop = substr($mode,0,1)."_time_".strtolower($type)."_loop";
+            $initialMode = substr($mode,0,1); // is m_ or a_
+            $column = $this->validate($request,[
                 'm_default_zero_loop' => 'required|numeric',
                 'm_time_zero_loop' => 'required|numeric',
                 'm_default_span_loop' => 'required|numeric',
                 'm_time_span_loop' => 'required|numeric',
                 'm_max_span_ppm' => 'required|numeric',
-            ], [
-                'm_default_zero_loop.required' => 'Default Zero Loop cant empty!',
-                'm_time_zero_loop.required' => 'Time Zero Loop cant empty!',
-                'm_default_span_loop.required' => 'Span Zero Loop cant empty!',
-                'm_time_span_loop.required' => 'Time Span Loop cant empty!',
-                'm_max_span_ppm.required' => 'Max PPM cant empty!',
-                'm_default_zero_loop.numeric' => 'Default Zero Loop must be numeric!',
-                'm_time_zero_loop.numeric' => 'Time Zero Loop must be numeric!',
-                'm_default_span_loop.numeric' => 'Span Zero Loop must be numeric!',
-                'm_time_span_loop.numeric' => 'Time Span Loop must be numeric!',
-                'm_max_span_ppm.numeric' => 'Max PPM must be numeric!',
+            ],[
+                $initialMode.'_default_zero_loop.required' => 'Default Zero Loop cant empty!',
+                $initialMode.'_time_zero_loop.required' => 'Time Zero Loop cant empty!',
+                $initialMode.'_default_span_loop.required' => 'Span Zero Loop cant empty!',
+                $initialMode.'_time_span_loop.required' => 'Time Span Loop cant empty!',
+                $initialMode.'_max_span_ppm.required' => 'Max PPM cant empty!',
+                $initialMode.'_default_zero_loop.numeric' => 'Default Zero Loop must be numeric!',
+                $initialMode.'_time_zero_loop.numeric' => 'Time Zero Loop must be numeric!',
+                $initialMode.'_default_span_loop.numeric' => 'Span Zero Loop must be numeric!',
+                $initialMode.'_time_span_loop.numeric' => 'Time Span Loop must be numeric!',
+                $initialMode.'_max_span_ppm.numeric' => 'Max PPM must be numeric!',
             ]);
             $now = Carbon::now('Asia/Jakarta');
-            $endAt = $now->addSeconds(($type == "span" ? $column['m_time_span_loop'] : $column['m_time_zero_loop']));
+            $endAt = $now->addSeconds($column[$fieldTimeLoop]);
             $endAt = $endAt->addSeconds(1);
             $endAt = $endAt->format("Y-m-d H:i:s");
             $column['is_calibration'] = 2; // 2 = Manual Cal
@@ -50,22 +60,19 @@ class SetCalibrationController extends Controller
         }
     }
 
-    public function checkRemaining($mode, $type)
-    {
+     /**
+     * check remaining calibration progress function
+     *
+     * @param [string] $mode is condition calibration manual or auto
+     * @param [string] $type is condition span or zero
+     * @param Request $request
+     * @return json
+     */
+    public function checkRemaining($mode,$type){
         $config = Configuration::find(1);
-        switch ($mode) {
-            case 'manual':
-                $endAt = $config->m_end_calibration_at;
-                break;
-
-            case 'auto':
-            default:
-                $endAt = $config->a_end_calibration_at;
-                break;
-        }
-        // if(empty($startAt)){
-        //     return response()->json(['success' => false, 'message' => 'Calibration is not started!']);
-        // }
+        $initialMode = substr($mode,0,1); // is m_ or a_
+        $fieldEndAt = $initialMode."_end_calibration_at";
+        $endAt = $config->$fieldEndAt;
         $now = Carbon::now();
         $endAt = Carbon::parse($endAt);
         $diff = $now->diffInSeconds($endAt, false);
@@ -76,8 +83,7 @@ class SetCalibrationController extends Controller
             ->orderBy("id", "desc")->get();
         $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->withCasts(["created_at" => "datetime:H:i:s"])
-            ->limit(3)->orderBy("id", "desc")->get();
-        // $lastCalibrationAvg = CalibrationAvgLog::orderBy("id","desc")->first();
+            ->limit(3)->orderBy("id","desc")->get();
         return response()->json([
             'success' => true,
             'end_at' => $endAt->format("Y-m-d H:i:s"),
@@ -86,4 +92,31 @@ class SetCalibrationController extends Controller
             'sensor_values' => $sensorValues,
         ]);
     }
+
+    public function retryCalibration($mode, $type){
+        try{
+            $config = Configuration::find(1);
+            $initialMode = substr($mode,0,1); // is m_ or a_
+            $isCalibration = $config->is_calibration;
+            $fieldTimeLoop = $initialMode."_time_".strtolower($type)."_loop";
+            $fieldStartAt = $initialMode."_start_calibration_at";
+            $fieldEndAt = $initialMode."_end_calibration_at";
+            if($isCalibration == 1 || $isCalibration == 2){
+                $now = Carbon::now('Asia/Jakarta');
+                $endAt = $now->addSeconds($config->$fieldTimeLoop);
+                $endAt = $endAt->addSeconds(1);
+                $endAt = $endAt->format("Y-m-d H:i:s");
+                $config->$fieldStartAt = $now->format("Y-m-d H:i:s");
+                $config->$fieldEndAt = $endAt;
+                $config->save();
+                $retry = true;
+            }else{
+                $retry = false;
+            }
+            return response()->json(['success' => true, 'is_retry' => $retry]);
+        }catch(Exception $e){
+            return response()->json(['success' => false, 'is_retry' => false,'message' => $e->getMessage()]);
+        }
+    }
+
 }
