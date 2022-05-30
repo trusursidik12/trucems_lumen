@@ -61,6 +61,7 @@ try:
                 if(data_value):
                     round_value = round(float(data_value), 3)
                 else:
+                    # value set when the sensor disconnected!
                     round_value = -2.222
                 # update data
                 patch_payload_sensor_values = 'value='+str(round_value)+''
@@ -185,7 +186,7 @@ try:
             json_get_configuration = json.loads(response_configuration.text)
 
             if(json_get_configuration["success"] == True):
-                # update data
+                # value set when the USB Port disconnected!
                 round_value = -1.111
                 patch_payload_sensor_values = 'value='+str(round_value)+''
                 response = requests.request(
