@@ -32,7 +32,6 @@
                 <p id="remaining"></p>
                <div id="last-value" class="hidden">
                     <p class="text-indigo-500">Last Value : <span class="last-value"></span> ppm</p>
-                    <p class="text-indigo-500 font-bold">Last AVG. Value : {{ @$lastAvg->value ? $lastAvg->value : 0 }} ppm</p>
                </div>
             </div>
         </div>

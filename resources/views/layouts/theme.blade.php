@@ -13,7 +13,7 @@
     <div class="max-w-5xl mx-auto bg-gray-200 rounded min-h-[100vh] relative">
         @yield('content')
         <div class="absolute bottom-0 w-full flex justify-end px-5 py-2">
-            <span class="text-gray-800">&copy; {{ date('Y') }} Developed by PT. Trusur Unggul Teknusa</span> 
+            <span class="text-gray-800">&copy; 2022 Developed by PT. Trusur Unggul Teknusa</span> 
         </div>
     </div>
    
