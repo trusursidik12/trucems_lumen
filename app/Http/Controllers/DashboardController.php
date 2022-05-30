@@ -10,4 +10,7 @@ class DashboardController extends Controller
         $sensorValues = SensorValue::limit(10)->get();
         return view('dashboard.dashboard', compact('sensorValues'));
     }
+    public function qualityStandard(){
+        return view('quality-standard.index');
+    }
 }
