@@ -7,48 +7,20 @@
             Back
         </a>
     </div>
-    <div class="flex justify-between pt-[14vh] space-x-3">
+    <div class="flex justify-between pt-[6vh] space-x-3">
         <div class="w-full rounded px-6 py-3 bg-gray-300">
             <div class="flex justify-end">
-               
+               <canvas id="chart"></canvas>
             </div>
         </div>
     </div>
 </div>
 @endsection
 @section('js')
+<script src="{{ url('js/chart.js/chart.min.js') }}"></script>
+<script src="{{ url('js/chart.js/chartjs-plugin-annotation.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-        if (localStorage.getItem("unit") === undefined) {
-            localStorage.setItem("unit", "ppm")
-        }
-
-        function switchUnit(isBtn = false) {
-            let unit = localStorage.getItem("unit")
-            if (unit === "ppm") {
-                if (isBtn) {
-                    $('.sensor-unit').html("m/g")
-                    localStorage.setItem("unit", "m/g")
-                    $('#btn-switch').html(unit)
-                } else {
-                    $('#btn-switch').html("m/g")
-                    $('.sensor-unit').html(unit)
-                }
-            } else {
-                if (isBtn) {
-                    $('.sensor-unit').html("ppm")
-                    localStorage.setItem("unit", "ppm")
-                    $('#btn-switch').html(unit)
-                } else {
-                    $('#btn-switch').html("ppm")
-                    $('.sensor-unit').html(unit)
-                }
-            }
-        }
-        switchUnit()
-        $('#btn-switch').click(function() {
-            switchUnit(true)
-        })
 
         function getValues() {
             let random = Math.floor(Math.random() * 100)
@@ -83,4 +55,41 @@
         getValues()
     })
 </script>
+<script>
+    const labels = [
+      'TRS (H2S)',
+    ];
+  
+    const data = {
+      labels: labels,
+      datasets: [{
+        barThickness : 68,
+        label: 'Concentratation PPM',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: [10],
+      }]
+    };
+  
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        annotation: {
+            annotations: [{
+                type: 'line',
+                mode: 'horizontal',
+                scaleID: 'y-axis-0',
+                value: '25',
+                borderColor: 'red',
+                borderWidth: 2
+            }]
+        }
+      }
+    };
+    const myChart = new Chart(
+        document.getElementById('chart'),
+        config
+    );
+  </script>
 @endsection

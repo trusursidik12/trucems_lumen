@@ -22,7 +22,8 @@ class SensorSeeder extends Seeder
                 'unit_id' => 1,
                 'code' => 'trs',
                 'name' => 'TRS (H<sub>2</sub>S)',
-                'formula' => null
+                'formula' => null,
+                'quality_standard' => 2 // PPM
             ]
         ]);
     }

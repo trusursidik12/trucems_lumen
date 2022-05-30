@@ -5,3 +5,5 @@ mix.js("resources/js/app.js", "public/js")
         require("tailwindcss"),
 ]);
 // mix.copyDirectory('node_modules/kioskboard/dist','public/js/kioskboard')
+// mix.copyDirectory('node_modules/chart.js/dist','public/js/chart.js')
+// mix.copyDirectory('node_modules/chartjs-plugin-annotation/dist','public/js/chart.js')

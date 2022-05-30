@@ -440,6 +440,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -486,6 +490,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-14 {
   height: 3.5rem;
 }
+.h-8 {
+  height: 2rem;
+}
 .h-\[88vh\] {
   height: 88vh;
 }
@@ -509,6 +516,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-10 {
   width: 2.5rem;
+}
+.w-8 {
+  width: 2rem;
 }
 .w-2\/3 {
   width: 66.666667%;
@@ -623,6 +633,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .pt-\[14vh\] {
   padding-top: 14vh;
+}
+.pt-\[6vh\] {
+  padding-top: 6vh;
 }
 .text-left {
   text-align: left;

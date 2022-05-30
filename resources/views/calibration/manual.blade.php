@@ -14,6 +14,7 @@
        
     </div>
     <form action="" class="bg-gray-300 h-[83vh] rounded" id="form">
+        <input type="hidden" name="type">
         <div class="flex justify-between space-x-3 items-center pt-[13vh]" id="section-form">
             <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
                 <div class="flex my-2 justify-between items-center">
@@ -31,6 +32,13 @@
                     <span class="w-1/3">
                         <input type="text" name="m_time_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_time_zero_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
+                </div>
+                
+                <div class="my-3">
+                    <label for="zero_is_auto" class="flex justify-between items-center">
+                        <span class="uppercase font-semibold text-2xl">Automatic Gas Calibration</span>
+                        <input type="checkbox" id="zero_is_auto" name="zero_is_auto" class="h-8 w-8"> 
+                    </label>
                 </div>
                 {{-- Margin --}}
                 <div class="invisible flex my-2 justify-between items-center">
@@ -69,6 +77,12 @@
                     <span class="w-1/3">
                         <input type="text" name="m_max_span_ppm" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_max_span_ppm }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
+                </div>
+                <div class="my-3">
+                    <label for="span_is_auto" class="flex justify-between items-center">
+                        <span class="uppercase font-semibold text-2xl">Automatic Gas Calibration</span>
+                        <input type="checkbox" id="span_is_auto" name="span_is_auto" class="h-8 w-8"> 
+                    </label>
                 </div>
                 <button data-type="span" type="button" class="btn-start rounded w-full py-4 text-xl font-bold bg-indigo-500 text-white">Start Span Manual Calibration</button>
             </div>
@@ -173,6 +187,7 @@
      $(document).ready(function(){
          $('.btn-start').click(function(){
              let type = $(this).data('type');
+             $('input[name=type]').val(type)
              $.ajax({
                  url : `{{ url("api/set-calibration/manual") }}/${type}`,
                  type : 'PATCH',
