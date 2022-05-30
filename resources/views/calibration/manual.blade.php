@@ -186,7 +186,7 @@
                         Object.keys(data.errors).map(function(index){
                             let errors = data.errors[index]
                             errors.map(function(error){
-                                html+=` <p class="p-1 bg-red-500 text-white mb-2">${error}</p>`
+                                html+=` <p class="rounded p-2 bg-red-500 text-white mb-2">${error}</p>`
                             })
                         })
                         $('#error-msg').html(html)
