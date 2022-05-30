@@ -22,7 +22,8 @@ class SensorSeeder extends Seeder
                 'unit_id' => 1,
                 'code' => 'trs',
                 'name' => 'TRS (H<sub>2</sub>S)',
-                'formula' => null
+                'formula' => null,
+                'quality_standard' => 20 // 20 m/g = Recovery, 40 m/g lime klin)
             ]
         ]);
     }

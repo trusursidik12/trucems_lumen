@@ -3,15 +3,15 @@
 @section('content')
 <div class="px-6 py-3 bg-gray-200 rounded">
     <div class="flex justify-between mb-3">
-        <a href="{{ url("/") }}" role="button" class="px-4 py-2 bg-gray-500 text-white">
+        <a href="{{ url("/") }}" role="button" class="rounded px-4 py-2 bg-gray-500 text-white">
             Back
         </a>
-        <button type="button" id="btn-export" class="px-4 py-2 bg-green-500 text-white">
+        <button type="button" id="btn-export" class="rounded px-4 py-2 bg-green-500 text-white">
             Export CSV
         </button>
     </div>
     <div class="bg-gray-300 p-2 rounded mt-[12vh]">
-        <table class="table w-full text-left">
+        <table class="table w-full text-left rounded">
             <thead>
                 <th>Date Time</th>
                 <th>Parameter</th>
@@ -69,7 +69,7 @@ $(document).ready(function(){
                             break;
                     }
                     html+=`
-                    <a href="#" data-url="${link.url}" class="btn-link flex h-10 w-10 justify-center items-center bg-${link.active ? 'indigo' : 'slate'}-500 text-center text-white ml-1">
+                    <a href="#" data-url="${link.url}" class="btn-link rounded flex h-10 w-10 justify-center items-center bg-${link.active ? 'indigo' : 'slate'}-500 text-center text-white ml-1">
                         <span>${label}</span>
                     </a>
                     `

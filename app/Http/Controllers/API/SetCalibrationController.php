@@ -28,11 +28,11 @@ class SetCalibrationController extends Controller
             $fieldLoop = substr($mode, 0, 1) . "_default_" . strtolower($type) . "_loop";
             $initialMode = substr($mode, 0, 1); // is m_ or a_
             $column = $this->validate($request, [
-                'm_default_zero_loop' => 'required|numeric',
-                'm_time_zero_loop' => 'required|numeric',
-                'm_default_span_loop' => 'required|numeric',
-                'm_time_span_loop' => 'required|numeric',
-                'm_max_span_ppm' => 'required|numeric',
+                 $initialMode.'_default_zero_loop' => 'required|numeric|min:1',
+                 $initialMode.'_time_zero_loop' => 'required|numeric|min:1',
+                 $initialMode.'_default_span_loop' => 'required|numeric|min:1',
+                 $initialMode.'_time_span_loop' => 'required|numeric|min:1',
+                 $initialMode.'_max_span_ppm' => 'required|numeric|min:1',
             ], [
                 $initialMode . '_default_zero_loop.required' => 'Default Zero Loop cant empty!',
                 $initialMode . '_time_zero_loop.required' => 'Time Zero Loop cant empty!',
@@ -44,6 +44,11 @@ class SetCalibrationController extends Controller
                 $initialMode . '_default_span_loop.numeric' => 'Span Zero Loop must be numeric!',
                 $initialMode . '_time_span_loop.numeric' => 'Time Span Loop must be numeric!',
                 $initialMode . '_max_span_ppm.numeric' => 'Max PPM must be numeric!',
+                $initialMode . '_default_zero_loop.min' => 'Default Zero Loop must be at least 1',
+                $initialMode . '_time_zero_loop.min' => 'Time Zero Loop must be at least 1',
+                $initialMode . '_default_span_loop.min' => 'Span Zero Loop must be at least 1',
+                $initialMode . '_time_span_loop.min' => 'Time Span Loop must be at least 1',
+                $initialMode . '_max_span_ppm.min' => 'Max PPM must be at least 1',
             ]);
             $now = Carbon::now('Asia/Jakarta');
             $endAt = $now->addSeconds($column[$fieldTimeLoop] + 1);

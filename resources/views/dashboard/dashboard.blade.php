@@ -6,9 +6,9 @@
         <p>10:10:10</p>
     </div>
     <div class="flex justify-between pt-[14vh] space-x-3">
-        <div class="w-2/3 px-6 py-3 bg-gray-300">
+        <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
             <div class="flex justify-end">
-                <button type="button" id="btn-switch" class="px-4 py-2 bg-indigo-500 text-white">
+                <button type="button" id="btn-switch" class="rounded px-4 py-2 bg-indigo-500 text-white">
                     m/g
                 </button>
             </div>
@@ -26,11 +26,11 @@
             </div>
         </div>
         <div class="w-1/3">
-            <nav class="sidebar flex flex-col space-y-3">
-                <a href="{{ url("calibration/auto") }}">Auto CAL</a>
+            <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
+                {{-- <a href="{{ url("calibration/auto") }}">Auto CAL</a> --}}
                 <a href="{{ url("calibration/manual") }}">Manual CAL</a>
                 <a href="{{ url("calibration/logs") }}">Calibration Logs</a>
-                <a href="{{ url("settings") }}">Setting</a>
+                {{-- <a href="{{ url("settings") }}">Setting</a> --}}
                 <a href="{{ url("quality-standards") }}">Baku Mutu</a>
             </nav>
         </div>
