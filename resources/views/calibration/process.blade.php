@@ -9,7 +9,8 @@
             <p class="block font-semibold text-sm text-indigo-700">Realtime Value : </p>
             <span class="block ml-3" id="section-logs">
             </span>
-            <p class="block font-semibold text-sm text-indigo-700">Last Avg.: {{ @$lastAvg->value ? $lastAvg->value : 0}} PPM</p>
+            <p class="block font-semibold text-sm text-indigo-700 last-avg">Last AVG. Value :</p>
+            <span class="block font-semibold text-sm text-gray-700 ml-3">{{ @$lastAvg->value ? $lastAvg->value : 0}} PPM</span>
             <div id="section-values">
                 @foreach ($sensorValues as $value)
                 <div class="flex justify-between items-center px-3 section-value" data-sensor-id="{{ $value->sensor_id }}">
@@ -29,6 +30,10 @@
                 <p class="text-2xl mb-3 uppercase font-semibold font-sans">Calibrating</p>
                 <p class="text-2xl mb-3 uppercase font-semibold font-sans">{{ $type }}</p>
                 <p id="remaining"></p>
+               <div id="last-value" class="hidden">
+                    <p class="text-indigo-500">Last Value : <span class="last-value"></span> ppm</p>
+                    <p class="text-indigo-500 font-bold">Last AVG. Value : {{ @$lastAvg->value ? $lastAvg->value : 0 }} ppm</p>
+               </div>
             </div>
         </div>
     </div>
@@ -57,6 +62,7 @@
                             $('#section-right').removeClass('w-1/2')
                             $('#section-right').addClass('w-full')
                             $('#remaining').addClass('hidden')
+                            $('#last-value').removeClass('hidden')
                             $.ajax({
                                 url: `{{ url('api/calibration/update-calibration')."/".strtolower($mode)."/".strtolower($type) }}?t=${random}`,
                                 type: 'get',
@@ -91,6 +97,7 @@
                         sensorValues.map(function(value) {
                             let div = section.find(`.section-value[data-sensor-id=${value.sensor_id}]`)
                             div.find('.sensor-value').html(`${value.value}`)
+                            $('.last-value').html(`${value.value}`)
                         })
                         // Logs
                         let calibrationLogs = data.calibration_logs

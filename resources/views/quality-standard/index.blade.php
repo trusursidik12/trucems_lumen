@@ -9,7 +9,7 @@
     </div>
     <div class="flex justify-between pt-[6vh] space-x-3">
         <div class="w-full rounded px-6 py-3 bg-gray-300">
-            <h2 class="text-xl text-center"><span id="concentrate"></span> m/g</h2>
+            <h2 class="text-xl text-center"><span id="concentrate"></span> mg/m<sup>3</sup></h2>
             <div class="flex justify-end">
                <canvas id="chart"></canvas>
             </div>
@@ -29,7 +29,7 @@
                 ],
             datasets: [{
                 barThickness : 68,
-                label: 'Concentratation m/g',
+                label: 'Concentratation mg/m³',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: [90,11,23,13,21],
@@ -117,7 +117,7 @@
                             // Formula is (0.0409 * concentrate * 34.08)
                             // * 1000 and / 1000 is for rounding 3 decimal places
                             // Set Quality Standard
-                            chartQualityStandard.options.plugins.annotation.annotations.line1.label.content = `Baku Mutu - ${value.sensor.quality_standard} m/g`
+                            chartQualityStandard.options.plugins.annotation.annotations.line1.label.content = `Baku Mutu - ${value.sensor.quality_standard} mg/m³`
                             chartQualityStandard.options.plugins.annotation.annotations.line1.yMin = value.sensor.quality_standard
                             chartQualityStandard.options.plugins.annotation.annotations.line1.yMax = value.sensor.quality_standard
                             // Set Concentrate Value
