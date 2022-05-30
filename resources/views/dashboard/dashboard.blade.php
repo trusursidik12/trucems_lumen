@@ -6,7 +6,7 @@
         <p>10:10:10</p>
     </div>
     <div class="flex justify-between pt-[14vh] space-x-3">
-        <div class="w-2/3 px-6 py-3 bg-gray-300">
+        <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
             <div class="flex justify-end">
                 <button type="button" id="btn-switch" class="rounded px-4 py-2 bg-indigo-500 text-white">
                     m/g
