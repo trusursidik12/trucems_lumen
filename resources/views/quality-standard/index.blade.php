@@ -75,15 +75,19 @@
       type: 'bar',
       data: data,
       options: {
-        annotation: {
-            annotations: [{
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                value: '25',
-                borderColor: 'red',
-                borderWidth: 2
-            }]
+        plugins: {
+            autocolors: false,
+            annotation: {
+                annotations: {
+                    line1: {
+                        type: 'line',
+                        yMin: 5,
+                        yMax: 5,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 2,
+                    }
+                }
+            }
         }
       }
     };
