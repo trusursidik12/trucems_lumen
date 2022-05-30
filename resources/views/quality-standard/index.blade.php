@@ -45,32 +45,23 @@
             data: data,
             options: {
                 plugins: {
-                    // autocolors: true,
-                    // annotation: {
-                    //     annotations: {
-                    //         line1: {
-                    //             type: 'line',
-                    //             yMin: 5,
-                    //             yMax: 5,
-                    //             borderColor: 'red',
-                    //             borderWidth: 2,
-                    //             label : {
-                    //                 enabled : true,
-                    //                 content : 'Baku Mutu'
-                    //             }
-                    //         }
-                    //     }
-                    // },
-                    datalabels: {
-                        color: 'white',
-                        display: function(context) {
-                            return context.dataset.data[context.dataIndex] > 0;
-                        },
-                        font: {
-                        weight: 'bold'
-                        },
-                        formatter: Math.round
-                    }
+                    autocolors: true,
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                yMin: 5,
+                                yMax: 5,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                label : {
+                                    enabled : true,
+                                    content : 'Baku Mutu'
+                                }
+                            }
+                        }
+                    },
+                    
                         
 
                 }
@@ -141,7 +132,7 @@
             })
             setTimeout(getValues, 1000);
         }
-        // getValues()
+        getValues()
     })
 </script>
 @endsection
