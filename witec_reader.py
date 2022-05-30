@@ -1,10 +1,8 @@
 from __future__ import print_function
 import sys
-# from labjack import ljm
 from ast import Str
 import time
 from datetime import datetime
-# import psycopg2
 from time import sleep
 import serial  # Import module
 import requests
@@ -12,24 +10,20 @@ import json
 import struct
 
 try:
-
     # ser.open()
 
-    # except Exception as e:
-    #     print("[X]  Error " + e)
-
     # patch / update data sensor values
-    patch_url_sensor_values = "http://localhost/trucems_lumen/public/api/sensor-value/1"
+    patch_url_sensor_values = "http://localhost/trucems/public/api/sensor-value/1"
     # post data into calibration_logs
-    post_url_calibration_logs = "http://localhost/trucems_lumen/public/api/calibration-logs"
+    post_url_calibration_logs = "http://localhost/trucems/public/api/calibration-logs"
     # get data into calibration_logs
-    get_url_calibration_logs = "http://localhost/trucems_lumen/public/api/calibration-logs/get-last"
+    get_url_calibration_logs = "http://localhost/trucems/public/api/calibration-logs/get-last"
     # get configuration
-    get_url_configuration = "http://localhost/trucems_lumen/public/api/configurations"
+    get_url_configuration = "http://localhost/trucems/public/api/configurations"
     # patch / update configuration
-    patch_url_configuration = "http://localhost/trucems_lumen/public/api/configurations"
+    patch_url_configuration = "http://localhost/trucems/public/api/configurations"
     # delete configuration
-    delete_url_configuration = "http://localhost/trucems_lumen/public/api/calibration-logs"
+    delete_url_configuration = "http://localhost/trucems/public/api/calibration-logs"
     # payload
     get_payload = {}
 
@@ -37,6 +31,9 @@ try:
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
+    # port on linux
+    # portx = "/dev/ttyWITEC"
+    # port on windows
     portx = "COM7"
     bps = 115200
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
@@ -64,7 +61,7 @@ try:
                 if(data_value):
                     round_value = round(float(data_value), 3)
                 else:
-                    round_value = 0
+                    round_value = -2.222
                 # update data
                 patch_payload_sensor_values = 'value='+str(round_value)+''
                 response = requests.request(
