@@ -16,7 +16,7 @@ while True:
         response_runtime = requests.request(
             "GET", patch_url_runtime, headers=headers, data=get_payload)
         json_get_runtime = json.loads(response_runtime.text)
-        time.sleep(0.5)
+        time.sleep(60)
         if(json_get_runtime["success"] == True):
             if(int(json_get_runtime["data"]["hours"]) >= 23 and int(json_get_runtime["data"]["minutes"]) >= 59):
                 days = float(json_get_runtime["data"]["days"]) + 1
