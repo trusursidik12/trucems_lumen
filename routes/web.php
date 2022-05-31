@@ -28,6 +28,8 @@ $router->group(['prefix' => 'calibration'], function() use ($router){
  * API
  */
 $router->group(['prefix' => 'api'], function() use ($router){
+    $router->get('/runtime','API\RuntimeController@index');
+    $router->patch('/runtime','API\RuntimeController@store');
     /**
      * Set Calibration
      */

@@ -3,7 +3,7 @@
 @section('content')
 <div class="px-6 py-3 bg-gray-200 rounded">
     <div class="flex justify-start mb-3">
-        <p>10:10:10</p>
+        <p id="runtime">10:10:10</p>
     </div>
     <div class="flex justify-between pt-[14vh] space-x-3">
         <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
@@ -102,6 +102,26 @@
             setTimeout(getValues, 1000);
         }
         getValues()
+    })
+</script>
+<script>
+    $(document).ready(function(){
+        function loadRuntime(){
+            $.ajax({
+                url : `{{ url('api/runtime') }}`,
+                type : 'get',
+                dataType : 'json',
+                data : $(this).serialize(),
+                success : function(data){
+                    if(data.success){
+                        let runtime = data.data
+                        $('#runtime').html(`${runtime.days}:${runtime.hours}:${runtime.minutes}`)
+                    }
+                }
+            })
+            setTimeout(loadRuntime, (1000*60)); //load every  mins
+        }
+        loadRuntime()
     })
 </script>
 @endsection

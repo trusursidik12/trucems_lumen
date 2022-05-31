@@ -29,7 +29,7 @@
                 ],
             datasets: [{
                 barThickness : 68,
-                label: 'Concentratation mg/m³',
+                label: 'Concentration mg/m³',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: [90,11,23,13,21],
