@@ -12,6 +12,7 @@ class ValueLogsController extends Controller
     {
         $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name,quality_standard', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->get();
+        // dd($sensorValues);
         return response()->json(['success' => true, 'data' => $sensorValues]);
     }
 

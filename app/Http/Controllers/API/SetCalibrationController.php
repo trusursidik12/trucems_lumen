@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\CalibrationAvgLog;
 use App\Models\CalibrationLog;
 use App\Models\Configuration;
 use App\Models\SensorValue;
@@ -50,7 +49,7 @@ class SetCalibrationController extends Controller
                 $initialMode . '_time_span_loop.min' => 'Time Span Loop must be at least 1',
                 $initialMode . '_max_span_ppm.min' => 'Max PPM must be at least 1',
             ]);
-            $now = Carbon::now('Asia/Jakarta');
+            $now = Carbon::now();
             $endAt = $now->addSeconds($column[$fieldTimeLoop] + 1);
             $endAt = $endAt->format("Y-m-d H:i:s");
             $column['is_calibration'] = 2; // 2 = Manual Cal
@@ -127,7 +126,7 @@ class SetCalibrationController extends Controller
             $fieldStartAt = $initialMode . "_start_calibration_at";
             $fieldEndAt = $initialMode . "_end_calibration_at";
             $startAt = date('Y-m-d H:i:s');
-            $endAt = Carbon::now('Asia/Jakarta')->addSeconds($config->$fieldLoop + 1)
+            $endAt = Carbon::now()->addSeconds($config->$fieldLoop + 1)
                 ->format('Y-m-d H:i:s');
             $config->update([
                 $fieldStartAt => $startAt,
