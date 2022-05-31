@@ -8,18 +8,22 @@ import serial  # Import module
 import requests
 import json
 import struct
+import logging
 
+logf = open("error.log", "w")
+# logf.write("Error : vvvv")
+# logf.close()
 try:
     # ser.open()
 
     # patch / update data sensor values
-    patch_url_sensor_values = "http://localhost/trucems/public/api/sensor-value/1"
+    patch_url_sensor_values = "http://localhost/trucems/public/api/sensor-valuea/1"
     # post data into calibration_logs
     post_url_calibration_logs = "http://localhost/trucems/public/api/calibration-logs"
     # get data into calibration_logs
     get_url_calibration_logs = "http://localhost/trucems/public/api/calibration-logs/get-last"
     # get configuration
-    get_url_configuration = "http://localhost/trucems/public/api/configurations"
+    get_url_configuration = "http://localhost/trucems/public/api/configurationsa"
     # patch / update configuration
     patch_url_configuration = "http://localhost/trucems/public/api/configurations"
     # delete configuration
@@ -32,15 +36,16 @@ try:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     # port on linux
-    # portx = "/dev/ttyWITEC"
+    portx = "/dev/ttyWITEC"
     # port on windows
-    portx = "COM7"
+    # portx = "COM7"
     bps = 115200
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
 
     # loop
     while True:
+        logf = open("error.log", "w")
         try:
             witec_ser = serial.Serial(portx, bps, timeout=timex)
             print("serial is connected!")
@@ -179,7 +184,9 @@ try:
                 print(json_get_configuration)
             time.sleep(1)
             witec_ser.close()  # Close serial port
-        except serial.serialutil.SerialException:
+        except serial.serialutil.SerialException as e:
+            now = datetime.now()
+            timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
             print("serial not connected!")
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
@@ -195,6 +202,12 @@ try:
                 print(json.loads(response.text))
             else:
                 print(json_get_configuration)
+            logf.write("Error "+timestamp+" : \n"+str(e))
+            logf.close()
             time.sleep(5)
 except Exception as e:
+    now = datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
     print("[X]  Not connected ", e)
+    logf.write("Error "+timestamp+" : \n".format(str(e)))
+    logf.close()
