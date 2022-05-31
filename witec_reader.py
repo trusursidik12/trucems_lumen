@@ -52,18 +52,18 @@ try:
             json_get_configuration = json.loads(response_configuration.text)
 
             if(json_get_configuration["success"] == True):
-                msg = bytes.fromhex("17 00 00 00 00 00 55 30")
+                msg = bytes.fromhex("17 00 00 00 00 00 55 00")
                 result = witec_ser.write(msg)
                 data = str(witec_ser.readlines(1))
                 data_value = data.replace("[b'", "").replace(
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
-                print(data_value)
                 if(data_value):
                     round_value = round(float(data_value), 3)
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
-                # update data
+                print(round_value)
+                # update sensor values
                 patch_payload_sensor_values = 'value='+str(round_value)+''
                 response = requests.request(
                     "PATCH", patch_url_sensor_values, headers=headers, data=patch_payload_sensor_values)
@@ -176,7 +176,7 @@ try:
                             "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
                         print(response_delete.text)
             else:
-                print(json_get_configuration["message"])
+                print(json_get_configuration)
             time.sleep(1)
             witec_ser.close()  # Close serial port
         except serial.serialutil.SerialException:
@@ -188,12 +188,13 @@ try:
             if(json_get_configuration["success"] == True):
                 # value set when the USB Port disconnected!
                 round_value = -1.111
+                print(round_value)
                 patch_payload_sensor_values = 'value='+str(round_value)+''
                 response = requests.request(
                     "PATCH", patch_url_sensor_values, headers=headers, data=patch_payload_sensor_values)
                 print(json.loads(response.text))
             else:
-                print(json_get_configuration["message"])
+                print(json_get_configuration)
             time.sleep(5)
 except Exception as e:
-    print("[X]  Not connected " + e)
+    print("[X]  Not connected ", e)
