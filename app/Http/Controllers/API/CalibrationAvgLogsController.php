@@ -37,8 +37,8 @@ class CalibrationAvgLogsController extends Controller
 
     public function logs(){
         $calibrationAvgLogs = CalibrationAvgLog::with(["sensor:id,unit_id,name","sensor.unit:id,name"])
-        ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
-        ->orderBy("id","desc")->paginate(10);
+        // ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
+        ->orderBy("calibration_avg_logs.id","desc")->paginate(10);
         return $calibrationAvgLogs;
     }
 
