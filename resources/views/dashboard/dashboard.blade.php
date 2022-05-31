@@ -49,7 +49,7 @@
             if (unit === "ppm") {
                 if (isBtn) {
                     $('.sensor-unit').html("mg/m<sup>3</sup>")
-                    localStorage.setItem("unit", "mg/m<sup>3</sup>")
+                    localStorage.setItem("unit", "mg/m3")
                     $('#btn-switch').html(unit)
                 } else {
                     $('#btn-switch').html("mg/m<sup>3</sup>")
@@ -86,7 +86,7 @@
                     if (data.success) {
                         let sensorValues = data.data
                         sensorValues.map(function(value) {
-                            if (unit === "m/g") {
+                            if (unit === "mg/m3") {
                                 concentrate = Math.round((0.0409 * value.value * 34.08) * 1000) / 1000
                                 // Formula is (0.0409 * concentrate * 34.08)
                                 // * 1000 and / 1000 is for rounding 3 decimal places
