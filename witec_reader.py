@@ -17,13 +17,13 @@ try:
     # ser.open()
 
     # patch / update data sensor values
-    patch_url_sensor_values = "http://localhost/trucems/public/api/sensor-valuea/1"
+    patch_url_sensor_values = "http://localhost/trucems/public/api/sensor-value/1"
     # post data into calibration_logs
     post_url_calibration_logs = "http://localhost/trucems/public/api/calibration-logs"
     # get data into calibration_logs
     get_url_calibration_logs = "http://localhost/trucems/public/api/calibration-logs/get-last"
     # get configuration
-    get_url_configuration = "http://localhost/trucems/public/api/configurationsa"
+    get_url_configuration = "http://localhost/trucems/public/api/configurations"
     # patch / update configuration
     patch_url_configuration = "http://localhost/trucems/public/api/configurations"
     # delete configuration
