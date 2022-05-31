@@ -7,7 +7,7 @@
             Back
         </a>
     </div>
-    <div class="flex justify-between pt-[6vh] space-x-3">
+    <div class="flex justify-between pt-[3vh] space-x-3">
         <div class="w-full rounded px-6 py-3 bg-gray-300">
             <h2 class="text-xl text-center"><span id="concentrate"></span> mg/m<sup>3</sup></h2>
             <div class="flex justify-end">
