@@ -15,8 +15,8 @@ try:
         #msg = bytes.fromhex("33 03 9D A4 00 02 AE 56")
         # msg = bytes.fromhex("01 0F 00 00 00 08 01 00 FE 95")
         msg = bytes.fromhex("01 0F 00 00 00 08 01 01 3F 55")
-        # msg3 = bytes.fromhex("01 0F 00 00 00 08 01 02 7F 54")
         result = ser.write(msg)
+        # msg3 = bytes.fromhex("01 0F 00 00 00 08 01 02 7F 54")
         # result3 = ser.write(msg3)
         # msg = bytes.fromhex("17 00 00 00 00 00 55 30")
         # result=ser.write(chr(0x06).encode("utf-8"))#Writing data
@@ -27,11 +27,12 @@ try:
         # print(ser.read().hex())#Read a byte
         # print(ser.read(8).hex())#Read a byte
         print(ser.readlines(1))
-        print(result)
+        # print(result)
         # print(result3)
         # ser.close()  # Close serial port
         sleep(5)
-        msg2 = bytes.fromhex("01 0F 00 00 00 08 01 00 FE 95")
+        # msg2 = bytes.fromhex("01 0F 00 00 00 08 01 00 FE 95")
+        msg2 = bytes.fromhex("01 0F 00 00 00 08 01 02 7F 54")
         result2 = ser.write(msg2)
         print(ser.readlines(1))
         print(result2)

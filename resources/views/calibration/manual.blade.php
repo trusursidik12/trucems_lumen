@@ -10,18 +10,15 @@
         <a href="{{ url("/") }}" role="button" class="rounded px-4 py-2 bg-gray-500 text-white">
             Back
         </a>
-        <div id="blowback-form" 
-        class="hidden flex-row space-x-3 items-center"
-        >
+        <div id="blowback-form" class="hidden flex-row space-x-3 items-center">
             <p class="text-gray-700" id="remaining"></p>
-            <input type="text" required value="5" name="blowback_duration" autocomplete="false" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" placeholder="Duration (sec)"
-            class="js-virtual-keyboard px-3 py-2 bg-white rounded w-[8rem]
+            <input type="text" required value="5" name="blowback_duration" autocomplete="false" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" placeholder="Duration (sec)" class="js-virtual-keyboard px-3 py-2 bg-white rounded w-[8rem]
             focus:outline-slate-100">
             <button type="button" id="btn-start-blowback" class="rounded disabled:bg-gray-500 px-4 py-2 bg-indigo-700 text-white">
                 Start Blow Back
             </button>
             <button type="button" id="btn-cancel-blowback" class="rounded disabled:bg-gray-500 px-4 py-2 bg-red-500 text-white">
-                Cancel
+                Close
             </button>
         </div>
         <button id="btn-show-blowback" type="button" class="rounded disabled:bg-gray-500 px-4 py-2 bg-indigo-700 text-white">
@@ -29,7 +26,7 @@
         </button>
     </div>
     <div id="error-msg">
-       
+
     </div>
     <form action="" class="bg-gray-300 h-[83vh] rounded" id="form">
         <input type="hidden" name="type">
@@ -62,7 +59,7 @@
                 </div>
                 {{-- End Margin --}}
                 <button data-type="zero" type="button" class="btn-start rounded w-full py-4 text-xl font-bold bg-indigo-500 text-white">Start Zero Manual Calibration</button>
-           
+
             </div>
             <div class="w-1/2 px-6 py-3">
                 <div class="flex my-2 justify-between items-center">
@@ -100,41 +97,40 @@
 <script src="{{ url('sweetalert2/sweetalert2.all.min.js') }}"></script>
 <script src="{{ url("js/kioskboard/kioskboard-2.2.0.min.js")  }}"></script>
 <script>
-$(document).ready(function(){
-    KioskBoard.init({
-            keysArrayOfObjects: [
-                    {
-                        "0": "Q",
-                        "1": "W",
-                        "2": "E",
-                        "3": "R",
-                        "4": "T",
-                        "5": "Y",
-                        "6": "U",
-                        "7": "I",
-                        "8": "O",
-                        "9": "P"
-                    },
-                    {
-                        "0": "A",
-                        "1": "S",
-                        "2": "D",
-                        "3": "F",
-                        "4": "G",
-                        "5": "H",
-                        "6": "J",
-                        "7": "K",
-                        "8": "L"
-                    },
-                    {
-                        "0": "Z",
-                        "1": "X",
-                        "2": "C",
-                        "3": "V",
-                        "4": "B",
-                        "5": "N",
-                        "6": "M"
-                    }
+    $(document).ready(function() {
+        KioskBoard.init({
+            keysArrayOfObjects: [{
+                    "0": "Q",
+                    "1": "W",
+                    "2": "E",
+                    "3": "R",
+                    "4": "T",
+                    "5": "Y",
+                    "6": "U",
+                    "7": "I",
+                    "8": "O",
+                    "9": "P"
+                },
+                {
+                    "0": "A",
+                    "1": "S",
+                    "2": "D",
+                    "3": "F",
+                    "4": "G",
+                    "5": "H",
+                    "6": "J",
+                    "7": "K",
+                    "8": "L"
+                },
+                {
+                    "0": "Z",
+                    "1": "X",
+                    "2": "C",
+                    "3": "V",
+                    "4": "B",
+                    "5": "N",
+                    "6": "M"
+                }
             ],
             keysJsonUrl: `{{ url('js/kioskboard-keys-english.json') }}`,
             // Language Code (ISO 639-1) for custom keys (for language support) => e.g. "de" || "en" || "fr" || "hu" || "tr" etc...
@@ -145,9 +141,9 @@ $(document).ready(function(){
             capsLockActive: true,
 
             /*
-            * Allow or prevent real/physical keyboard usage. Prevented when "false"
-            * In addition, the "allowMobileKeyboard" option must be "true" as well, if the real/physical keyboard has wanted to be used.
-            */
+             * Allow or prevent real/physical keyboard usage. Prevented when "false"
+             * In addition, the "allowMobileKeyboard" option must be "true" as well, if the real/physical keyboard has wanted to be used.
+             */
             allowRealKeyboard: true,
 
             // Allow or prevent mobile keyboard usage. Prevented when "false"
@@ -182,30 +178,30 @@ $(document).ready(function(){
 
             // Scrolls the document to the top or bottom(by the placement option) of the input/textarea element. Prevented when "false"
             autoScroll: true,
-            })
-        KioskBoard.run('.js-virtual-keyboard',{
-            
         })
-})
+        KioskBoard.run('.js-virtual-keyboard', {
+
+        })
+    })
 </script>
 <script>
     // Blowback function
-    $(document).ready(function(){
+    $(document).ready(function() {
         // Manipulate element HTML
-        $('#btn-show-blowback').click(function(){
+        $('#btn-show-blowback').click(function() {
             $(this).addClass('hidden')
             $('#blowback-form').removeClass('hidden').addClass('flex')
         })
-        $('#btn-cancel-blowback').click(function(){
+        $('#btn-cancel-blowback').click(function() {
             $('#btn-show-blowback').removeClass('hidden')
             $('#blowback-form').addClass('hidden').removeClass('flex')
         })
         // 
-        
+
         var intervalRemaining;
-        $('#btn-start-blowback').click(function(){
+        $('#btn-start-blowback').click(function() {
             let duration = $('input[name=blowback_duration]').val()
-            if(duration == null || duration == undefined || duration == ""){
+            if (duration == null || duration == undefined || duration == "") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -217,84 +213,85 @@ $(document).ready(function(){
             $('button').prop('disabled', true)
             $('a').attr('href', 'javascript:void(0)')
             $.ajax({
-                url : `{{ url('api/blowback') }}`,
-                type : 'PATCH',
-                dataType : 'json',
-                data : `blowback_duration=${duration}`,
-                success : function(data){
-                    if(data.success){
+                url: `{{ url('api/blowback') }}`,
+                type: 'PATCH',
+                dataType: 'json',
+                data: `blowback_duration=${duration}`,
+                success: function(data) {
+                    if (data.success) {
                         intervalRemaining = setInterval(remainingBlowback, 1000);
-                    }   
+                    }
                 }
             })
         })
         // Function
-        function remainingBlowback(){
+        function remainingBlowback() {
             $.ajax({
-                url : `{{ url('api/blowback') }}`,
-                type : 'GET',
-                dataType : 'json',
-                success : function(data){
-                    if(data.success){
+                url: `{{ url('api/blowback') }}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
                         let sec = data.remaining_time
-                        if(sec <= 0){
+                        if (sec <= 0) {
                             clearInterval(intervalRemaining)
                             $.ajax({
-                                url : `{{ url('api/blowback/finish') }}`,
-                                type : 'PATCH',
-                                dataType : 'json',
-                                data : $(this).serialize(),
-                                success : function(data){
-                                    if(data.success){
+                                url: `{{ url('api/blowback/finish') }}`,
+                                type: 'PATCH',
+                                dataType: 'json',
+                                data: $(this).serialize(),
+                                success: function(data) {
+                                    if (data.success) {
                                         $('#remaining').html(``)
                                         $('#btn-start-blowback').html('Start Blow Back')
                                         $('button').prop('disabled', false)
-                                        $('a').attr('href','{{ url('/') }}')
-                                    }   
+                                        $('a').attr('href', '{{ url(' / ') }}')
+                                    }
                                 }
                             })
                         }
                         $('#remaining').html(`Remaining : ${sec} sec`)
-                    }   
+                    }
                 }
             })
         }
     })
 </script>
- <script>
-     $(document).ready(function(){
-        function setCal(){
+<script>
+    $(document).ready(function() {
+        function setCal() {
             let type = $('input[name=type]').val()
             $.ajax({
-                 url : `{{ url("api/set-calibration/manual") }}/${type}`,
-                 type : 'PATCH',
-                 dataType : 'json',
-                 data : $('#form').serialize(),
-                 success : function(data){
-                     if(data.success){
-                         return window.location.href = `{{ url('calibration/manual/') }}/${type}/process`
-                     }else{
+                url: `{{ url("api/set-calibration/manual") }}/${type}`,
+                type: 'PATCH',
+                dataType: 'json',
+                data: $('#form').serialize(),
+                success: function(data) {
+                    if (data.success) {
+                        return window.location.href = `{{ url('calibration/manual/') }}/${type}/process`
+                    } else {
                         let html = ``;
-                        Object.keys(data.errors).map(function(index){
+                        Object.keys(data.errors).map(function(index) {
                             let errors = data.errors[index]
-                            errors.map(function(error){
-                                html+=` <p class="rounded p-2 bg-red-500 text-white mb-2">${error}</p>`
+                            errors.map(function(error) {
+                                html += ` <p class="rounded p-2 bg-red-500 text-white mb-2">${error}</p>`
                             })
                         })
                         $('#error-msg').html(html)
-                     }
+                    }
                 }
             })
         }
-        function isRelayOpen(callback, type){
+
+        function isRelayOpen(callback, type) {
             $.ajax({
-                url : `{{ url('api/relay') }}`,
-                type : 'GET',
-                dataType : 'json',
-                success : function(data){
-                    if(data.success){
+                url: `{{ url('api/relay') }}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
                         let config = data.data
-                        if(config.is_open){
+                        if (config.is_open) {
                             setCal()
                         }
                     }
@@ -302,51 +299,52 @@ $(document).ready(function(){
             })
             setTimeout(isRelayOpen, 1000);
         }
-        function submitCalibration(el, type){
+
+        function submitCalibration(el, type) {
             $(el).html('Waiting...')
             $('a').attr('href', 'javascript:void(0)')
             $('button').attr('disabled', true)
             $('input[name=type]').val(type)
             let is_relay_open = (type == 'span' ? 2 : 1)
             $.ajax({
-                url : `{{ url('api/relay') }}`,
-                type : 'PATCH',
-                dataType : 'json',
-                data : `is_relay_open=${is_relay_open}`,
-                success : function(data){
-                    if(data.success){
+                url: `{{ url('api/relay') }}`,
+                type: 'PATCH',
+                dataType: 'json',
+                data: `is_relay_open=${is_relay_open}`,
+                success: function(data) {
+                    if (data.success) {
                         isRelayOpen()
                     }
                 },
-                error : function(xhr, status, response){
-                $(el).html(`Start ${type} Manual Calibration`)
-                $('button').attr('disabled', false)
-                $('a').attr('href', '{{ url('/') }}')
+                error: function(xhr, status, response) {
+                    $(el).html(`Start ${type} Manual Calibration`)
+                    $('button').attr('disabled', false)
+                    $('a').attr('href', '{{ url(' / ') }}')
                 }
             })
         }
-        $('.btn-start').click(function(){
+        $('.btn-start').click(function() {
             let el = $(this)
             let type = $(el).data('type');
-            if(type == "span"){
+            if (type == "span") {
                 Swal.fire({
-                        title: 'Are you sure?',
-                        text : 'Make sure the gas is ready for calibration!',
-                        showDenyButton: true,
-                        // showCancelButton: true,
-                        confirmButtonText: 'Confirm and Do Calibration',
-                        denyButtonText: `Cancel`,
-                    }).then((result) => {
+                    title: 'Are you sure?',
+                    text: 'Make sure the gas is ready for calibration!',
+                    showDenyButton: true,
+                    // showCancelButton: true,
+                    confirmButtonText: 'Confirm and Do Calibration',
+                    denyButtonText: `Close`,
+                }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {
                         submitCalibration(el, type)
                     }
                 })
-            }else{
+            } else {
                 submitCalibration(el, type)
             }
-            
+
         })
-     })
- </script>
+    })
+</script>
 @endsection
