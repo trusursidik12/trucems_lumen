@@ -15,8 +15,9 @@ class Configuration extends Model
      */
     protected $fillable = [
         'schedule_auto_calibration',
-        'is_calibration',
         'is_calibration_history',
+        'is_calibration',
+        'is_relay_open',
         'calibration_type',
         'a_default_zero_loop',
         'a_default_span_loop',

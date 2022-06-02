@@ -28,8 +28,16 @@ $router->group(['prefix' => 'calibration'], function() use ($router){
  * API
  */
 $router->group(['prefix' => 'api'], function() use ($router){
+    /**
+     * Runtime API
+     */
     $router->get('/runtime','API\RuntimeController@index');
     $router->patch('/runtime','API\RuntimeController@store');
+    /**
+     * Set Relay API
+     */
+    $router->get('/relay','API\ConfigurationController@isRelayOpen');
+    $router->patch('/relay','API\ConfigurationController@setRelay');
     /**
      * Set Calibration
      */
