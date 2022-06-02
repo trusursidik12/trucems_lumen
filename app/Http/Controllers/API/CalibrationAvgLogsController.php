@@ -19,14 +19,20 @@ class CalibrationAvgLogsController extends Controller
             $column = $this->validate($request,[
                 'sensor_id' => 'required|numeric',
                 'value' => 'required|numeric',
-                'row_count' => 'required|numeric'
+                'row_count' => 'required|numeric',
+                'cal_gas_ppm' => 'required|numeric',
+                'cal_duration' => 'required|numeric',
             ],[
                 "sensor_id.required" => "Sensor cant be empty!",
                 "value.required" => "Value cant be empty!",
                 "row_count.required" => "Total ROW cant be empty!",
+                "cal_gas_ppm.required" => "Cal. Gas PPM cant be empty!",
+                "cal_duration.required" => "Cal. Duration cant be empty!",
                 "sensor_id.numeric" => "Invalid data type sensor_id!",
                 "value.numeric" => "Value must be numeric format!",
                 "row_count.numeric" => "Total row must be numeric format!",
+                "cal_gas_ppm.numeric" => "Cal. gas PPM must be numeric format!",
+                "cal_duration.numeric" => "Cal. duration must be numeric format!",
             ]);
             CalibrationAvgLog::create($column);
             return response()->json(["success" => true, "message" => "Successfully insert calibration logs!"]);
@@ -54,7 +60,7 @@ class CalibrationAvgLogsController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Date Time', 'Parameter', 'Concentrate', 'Row Count', 'Unit');
+        $columns = array('Date Time', 'Parameter','Calibration Type', 'Concentrate', 'Row Count', 'Unit');
 
         $callback = function() use($calibrationLogs, $columns) {
             $file = fopen('php://output', 'w');
@@ -63,11 +69,12 @@ class CalibrationAvgLogsController extends Controller
             foreach ($calibrationLogs as $log) {
                 $row['DateTime']  = $log->created_at;
                 $row['Parameter']    = strtoupper($log->sensor->code);
+                $row['Calibration Type']    = $log->calibration_type  == 1 ? 'Zero' : 'Span';
                 $row['Concentrate']    = $log->value;
                 $row['Row Count']    = $log->row_count;
                 $row['Unit']  = $log->sensor->unit->name;
 
-                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Concentrate'], $row['Row Count'], $row['Unit']));
+                fputcsv($file, array($row['DateTime'], $row['Parameter'],$row['Calibration Type'], $row['Concentrate'], $row['Row Count'], $row['Unit']));
             }
 
             fclose($file);

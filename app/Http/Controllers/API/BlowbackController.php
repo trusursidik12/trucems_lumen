@@ -9,6 +9,7 @@ use App\Models\SensorValue;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class BlowbackController extends Controller
 {
@@ -24,7 +25,6 @@ class BlowbackController extends Controller
         try {
             $column = $this->validate($request, [
                 'blowback_duration' => 'required|numeric',
-                'is_relay_open' => 'required|numeric',
             ],[
                 'blowback_duration.required' => 'Blowback duration is required!',
                 'blowback_duration.numeric' => 'Invalid type blow back duration!',
@@ -32,6 +32,9 @@ class BlowbackController extends Controller
             $now = Carbon::now();
             $endAt = $now->addSeconds($column['blowback_duration'] + 1);
             $endAt = $endAt->format("Y-m-d H:i:s");
+            $column['is_relay_open'] = 4;
+            $column['start_at'] = date('Y-m-d H:i:s');
+            $column['end_blowback_at'] = $endAt;
             $configuration = Configuration::find(1);
             $configuration->update($column);
             return response()->json(["success" => true, "message" => "Blowback updated!"]);
@@ -47,7 +50,7 @@ class BlowbackController extends Controller
      * @param Request $request
      * @return json
      */
-    public function checkRemaining($type)
+    public function checkRemaining()
     {
         $config = Configuration::find(1);
         $now = Carbon::now();
@@ -58,6 +61,20 @@ class BlowbackController extends Controller
             'end_at' => $endAt->format("Y-m-d H:i:s"),
             'remaining_time' => $diff,
         ]);
+    }
+
+    public function finishBlowback(){
+        try{
+            $config = Configuration::find(1);
+            $config->update([
+                'is_relay_open' => 0,
+                'end_blowback_at' => null,
+                'start_blowback_at' => null,
+            ]);
+            return response()->json(['success' => true, 'message' => 'Blowback was update to finished!']);
+        }catch(Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
 }

@@ -15,6 +15,7 @@
             <thead>
                 <th>Date Time</th>
                 <th>Parameter</th>
+                <th>Calibration Type</th>
                 <th>Concentrate</th>
                 <th>Row Count</th>
                 <th>Unit</th>
@@ -48,6 +49,7 @@ $(document).ready(function(){
                     html+=` <tr>
                                 <td>${log.created_at}</td>
                                 <td>${log.sensor.name}</td>
+                                <td>${log.calibration_type == 1 ? 'Zero' : 'Span'}</td>
                                 <td>${log.value}</td>
                                 <td>${log.row_count}</td>
                                 <td>${log.sensor.unit.name}</td>

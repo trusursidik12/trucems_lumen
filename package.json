@@ -19,6 +19,7 @@
     "chartjs-plugin-annotation": "^1.4.0",
     "chartjs-plugin-datalabels": "^2.0.0",
     "kioskboard": "^2.2.0",
-    "laravel-mix": "^6.0.43"
+    "laravel-mix": "^6.0.43",
+    "sweetalert2": "^11.4.17"
   }
 }

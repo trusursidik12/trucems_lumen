@@ -38,6 +38,10 @@ $router->group(['prefix' => 'api'], function() use ($router){
      */
     $router->get('/relay','API\ConfigurationController@isRelayOpen');
     $router->patch('/relay','API\ConfigurationController@setRelay');
+    // Blowback
+    $router->get('/blowback','API\BlowbackController@checkRemaining');
+    $router->patch('/blowback','API\BlowbackController@setBlowback');
+    $router->patch('/blowback/finish','API\BlowbackController@finishBlowback');
     /**
      * Set Calibration
      */

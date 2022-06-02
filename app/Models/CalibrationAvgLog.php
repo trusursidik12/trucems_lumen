@@ -16,7 +16,7 @@ class CalibrationAvgLog extends Model
      * @var array
      */
     protected $fillable = [
-        'sensor_id', 'value' , 'row_count', 'calibration_type'
+        'sensor_id', 'value' , 'row_count', 'calibration_type', 'cal_gas_ppm', 'cal_duration'
     ];
 
     public function Sensor(){
