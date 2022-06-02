@@ -250,11 +250,6 @@ $(document).ready(function(){
                                         $('#btn-start-blowback').html('Start Blow Back')
                                         $('button').prop('disabled', false)
                                         $('a').attr('href','{{ url('/') }}')
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Success',
-                                            text: 'Blow Back was successfully!',
-                                        })
                                     }   
                                 }
                             })

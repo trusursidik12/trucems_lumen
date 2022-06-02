@@ -54,6 +54,7 @@ class CalibrationLogsController extends Controller
 
     public function destroy()
     {
+        $config = Configuration::find(1);
         $calibrationLogs = CalibrationLog::first();
         $sum = CalibrationLog::sum("value");
         $rowCount = CalibrationLog::get()->count();
@@ -67,6 +68,8 @@ class CalibrationLogsController extends Controller
         CalibrationAvgLog::create([
             'sensor_id' => $calibrationLogs->sensor_id,
             'row_count' => $rowCount,
+            'cal_gas_ppm' => ($calibrationLogs->calibration_type == 2 ? $config->m_max_span_ppm : 0),
+            'cal_duration' => ($calibrationLogs->calibration_type == 2 ? $config->m_time_span_loop : $config->m_time_zero_loop),
             'value' => round($avg, 3),
             'calibration_type' => $calibrationLogs->calibration_type,
         ]);
