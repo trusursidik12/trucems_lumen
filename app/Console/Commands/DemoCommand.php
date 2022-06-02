@@ -27,7 +27,7 @@ class DemoCommand extends Command{
             $config = Configuration::find(1);
             $values = SensorValue::limit(10)->get();
             foreach ($values as $value) {
-                $value->value = rand(-2,55);
+                $value->value = rand(2,20) / (rand(1,10) * 10);
                 $value->save();
                 if($config->is_calibration == 1 || $config->is_calibration == 2){
                     CalibrationLog::create([
