@@ -502,32 +502,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-full {
   height: 100%;
 }
-.h-\[70vh\] {
-  height: 70vh;
-}
-.h-\[65vh\] {
-  height: 65vh;
-}
-.h-\[75vh\] {
-  height: 75vh;
-}
 .h-\[68vh\] {
   height: 68vh;
-}
-.max-h-\[83vh\] {
-  max-height: 83vh;
-}
-.max-h-\[53vh\] {
-  max-height: 53vh;
-}
-.max-h-\[53\] {
-  max-height: 53;
-}
-.max-h-\[75vh\] {
-  max-height: 75vh;
-}
-.max-h-\[70vh\] {
-  max-height: 70vh;
 }
 .max-h-\[60vh\] {
   max-height: 60vh;
@@ -727,9 +703,21 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(99 102 241 / var(--tw-text-opacity));
 }
+.text-indigo-900 {
+  --tw-text-opacity: 1;
+  color: rgb(49 46 129 / var(--tw-text-opacity));
+}
 .text-gray-800 {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+.text-indigo-800 {
+  --tw-text-opacity: 1;
+  color: rgb(55 48 163 / var(--tw-text-opacity));
 }
 .outline-none {
   outline: 2px solid transparent;
