@@ -169,8 +169,8 @@ try:
                         # print(value3)
                         # print(value4)
 
-                        print("60 00 "+str(value1)+" "+str(value2) +
-                              " "+str(value3)+" "+str(value4)+" 55 00")
+                        # print("60 00 "+str(value1)+" "+str(value2) +
+                        #       " "+str(value3)+" "+str(value4)+" 55 00")
                         # span_msg = bytes.fromhex("60 00 "+str(value1)+" "+str(value2) +
                         #                          " "+str(value3)+" "+str(value4)+" 55 00")
                         # result = witec_ser.write(span_msg)
