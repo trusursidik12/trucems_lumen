@@ -70,7 +70,7 @@ class CalibrationAvgLogsController extends Controller
                 $row['DateTime']  = $log->created_at;
                 $row['Parameter']    = strtoupper($log->sensor->code);
                 $row['Calibration Type']    = $log->calibration_type  == 1 ? 'Zero' : 'Span';
-                $row['Concentrate']    = $log->value;
+                $row['Concentrate']    = "{$log->value} / {$log->cal_gas_ppm}";
                 $row['Row Count']    = $log->row_count;
                 $row['Unit']  = $log->sensor->unit->name;
 

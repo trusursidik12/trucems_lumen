@@ -22,7 +22,7 @@ class CreateCalibrationAvgLogsTable extends Migration
                 ->onDelete('set null');
                 $table->integer('row_count')->default(1)->nullable();
                 $table->double('value')->default(0)->nullable();
-                $table->integer('cal_gas_ppm')->default(1)->nullable();
+                $table->integer('cal_gas_ppm')->default(0)->nullable();
                 $table->integer('cal_duration')->default(0)->nullable()->comment('Second');
             $table->smallInteger('calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
             $table->timestamps();

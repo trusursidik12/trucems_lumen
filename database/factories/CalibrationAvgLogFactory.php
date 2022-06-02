@@ -22,11 +22,14 @@ class CalibrationAvgLogFactory extends Factory
      */
     public function definition()
     {
+        $type = rand(1,2);
         return [
             'sensor_id' => 1,
             'row_count' =>rand(20,30),
             'value' => rand(-10,100),
-            'calibration_type' => rand(1,2) 
+            'calibration_type' => $type,
+            'cal_gas_ppm' => ($type == 2 ? rand(1,4) : 0),
+            'cal_duration' => rand(1,10)
         ];
     }
 }
