@@ -3,7 +3,10 @@
 @section('content')
 <div class="px-6 py-3 bg-gray-200 rounded">
     <div class="flex justify-start mb-3">
-        <p id="runtime">10:10:10</p>
+        <div>
+            <span class="text-gray-700">Runtime : </span>
+            <span id="runtime" class="text-indigo-900 text-bold"></span>
+        </div>
     </div>
     <div class="flex justify-between pt-[14vh] space-x-3">
         <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">

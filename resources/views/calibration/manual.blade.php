@@ -185,10 +185,9 @@
 
  <script>
      $(document).ready(function(){
-         $('.btn-start').click(function(){
-             let type = $(this).data('type');
-             $('input[name=type]').val(type)
-             $.ajax({
+        function setCal(){
+            let type = $('input[name=type]').val()
+            $.ajax({
                  url : `{{ url("api/set-calibration/manual") }}/${type}`,
                  type : 'PATCH',
                  dataType : 'json',
@@ -206,9 +205,44 @@
                         })
                         $('#error-msg').html(html)
                      }
+                 }
+             })
+         }
+         function isRelayOpen(callback, type){
+             $.ajax({
+                 url : `{{ url('api/relay') }}`,
+                 type : 'GET',
+                 dataType : 'json',
+                 success : function(data){
+                     if(data.success){
+                         let config = data.data
+                         if(config.is_open){
+                             setCal()
+                         }
+                     }
+                 }
+             })
+             setTimeout(isRelayOpen, 1000);
+         }
+         $('.btn-start').click(function(){
+             $(this).html('Waiting...')
+             $('button').attr('disabled', true)
+             let type = $(this).data('type');
+             let is_relay_open = (type == 'span' ? 2 : 1)
+             $('input[name=type]').val(type)
+             $.ajax({
+                 url : `{{ url('api/relay') }}`,
+                 type : 'PATCH',
+                 dataType : 'json',
+                 data : `is_relay_open=${is_relay_open}`,
+                 success : function(data){
+                     if(data.success){
+                         isRelayOpen()
+                     }
                  },
-                 error : function(xhr, status, err){
-                     
+                 error : function(xhr, status, response){
+                    $(this).html(`Start ${type} Manual Calibration`)
+                    $('button').attr('disabled', false)
                  }
              })
          })

@@ -25,8 +25,9 @@ class ConfigurationController extends Controller
         try {
             $column = $this->validate($request, [
                 "schedule_auto_calibration" => "string",
-                "is_calibration" => "numeric",
                 "is_calibration_history" => "numeric",
+                "is_relay_open" => "numeric",
+                "is_calibration" => "numeric",
                 "loop_count" => "numeric",
                 "calibration_type" => "string",
                 "a_default_zero_loop" => "numeric",
@@ -44,6 +45,7 @@ class ConfigurationController extends Controller
                 "m_start_calibration_at" => "nullable",
             ], [
                 "schedule_auto_calibration.required" => "Schedule auto calibration cant be empty!",
+                "is_relay_open.required" => "Is Relay Open cant be empty!",
                 "is_calibration.required" => "Is Calibration cant be empty!",
                 "calibration_type.required" => "Calibration Type cant be empty!",
                 "a_default_zero_loop.required" => "Default zero loop cant be empty!",
@@ -63,6 +65,30 @@ class ConfigurationController extends Controller
             return response()->json(["success" => true, "message" => "Successfully update configurations!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(["success" => false, "errors" => $e->response->original]);
+        }
+    }
+    public function setRelay(Request $request){
+        try{
+            $column = $this->validate($request,[
+                'is_relay_open' => 'required|numeric'
+            ],[
+                'is_relay_open.required' => 'Is Relay Open cant empty!',
+                'is_relay_open.numeric' => 'Invalid Format Is Relay Open!',
+            ]);
+            $config = Configuration::find(1);
+            $config->update($column);
+            return response()->json(['success' => true, 'message' => 'Success! Relay is open']);
+        }catch(\Illuminate\Validation\ValidationException $e){
+            return response()->json(['success' => false, 'errors' => $e->response->original]);
+        }
+    }
+    public function isRelayOpen(){
+        try{
+            $config = Configuration::select('is_relay_open')->find(1);
+            $isOpen = ($config->is_relay_open == 3 ? true : false);
+            return response()->json(['success' => true, 'data' => ['is_open' => $isOpen, 'is_relay_open' => $config->is_relay_open]]);
+        }catch(Exception $e){
+            return response()->json(['success' => false, 'message' => 'Error : '.$e->getMessage()]);
         }
     }
 }

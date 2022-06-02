@@ -466,12 +466,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ml-3 {
   margin-left: 0.75rem;
 }
-.mt-\[14vh\] {
-  margin-top: 14vh;
-}
-.ml-5 {
-  margin-left: 1.25rem;
-}
 .block {
   display: block;
 }
@@ -508,29 +502,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-full {
   height: 100%;
 }
-.h-\[98vh\] {
-  height: 98vh;
+.h-\[68vh\] {
+  height: 68vh;
 }
-.h-\[80vh\] {
-  height: 80vh;
-}
-.h-\[90vh\] {
-  height: 90vh;
-}
-.min-h-\[70vh\] {
-  min-height: 70vh;
+.max-h-\[60vh\] {
+  max-height: 60vh;
 }
 .min-h-\[100vh\] {
   min-height: 100vh;
-}
-.min-h-\[90vh\] {
-  min-height: 90vh;
-}
-.min-h-\[95vh\] {
-  min-height: 95vh;
-}
-.min-h-\[98vh\] {
-  min-height: 98vh;
 }
 .w-1\/2 {
   width: 50%;
@@ -661,11 +640,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 .pt-\[14vh\] {
   padding-top: 14vh;
 }
-.pt-\[6vh\] {
-  padding-top: 6vh;
-}
-.pl-5 {
-  padding-left: 1.25rem;
+.pt-\[3vh\] {
+  padding-top: 3vh;
 }
 .text-left {
   text-align: left;
@@ -719,17 +695,29 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(67 56 202 / var(--tw-text-opacity));
 }
-.text-gray-800 {
+.text-gray-700 {
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 .text-indigo-500 {
   --tw-text-opacity: 1;
   color: rgb(99 102 241 / var(--tw-text-opacity));
 }
-.text-gray-700 {
+.text-indigo-900 {
   --tw-text-opacity: 1;
-  color: rgb(55 65 81 / var(--tw-text-opacity));
+  color: rgb(49 46 129 / var(--tw-text-opacity));
+}
+.text-gray-800 {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+.text-indigo-800 {
+  --tw-text-opacity: 1;
+  color: rgb(55 48 163 / var(--tw-text-opacity));
 }
 .outline-none {
   outline: 2px solid transparent;
