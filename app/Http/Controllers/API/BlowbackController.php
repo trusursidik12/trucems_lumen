@@ -60,6 +60,7 @@ class BlowbackController extends Controller
             'success' => true,
             'end_at' => $endAt->format("Y-m-d H:i:s"),
             'remaining_time' => $diff,
+            'is_relay_open' => $config->is_relay_open
         ]);
     }
 

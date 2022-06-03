@@ -11,6 +11,38 @@ import struct
 import logging
 
 logf = open("error.log", "w")
+def isRelayOpen(plc_ser, is_relay_open):
+    if is_relay_open == 1:
+        hex = "01 0F 00 00 00 08 01 02 7F 54"
+        relay =  "3"
+    elif is_relay_open == 2:
+        hex = "01 0F 00 00 00 08 01 04 FF 56"
+        relay =  "3"
+    elif is_relay_open == 4:
+        hex = "01 0F 00 00 00 08 01 08 FF 53"
+        relay =  "3"
+    elif is_relay_open == 0:
+        hex = "01 0F 00 00 00 08 01 01 3F 55"
+        relay =  "0"
+    else:
+        hex = None
+        relay = "0"
+    if(hex != None) :
+        try:
+            plc_msg = bytes.fromhex(hex)
+            plc_open = plc_ser.write(plc_msg)
+            plc_open_read = len(plc_ser.read(size = 10))
+            if((plc_open_read > 0) and (is_relay_open == 1 or is_relay_open == 2) ):
+                response = requests.request("PATCH", url + "relay", headers=headers, data="is_relay_open="+relay)
+            elif plc_open_read == 0:
+                relay =  "0"
+                response = requests.request("PATCH", url + "relay", headers=headers, data="is_relay_open="+relay)
+        except serial.SerialTimeoutException as e:
+            return "0"
+    return relay
+
+
+
 try:
     # ser.open()
 
@@ -24,12 +56,14 @@ try:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     # port on linux
-    # witec_port = "/dev/ttyWITEC"
-    # plc_port = "/dev/ttyWITEC"
+    witec_port = "/dev/ttyWITEC"
+    plc_port = "/dev/ttyPLC"
+    # witec_port = "/dev/ttyUSB0"
+    # plc_port = "/dev/ttyUSB1"
     # port on windows
-    witec_port = "COM7"
+    # witec_port = "COM7"
     witec_bps = 115200
-    plc_port = "COM8"
+    # plc_port = "COM8"
     plc_bps = 9600
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
@@ -45,7 +79,6 @@ try:
         try:
             witec_ser = serial.Serial(witec_port, witec_bps, timeout=timex)
             plc_ser = serial.Serial(plc_port, plc_bps, timeout=timex)
-            # print("serial is connected!")
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -71,32 +104,8 @@ try:
                 response = requests.request(
                     "PATCH", url + "sensor-value/1", headers=headers, data=patch_payload_sensor_values)
                 # print(json.loads(response.text))
-
-                if(json_get_configuration["data"]["is_relay_open"] == 1):
-                    # open RO1
-                    plc_msg = bytes.fromhex("01 0F 00 00 00 08 01 02 7F 54")
-                    plc_open = plc_ser.write(plc_msg)
-                    patch_payload_relay = 'is_relay_open=3'
-                    response = requests.request(
-                        "PATCH", url + "relay", headers=headers, data=patch_payload_relay)
-                    # print(response.text)
-                elif(json_get_configuration["data"]["is_relay_open"] == 2):
-                    # open RO2
-                    plc_msg = bytes.fromhex("01 0F 00 00 00 08 01 04 FF 56")
-                    plc_open = plc_ser.write(plc_msg)
-                    patch_payload_relay = 'is_relay_open=3'
-                    response = requests.request(
-                        "PATCH", url + "relay", headers=headers, data=patch_payload_relay)
-                    # print(response.text)
-                elif(json_get_configuration["data"]["is_relay_open"] == 4):
-                    plc_msg = bytes.fromhex("01 0F 00 00 00 08 01 08 FF 53")
-                    plc_open = plc_ser.write(plc_msg)
-                elif(json_get_configuration["data"]["is_relay_open"] == 0):
-                    plc_msg = bytes.fromhex("01 0F 00 00 00 08 01 01 3F 55")
-                    plc_open = plc_ser.write(plc_msg)
-                else:
-                    do_nothing = ''
-
+                isRelayOpen(plc_ser, json_get_configuration["data"]["is_relay_open"])
+                
                 if(json_get_configuration["data"]["is_calibration"] == 1 or json_get_configuration["data"]["is_calibration"] == 2):
                     post_payload_calibration_logs = 'value=' + \
                         str(round_value)+''
@@ -207,7 +216,7 @@ try:
         except serial.serialutil.SerialException as e:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-            # print("serial not connected!")
+            print("serial not connected!")
             response_configuration = requests.request(
                 "GET", url + "configurations", headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
@@ -228,6 +237,6 @@ try:
 except Exception as e:
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-    # print("[X]  Not connected ", e)
+    print("[X]  Not connected ", e)
     logf.write("Error "+timestamp+" : \n".format(str(e)))
     logf.close()

@@ -11,6 +11,7 @@
             Back
         </a>
         <div id="blowback-form" class="hidden flex-row space-x-3 items-center">
+            <div class="text-red-500"></div>
             <p class="text-gray-700" id="remaining"></p>
             <input type="text" required value="5" name="blowback_duration" autocomplete="false" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" placeholder="Duration (sec)" class="js-virtual-keyboard px-3 py-2 bg-white rounded w-[8rem]
             focus:outline-slate-100">
@@ -37,7 +38,7 @@
                         <span class="uppercase font-semibold text-2xl">Default Zero Loop</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" name="m_default_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_default_zero_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
+                        <input type="number" required min="1" name="m_default_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_default_zero_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -45,7 +46,7 @@
                         <span class="uppercase font-semibold text-2xl">Time Zero Loop <small class="font-thin text-xs lowercase">(sec)</small></span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" name="m_time_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_time_zero_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
+                        <input type="number" required min="1" name="m_time_zero_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_time_zero_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
                 </div>
                 {{-- Margin --}}
@@ -58,7 +59,7 @@
                     </span>
                 </div>
                 {{-- End Margin --}}
-                <button data-type="zero" type="button" class="btn-start rounded w-full py-4 text-xl font-bold bg-indigo-500 text-white">Start Zero Manual Calibration</button>
+                <button data-type="zero" type="button" class="btn-start disabled:bg-gray-500  rounded w-full py-4 text-xl font-bold bg-indigo-500 text-white">Start ZERO Manual Calibration</button>
 
             </div>
             <div class="w-1/2 px-6 py-3">
@@ -67,7 +68,7 @@
                         <span class="uppercase font-semibold text-2xl">Default Span Loop</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" name="m_default_span_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_default_span_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
+                        <input type="number" required min="1" name="m_default_span_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_default_span_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -75,7 +76,7 @@
                         <span class="uppercase font-semibold text-2xl">Time Span Loop <small class="font-thin text-xs lowercase">(sec)</small></span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" name="m_time_span_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_time_span_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
+                        <input type="number" required min="1" name="m_time_span_loop" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_time_span_loop }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
                 </div>
                 <div class="flex my-2 justify-between items-center">
@@ -83,10 +84,10 @@
                         <span class="uppercase font-semibold text-2xl">Calibration Gas PPM</span>
                     </span>
                     <span class="w-1/3">
-                        <input type="text" name="m_max_span_ppm" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_max_span_ppm }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
+                        <input type="number" required min="1" name="m_max_span_ppm" data-kioskboard-type="numpad" data-kioskboard-placement="bottom" value="{{ $config->m_max_span_ppm }}" class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                     </span>
                 </div>
-                <button data-type="span" type="button" class="btn-start rounded w-full py-4 text-xl font-bold bg-indigo-500 text-white">Start Span Manual Calibration</button>
+                <button data-type="span" type="button" class="btn-start disabled:bg-gray-500  rounded w-full py-4 text-xl font-bold bg-indigo-500 text-white">Start SPAN Manual Calibration</button>
             </div>
         </div>
     </form>
@@ -200,6 +201,7 @@
 
         var intervalRemaining;
         $('#btn-start-blowback').click(function() {
+            $('#remaining').removeClass('text-red-500').addClass('text-gray-700')
             let duration = $('input[name=blowback_duration]').val()
             if (duration == null || duration == undefined || duration == "") {
                 Swal.fire({
@@ -233,7 +235,15 @@
                 success: function(data) {
                     if (data.success) {
                         let sec = data.remaining_time
-                        if (sec <= 0) {
+                        // console.log(data.is_relay_open)
+                        if(data.is_relay_open == 0){
+                            $('#remaining').html(`Failed to Blow back`)
+                            $('#remaining').removeClass('text-gray-700').addClass('text-red-500')
+                            $('#btn-start-blowback').html('Start Blow Back')
+                            $('button').prop('disabled', false)
+                            $('a').attr('href', '{{ url("/?ref=calibration") }}')
+                            clearInterval(intervalRemaining)
+                        }else if (sec <= 0) {
                             clearInterval(intervalRemaining)
                             $.ajax({
                                 url: `{{ url('api/blowback/finish') }}`,
@@ -249,8 +259,9 @@
                                     }
                                 }
                             })
+                        }else{
+                            $('#remaining').html(`Remaining : ${sec} sec`)
                         }
-                        $('#remaining').html(`Remaining : ${sec} sec`)
                     }
                 }
             })
@@ -282,8 +293,8 @@
                 }
             })
         }
-
-        function isRelayOpen(callback, type) {
+        var intervalIsRelayOpen;
+        function isRelayOpen(el, type) {
             $.ajax({
                 url: `{{ url('api/relay') }}`,
                 type: 'GET',
@@ -291,17 +302,26 @@
                 success: function(data) {
                     if (data.success) {
                         let config = data.data
-                        if (config.is_open) {
+                        console.log(config)
+                        if (config.is_relay_open == 3) {
                             setCal()
+                        }else if(config.is_relay_open == 0){
+                            type =  $('.btn-active').data('type').toUpperCase()
+                            $('.btn-active').html(`Start ${type} Manual Calibration`)
+                            $('button').attr('disabled', false)
+                            $('a').attr('href', '{{ url("/?ref=calibration") }}')
+                            clearInterval(intervalIsRelayOpen)
                         }
                     }
                 }
             })
-            setTimeout(isRelayOpen, 1000);
         }
 
         function submitCalibration(el, type) {
+            $('button.btn-active').removeClass('btn-active')
             $(el).html('Waiting...')
+            $(el).addClass('btn-active')
+            $(el).data('type',type)
             $('a').attr('href', 'javascript:void(0)')
             $('button').attr('disabled', true)
             $('input[name=type]').val(type)
@@ -313,7 +333,9 @@
                 data: `is_relay_open=${is_relay_open}`,
                 success: function(data) {
                     if (data.success) {
-                        isRelayOpen()
+                        intervalIsRelayOpen = setInterval(function(el, type){
+                            isRelayOpen(el, type)
+                        }, 1000);
                     }
                 },
                 error: function(xhr, status, response) {
