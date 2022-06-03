@@ -245,7 +245,7 @@
                                         $('#remaining').html(``)
                                         $('#btn-start-blowback').html('Start Blow Back')
                                         $('button').prop('disabled', false)
-                                        $('a').attr('href', '{{ url(' / ') }}')
+                                        $('a').attr('href', '{{ url("/?ref=calibration") }}')
                                     }
                                 }
                             })
@@ -319,7 +319,7 @@
                 error: function(xhr, status, response) {
                     $(el).html(`Start ${type} Manual Calibration`)
                     $('button').attr('disabled', false)
-                    $('a').attr('href', '{{ url(' / ') }}')
+                    $('a').attr('href', '{{ url("/?ref=calibration") }}')
                 }
             })
         }
