@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class CalibrationLog extends Model
@@ -19,5 +20,8 @@ class CalibrationLog extends Model
 
     public function Sensor(){
         return $this->belongsTo(Sensor::class);
+    }
+    public function getCreatedAtAttribute($value){
+        return Carbon::parse($value)->timezone(env('APP_TIMEZONE'))->format("H:i:s");
     }
 }

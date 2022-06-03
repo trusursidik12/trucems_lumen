@@ -79,14 +79,15 @@ class SetCalibrationController extends Controller
         $config = Configuration::find(1);
         $initialMode = substr($mode, 0, 1); // is m_ or a_
         $fieldEndAt = $initialMode . "_end_calibration_at";
+        $calibrationType = ($type == "span" ? 2 : 1);
         $endAt = $config->$fieldEndAt;
         $now = Carbon::now();
         $endAt = Carbon::parse($endAt);
         $diff = $now->diffInSeconds($endAt, false);
         $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->get();
-        $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
-            ->withCasts(["created_at" => "datetime:H:i:s"])
+        $calibrationLogs = CalibrationLog::where('calibration_type' , $calibrationType)
+            ->with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->limit(3)->orderBy("id", "desc")->get();
         return response()->json([
             'success' => true,
