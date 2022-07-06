@@ -8,12 +8,17 @@
             <span id="runtime" class="text-indigo-900 text-bold"></span>
         </div>
     </div>
+    <div>
+        <p class="px-3 py-2 bg-red-500 text-white rounded hidden" id="error-msg">
+            
+        </p>
+    </div>
     <div class="flex justify-between pt-[14vh] space-x-3">
         <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
             <div class="flex justify-end">
                 <button type="button" id="btn-switch" class="rounded px-4 py-2 bg-indigo-500 text-white">
                     mg/m<sup>3</sup>
-                </button>
+                </button>   
             </div>
             <div id="section-values">
                 @foreach ($sensorValues as $value)
@@ -30,22 +35,22 @@
         </div>
         <div class="w-1/3">
             <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
-                <a href="#" id="btn-start-cems" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}" class="{{ $plc->is_maintenance == 0 ? "deactive" : "active" }}">
+                <button type="button" id="btn-start-cems" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}" class="{{ $plc->is_maintenance == 0 ? "deactive" : "active" }}">
                    {{ $plc->is_maintenance == 1 ? " Start CEMS" : "Stop CEMS" }}
-                </a>
-                <a href="#" id="btn-start-cal" data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
+                </button>
+                <button type="button" id="btn-start-cal" data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
                     {{ $plc->is_calibration == 1 ? "Stop Calibration" : "Start Calibration" }}    
-                </a>
-                <a href="{{ url("calibration/manual") }}" id="btn-cal-menu"
+                </button>
+                <button onclick="return window.location.href=`{{ url('calibration/manual') }}`"  id="btn-cal-menu"
                     class="{{ $plc->is_calibration == 1 ? "" : "hide" }} active">
                     Calibration
-                </a>
-                <a href="#" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}" class="{{ $plc->is_maintenance == 1 ? "deactive" : "" }}">
+                </button>
+                <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}" class="{{ $plc->is_maintenance == 1 ? "deactive" : "" }}">
                     {{ $plc->is_maintenance == 1 ? "Stop Maintenance" : "Start Maintenance" }}
-                </a>
-                <a href="{{ url("calibration/logs") }}">Calibration Logs</a>
+                </button>
+                <button onclick="return window.location.href=`{{ url('calibration/logs') }}`">Calibration Logs</button>
                 {{-- <a href="{{ url("settings") }}">Setting</a> --}}
-                <a href="{{ url("quality-standards") }}">Baku Mutu</a>
+                <button  onclick="return window.location.href=`{{ url('quality-standards') }}`" >Baku Mutu</button>
             </nav>
         </div>
     </div>
@@ -141,6 +146,8 @@
 <script>
     $(document).ready(function(){
         $('#btn-start-cems').click(function(e){
+            $(this).html('Loading...')
+            $('button').prop('disabled', true)
             e.preventDefault()
             $.ajax({
                 url : `{{ url('api/start-plc') }}`,
@@ -150,28 +157,44 @@
                     status : $('#btn-start-cems').attr('data-status')
                 },
                 success : function(data){
+                    
                     if(data.success){
-                        if(data.data.is_maintenance == 0){
-                            $('#btn-start-cems').attr('data-status',"1")
-                            $('#btn-start-cems').removeClass('active').addClass('deactive')
-                            $('#btn-start-cems').html('Stop CEMS')
-                            
-                            $('#btn-start-mt').attr('data-status',"1")
-                            $('#btn-start-mt').removeClass('deactive')
-                            $('#btn-start-mt').html('Start Maintenance')
-                            
-                        }else{
-                            $('#btn-start-cems').attr('data-status', "0")
-                            $('#btn-start-cems').removeClass('deactive').addClass('active')
-                            $('#btn-start-cems').html('Start CEMS')
-                            
-                        }
+                        setTimeout(() => {
+                            $('button').prop('disabled', false)
+                            if(data.data.is_maintenance == 0){
+                                $('#btn-start-cems').attr('data-status',"1")
+                                $('#btn-start-cems').removeClass('active').addClass('deactive')
+                                $('#btn-start-cems').html('Stop CEMS')
+                                
+                                $('#btn-start-mt').attr('data-status',"1")
+                                $('#btn-start-mt').removeClass('deactive')
+                                $('#btn-start-mt').html('Start Maintenance')
+                            }else{
+                                $('#btn-start-cems').attr('data-status', "0")
+                                $('#btn-start-cems').removeClass('deactive').addClass('active')
+                                $('#btn-start-cems').html('Start CEMS')
+                            }
+                        }, 5000);
+                    }else{
+                        $('button').prop('disabled', false)
+                        $('#btn-start-cems').attr('data-status',"1")
+                        $('#btn-start-cems').removeClass('active')
+                        $('#btn-start-cems').addClass('deactive')
+                        $('#btn-start-cems').html('Stop CEMS')
+                        // $('#btn-cal-menu').addClass('hide')
+                        $('#error-msg').removeClass('hidden')
+                        $('#error-msg').html(data.message)
+                        setTimeout(() => {
+                            $('#error-msg').addClass('hidden')
+                        }, 3000);
                     }
                 }
             })
         })
         $('#btn-start-cal').click(function(e){
             e.preventDefault()
+            $(this).html('Loading...')
+            $('button').prop('disabled', true)
             $.ajax({
                 url : `{{ url('api/start-cal') }}`,
                 type : 'PATCH',
@@ -181,26 +204,40 @@
                 },
                 success : function(data){
                     if(data.success){
-                        console.log(data.data.is_calibration)
-                        if(data.data.is_calibration == 0){
-                            $('#btn-start-cal').attr('data-status',"1")
-                            $('#btn-start-cal').removeClass('deactive')
-                            $('#btn-start-cal').html('Start Calibration')
-                            $('#btn-cal-menu').addClass('hide')
-                        }else{
-                            $('#btn-start-cal').removeClass('deactive')
-                            $('#btn-start-cal').attr('data-status', "0")
-                            $('#btn-start-cal').addClass('deactive')
-                            $('#btn-start-cal').html('Stop Calibration')
-                            $('#btn-cal-menu').removeClass('hide')
-                            
-                        }
+                        setTimeout(() => {
+                            $('button').prop('disabled', false)
+                            if(data.data.is_calibration == 0){
+                                $('#btn-start-cal').attr('data-status',"1")
+                                $('#btn-start-cal').removeClass('deactive')
+                                $('#btn-start-cal').html('Start Calibration')
+                                $('#btn-cal-menu').addClass('hide')
+                            }else{
+                                $('#btn-start-cal').removeClass('deactive')
+                                $('#btn-start-cal').attr('data-status', "0")
+                                $('#btn-start-cal').addClass('deactive')
+                                $('#btn-start-cal').html('Stop Calibration')
+                                $('#btn-cal-menu').removeClass('hide')
+                            }
+                        }, 5000);
+                    }else{
+                        $('button').prop('disabled', false)
+                        $('#btn-start-cal').attr('data-status',"1")
+                        $('#btn-start-cal').removeClass('deactive')
+                        $('#btn-start-cal').html('Start CEMS')
+                        $('#btn-cal-menu').addClass('hide')
+                        $('#error-msg').removeClass('hidden')
+                        $('#error-msg').html(data.message)
+                        setTimeout(() => {
+                            $('#error-msg').addClass('hidden')
+                        }, 3000);
                     }
                 }
             })
         })
         $('#btn-start-mt').click(function(e){
             e.preventDefault()
+            $(this).html('Loading...')
+            $('button').prop('disabled', true)
             $.ajax({
                 url : `{{ url('api/start-plc') }}`,
                 type : 'PATCH',
@@ -210,25 +247,37 @@
                 },
                 success : function(data){
                     if(data.success){
-                        if(data.data.is_maintenance == 0){
-                            $('#btn-start-mt').attr('data-status',"1")
-                            $('#btn-start-mt').removeClass('deactive')
-                            $('#btn-start-mt').html('Start Maintenance')
+                        setTimeout(() => {
+                            $('button').prop('disabled', false)
+                            if(data.data.is_maintenance == 0){
+                                $('#btn-start-mt').attr('data-status',"1")
+                                $('#btn-start-mt').removeClass('deactive')
+                                $('#btn-start-mt').html('Start Maintenance')
 
-                            $('#btn-start-cems').attr('data-status',"1")
-                            $('#btn-start-cems').removeClass('active').addClass('deactive')
-                            $('#btn-start-cems').html('Stop CEMS')
-                            
-                        }else{
-                            $('#btn-start-mt').attr('data-status', "0")
-                            $('#btn-start-mt').addClass('deactive')
-                            $('#btn-start-mt').html('Stop Maintenance')
+                                $('#btn-start-cems').attr('data-status',"1")
+                                $('#btn-start-cems').removeClass('active').addClass('deactive')
+                                $('#btn-start-cems').html('Stop CEMS')
+                            }else{
+                                $('#btn-start-mt').attr('data-status', "0")
+                                $('#btn-start-mt').addClass('deactive')
+                                $('#btn-start-mt').html('Stop Maintenance')
 
-                            $('#btn-start-cems').attr('data-status', "0")
-                            $('#btn-start-cems').removeClass('deactive').addClass('active')
-                            $('#btn-start-cems').html('Start CEMS')
-                            
-                        }
+                                $('#btn-start-cems').attr('data-status', "0")
+                                $('#btn-start-cems').removeClass('deactive').addClass('active')
+                                $('#btn-start-cems').html('Start CEMS')
+                            }
+                        }, 5000);
+                    }else{
+                        $('button').prop('disabled', false)
+                        $('#btn-start-mt').attr('data-status',"1")
+                        $('#btn-start-mt').removeClass('deactive')
+                        $('#btn-start-mt').html('Start Maintenance')
+                        // $('#btn-cal-menu').addClass('hide')
+                        $('#error-msg').removeClass('hidden')
+                        $('#error-msg').html(data.message)
+                        setTimeout(() => {
+                            $('#error-msg').addClass('hidden')
+                        }, 3000);
                     }
                 }
             })

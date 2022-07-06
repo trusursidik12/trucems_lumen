@@ -752,6 +752,34 @@ Ensure the default browser behavior of the `hidden` attribute.
 .sidebar > a.hide {
   display: none;
 }
+.sidebar > button {
+  display: block;
+  width: 100%;
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.sidebar > button.active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+}
+.sidebar > button.deactive {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+.sidebar > button.hide {
+  display: none;
+}
 
 .table thead  th, .table tbody td {
   border-width: 1px;
