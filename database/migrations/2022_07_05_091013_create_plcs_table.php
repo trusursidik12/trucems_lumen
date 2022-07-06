@@ -15,6 +15,9 @@ class CreatePlcsTable extends Migration
     {
         Schema::create('plcs', function (Blueprint $table) {
             $table->id();
+            $table->smallInteger('is_calibration')->default(0)->nullable();
+            $table->smallInteger('is_maintenance')->default(0)->nullable();
+            $table->smallInteger('d_off')->default(0)->nullable();
             $table->smallInteger('d0')->default(0)->nullable();
             $table->smallInteger('d1')->default(0)->nullable();
             $table->smallInteger('d2')->default(0)->nullable();

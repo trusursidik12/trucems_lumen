@@ -14,6 +14,6 @@ class Plc extends Model
      * @var array
      */
     protected $fillable = [
-        'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'
+        'is_calibration', 'is_maintenance', 'd_off','d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'
     ];
 }

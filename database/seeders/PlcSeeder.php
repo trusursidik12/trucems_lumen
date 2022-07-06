@@ -18,6 +18,8 @@ class PlcSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         Plc::truncate();
         Plc::create([
+            'is_calibration' => 0,
+            'is_maintenance' => 0,
             'd0' => 0,
             'd1' => 0,
             'd2' => 0,
