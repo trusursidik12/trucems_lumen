@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\DemoCommand;
+use App\Console\Commands\PlcCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DemoCommand::class
+        DemoCommand::class,
+        PlcCommand::class,
     ];
 
     /**
@@ -25,6 +27,5 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        
     }
 }

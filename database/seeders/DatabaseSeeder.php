@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UnitSeeder::class);
         $this->call(SensorSeeder::class);
         $this->call(SensorValueSeeder::class);
+        $this->call(PlcSeeder::class);
     }
 }

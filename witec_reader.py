@@ -11,36 +11,39 @@ import struct
 import logging
 
 logf = open("error.log", "w")
+
+
 def isRelayOpen(plc_ser, is_relay_open):
     if is_relay_open == 1:
         hex = "01 0F 00 00 00 08 01 02 7F 54"
-        relay =  "3"
+        relay = "3"
     elif is_relay_open == 2:
         hex = "01 0F 00 00 00 08 01 04 FF 56"
-        relay =  "3"
+        relay = "3"
     elif is_relay_open == 4:
         hex = "01 0F 00 00 00 08 01 08 FF 53"
-        relay =  "3"
+        relay = "3"
     elif is_relay_open == 0:
         hex = "01 0F 00 00 00 08 01 01 3F 55"
-        relay =  "0"
+        relay = "0"
     else:
         hex = None
         relay = "0"
-    if(hex != None) :
+    if(hex != None):
         try:
             plc_msg = bytes.fromhex(hex)
             plc_open = plc_ser.write(plc_msg)
-            plc_open_read = len(plc_ser.read(size = 10))
-            if((plc_open_read > 0) and (is_relay_open == 1 or is_relay_open == 2) ):
-                response = requests.request("PATCH", url + "relay", headers=headers, data="is_relay_open="+relay)
+            plc_open_read = len(plc_ser.read(size=10))
+            if((plc_open_read > 0) and (is_relay_open == 1 or is_relay_open == 2)):
+                response = requests.request(
+                    "PATCH", url + "relay", headers=headers, data="is_relay_open="+relay)
             elif plc_open_read == 0:
-                relay =  "0"
-                response = requests.request("PATCH", url + "relay", headers=headers, data="is_relay_open="+relay)
+                relay = "0"
+                response = requests.request(
+                    "PATCH", url + "relay", headers=headers, data="is_relay_open="+relay)
         except serial.SerialTimeoutException as e:
             return "0"
     return relay
-
 
 
 try:
@@ -56,14 +59,14 @@ try:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     # port on linux
-    witec_port = "/dev/ttyWITEC"
-    plc_port = "/dev/ttyPLC"
+    # witec_port = "/dev/ttyWITEC"
+    # plc_port = "/dev/ttyPLC"
     # witec_port = "/dev/ttyUSB0"
     # plc_port = "/dev/ttyUSB1"
     # port on windows
-    # witec_port = "COM7"
+    witec_port = "COM13"
     witec_bps = 115200
-    # plc_port = "COM8"
+    plc_port = "COM8"
     plc_bps = 9600
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
@@ -104,8 +107,9 @@ try:
                 response = requests.request(
                     "PATCH", url + "sensor-value/1", headers=headers, data=patch_payload_sensor_values)
                 # print(json.loads(response.text))
-                isRelayOpen(plc_ser, json_get_configuration["data"]["is_relay_open"])
-                
+                isRelayOpen(
+                    plc_ser, json_get_configuration["data"]["is_relay_open"])
+
                 if(json_get_configuration["data"]["is_calibration"] == 1 or json_get_configuration["data"]["is_calibration"] == 2):
                     post_payload_calibration_logs = 'value=' + \
                         str(round_value)+''
