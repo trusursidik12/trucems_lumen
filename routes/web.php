@@ -29,6 +29,12 @@ $router->group(['prefix' => 'calibration'], function() use ($router){
  */
 $router->group(['prefix' => 'api'], function() use ($router){
     /**
+     * PLC API
+     * 
+     */
+    $router->patch('/start-plc','API\PlcController@updatePLC');
+    $router->patch('/start-cal','API\PlcController@updateCal');
+    /**
      * Runtime API
      */
     $router->get('/runtime','API\RuntimeController@index');

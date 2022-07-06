@@ -3,10 +3,16 @@
 @tailwind utilities;
 
 .sidebar > a{
-    @apply block w-full bg-gray-500 text-white text-3xl px-5 py-8 rounded text-center uppercase
+    @apply block w-full bg-gray-500 text-white text-2xl px-5 py-3 rounded text-center uppercase
 }
 .sidebar > a.active{
-    @apply bg-indigo-500
+    @apply bg-green-600
+}
+.sidebar > a.deactive{
+    @apply bg-red-600
+}
+.sidebar > a.hide{
+    @apply hidden;
 }
 
 .table thead  th,

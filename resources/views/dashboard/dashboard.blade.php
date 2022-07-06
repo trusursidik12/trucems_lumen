@@ -30,8 +30,19 @@
         </div>
         <div class="w-1/3">
             <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
-                {{-- <a href="{{ url("calibration/auto") }}">Auto CAL</a> --}}
-                <a href="{{ url("calibration/manual") }}">Calibration</a>
+                <a href="#" id="btn-start-cems" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}" class="{{ $plc->is_maintenance == 0 ? "deactive" : "active" }}">
+                   {{ $plc->is_maintenance == 1 ? " Start CEMS" : "Stop CEMS" }}
+                </a>
+                <a href="#" id="btn-start-cal" data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
+                    {{ $plc->is_calibration == 1 ? "Stop Calibration" : "Start Calibration" }}    
+                </a>
+                <a href="{{ url("calibration/manual") }}" id="btn-cal-menu"
+                    class="{{ $plc->is_calibration == 1 ? "" : "hide" }} active">
+                    Calibration
+                </a>
+                <a href="#" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}" class="{{ $plc->is_maintenance == 1 ? "deactive" : "" }}">
+                    {{ $plc->is_maintenance == 1 ? "Stop Maintenance" : "Start Maintenance" }}
+                </a>
                 <a href="{{ url("calibration/logs") }}">Calibration Logs</a>
                 {{-- <a href="{{ url("settings") }}">Setting</a> --}}
                 <a href="{{ url("quality-standards") }}">Baku Mutu</a>
@@ -125,6 +136,103 @@
             setTimeout(loadRuntime, (1000*60)); //load every  mins
         }
         loadRuntime()
+    })
+</script>
+<script>
+    $(document).ready(function(){
+        $('#btn-start-cems').click(function(e){
+            e.preventDefault()
+            $.ajax({
+                url : `{{ url('api/start-plc') }}`,
+                type : 'PATCH',
+                dataType : 'json',
+                data : {
+                    status : $('#btn-start-cems').attr('data-status')
+                },
+                success : function(data){
+                    if(data.success){
+                        if(data.data.is_maintenance == 0){
+                            $('#btn-start-cems').attr('data-status',"1")
+                            $('#btn-start-cems').removeClass('active').addClass('deactive')
+                            $('#btn-start-cems').html('Stop CEMS')
+                            
+                            $('#btn-start-mt').attr('data-status',"1")
+                            $('#btn-start-mt').removeClass('deactive')
+                            $('#btn-start-mt').html('Start Maintenance')
+                            
+                        }else{
+                            $('#btn-start-cems').attr('data-status', "0")
+                            $('#btn-start-cems').removeClass('deactive').addClass('active')
+                            $('#btn-start-cems').html('Start CEMS')
+                            
+                        }
+                    }
+                }
+            })
+        })
+        $('#btn-start-cal').click(function(e){
+            e.preventDefault()
+            $.ajax({
+                url : `{{ url('api/start-cal') }}`,
+                type : 'PATCH',
+                dataType : 'json',
+                data : {
+                    status : $('#btn-start-cal').attr('data-status')
+                },
+                success : function(data){
+                    if(data.success){
+                        console.log(data.data.is_calibration)
+                        if(data.data.is_calibration == 0){
+                            $('#btn-start-cal').attr('data-status',"1")
+                            $('#btn-start-cal').removeClass('deactive')
+                            $('#btn-start-cal').html('Start Calibration')
+                            $('#btn-cal-menu').addClass('hide')
+                        }else{
+                            $('#btn-start-cal').removeClass('deactive')
+                            $('#btn-start-cal').attr('data-status', "0")
+                            $('#btn-start-cal').addClass('deactive')
+                            $('#btn-start-cal').html('Stop Calibration')
+                            $('#btn-cal-menu').removeClass('hide')
+                            
+                        }
+                    }
+                }
+            })
+        })
+        $('#btn-start-mt').click(function(e){
+            e.preventDefault()
+            $.ajax({
+                url : `{{ url('api/start-plc') }}`,
+                type : 'PATCH',
+                dataType : 'json',
+                data : {
+                    status : $('#btn-start-mt').attr('data-status')
+                },
+                success : function(data){
+                    if(data.success){
+                        if(data.data.is_maintenance == 0){
+                            $('#btn-start-mt').attr('data-status',"1")
+                            $('#btn-start-mt').removeClass('deactive')
+                            $('#btn-start-mt').html('Start Maintenance')
+
+                            $('#btn-start-cems').attr('data-status',"1")
+                            $('#btn-start-cems').removeClass('active').addClass('deactive')
+                            $('#btn-start-cems').html('Stop CEMS')
+                            
+                        }else{
+                            $('#btn-start-mt').attr('data-status', "0")
+                            $('#btn-start-mt').addClass('deactive')
+                            $('#btn-start-mt').html('Stop Maintenance')
+
+                            $('#btn-start-cems').attr('data-status', "0")
+                            $('#btn-start-cems').removeClass('deactive').addClass('active')
+                            $('#btn-start-cems').html('Start CEMS')
+                            
+                        }
+                    }
+                }
+            })
+        })
     })
 </script>
 @endsection

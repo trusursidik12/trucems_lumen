@@ -695,13 +695,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
-.text-gray-700 {
-  --tw-text-opacity: 1;
-  color: rgb(55 65 81 / var(--tw-text-opacity));
-}
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+.text-gray-700 {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 .text-indigo-700 {
   --tw-text-opacity: 1;
@@ -732,18 +732,25 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
   text-align: center;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
   text-transform: uppercase;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .sidebar > a.active {
   --tw-bg-opacity: 1;
-  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+}
+.sidebar > a.deactive {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+.sidebar > a.hide {
+  display: none;
 }
 
 .table thead  th, .table tbody td {
