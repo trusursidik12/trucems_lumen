@@ -8,11 +8,11 @@ class PhpSerialModbus
   
 	public function __construct() 
 	{
-		$this->serial = new PhpSerial;
+		$this->serial = new PhpSerial();
 	}
  
 	// Initialize serial port with specified parameters
-	public function deviceInit($port='/dev/ttyUSB0', $baud=115200, $parity='none', $char=8, $sbits=1, $flow='none')
+	public function deviceInit($port='/dev/ttyPLC', $baud=115200, $parity='none', $char=8, $sbits=1, $flow='none')
 	{
 		$this->serial->deviceSet($port);
 		$this->serial->confBaudRate($baud);
@@ -104,9 +104,12 @@ class PhpSerialModbus
 		if ($this->debug) print "DEBUG [query sent]: ".$this->bin2hexString($queryString)."\n";
 		
 		// Send over serial port
-		$this->serial->sendMessage($queryString);
-		
-		if ($response) return $this->getResponse(); else return 1;
+		return $this->serial->sendMessage($queryString);
+		// var_dump($this->getResponse());
+		// return $this->getResponse();
+		// print_r("Response:".$response.PHP_EOL);
+		// if ($response) return $this->getResponse(); else return 1;
+		// return $response;
 	}
 	
 	// Read response from slave

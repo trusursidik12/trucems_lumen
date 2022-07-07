@@ -51,10 +51,10 @@ class PhpSerial
             if ($this->_exec("stty --version") === 0) {
                 register_shutdown_function(array($this, "deviceClose"));
             } else {
-                trigger_error(
-                    "No stty availible, unable to run.",
-                    E_USER_ERROR
-                );
+                // trigger_error(
+                //     "No stty availible, unable to run.",
+                //     E_USER_ERROR
+                // );
             }
         } elseif (substr($sysName, 0, 6) === "Darwin") {
             $this->_os = "osx";
@@ -63,8 +63,8 @@ class PhpSerial
             $this->_os = "windows";
             register_shutdown_function(array($this, "deviceClose"));
         } else {
-            trigger_error("Host OS is neither osx, linux nor windows, unable " .
-                          "to run.", E_USER_ERROR);
+            // trigger_error("Host OS is neither osx, linux nor windows, unable " .
+            //               "to run.", E_USER_ERROR);
             exit();
         }
     }
@@ -118,12 +118,12 @@ class PhpSerial
                 }
             }
 
-            trigger_error("Specified serial port is not valid", E_USER_WARNING);
+            // trigger_error("Specified serial port is not valid", E_USER_WARNING);
 
             return false;
         } else {
-            trigger_error("You must close your device before to set an other " .
-                          "one", E_USER_WARNING);
+            // trigger_error("You must close your device before to set an other " .
+            //               "one", E_USER_WARNING);
 
             return false;
         }
@@ -138,25 +138,25 @@ class PhpSerial
     public function deviceOpen($mode = "r+b")
     {
         if ($this->_dState === SERIAL_DEVICE_OPENED) {
-            trigger_error("The device is already opened", E_USER_NOTICE);
+            // trigger_error("The device is already opened", E_USER_NOTICE);
 
             return true;
         }
 
         if ($this->_dState === SERIAL_DEVICE_NOTSET) {
-            trigger_error(
-                "The device must be set before to be open",
-                E_USER_WARNING
-            );
+            // trigger_error(
+            //     "The device must be set before to be open",
+            //     E_USER_WARNING
+            // );
 
             return false;
         }
 
         if (!preg_match("@^[raw]\\+?b?$@", $mode)) {
-            trigger_error(
-                "Invalid opening mode : ".$mode.". Use fopen() modes.",
-                E_USER_WARNING
-            );
+            // trigger_error(
+            //     "Invalid opening mode : ".$mode.". Use fopen() modes.",
+            //     E_USER_WARNING
+            // );
 
             return false;
         }
@@ -171,7 +171,7 @@ class PhpSerial
         }
 
         $this->_dHandle = null;
-        trigger_error("Unable to open the device", E_USER_WARNING);
+        // trigger_error("Unable to open the device", E_USER_WARNING);
 
         return false;
     }
@@ -194,7 +194,7 @@ class PhpSerial
             return true;
         }
 
-        trigger_error("Unable to close the device", E_USER_ERROR);
+        // trigger_error("Unable to close the device", E_USER_ERROR);
 
         return false;
     }
@@ -218,8 +218,8 @@ class PhpSerial
     public function confBaudRate($rate)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set the baud rate : the device is " .
-                          "either not set or opened", E_USER_WARNING);
+            // trigger_error("Unable to set the baud rate : the device is " .
+            //               "either not set or opened", E_USER_WARNING);
 
             return false;
         }
@@ -260,10 +260,10 @@ class PhpSerial
             }
 
             if ($ret !== 0) {
-                trigger_error(
-                    "Unable to set baud rate: " . $out[1],
-                    E_USER_WARNING
-                );
+                // trigger_error(
+                //     "Unable to set baud rate: " . $out[1],
+                //     E_USER_WARNING
+                // );
 
                 return false;
             }
@@ -284,10 +284,10 @@ class PhpSerial
     public function confParity($parity)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error(
-                "Unable to set parity : the device is either not set or opened",
-                E_USER_WARNING
-            );
+            // trigger_error(
+            //     "Unable to set parity : the device is either not set or opened",
+            //     E_USER_WARNING
+            // );
 
             return false;
         }
@@ -299,7 +299,7 @@ class PhpSerial
         );
 
         if (!isset($args[$parity])) {
-            trigger_error("Parity mode not supported", E_USER_WARNING);
+            // trigger_error("Parity mode not supported", E_USER_WARNING);
 
             return false;
         }
@@ -325,7 +325,7 @@ class PhpSerial
             return true;
         }
 
-        trigger_error("Unable to set parity : " . $out[1], E_USER_WARNING);
+        // trigger_error("Unable to set parity : " . $out[1], E_USER_WARNING);
 
         return false;
     }
@@ -339,8 +339,8 @@ class PhpSerial
     public function confCharacterLength($int)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set length of a character : the device " .
-                          "is either not set or opened", E_USER_WARNING);
+            // trigger_error("Unable to set length of a character : the device " .
+            //               "is either not set or opened", E_USER_WARNING);
 
             return false;
         }
@@ -373,10 +373,10 @@ class PhpSerial
             return true;
         }
 
-        trigger_error(
-            "Unable to set character length : " .$out[1],
-            E_USER_WARNING
-        );
+        // trigger_error(
+        //     "Unable to set character length : " .$out[1],
+        //     E_USER_WARNING
+        // );
 
         return false;
     }
@@ -392,8 +392,8 @@ class PhpSerial
     public function confStopBits($length)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set the length of a stop bit : the " .
-                          "device is either not set or opened", E_USER_WARNING);
+            // trigger_error("Unable to set the length of a stop bit : the " .
+            //               "device is either not set or opened", E_USER_WARNING);
 
             return false;
         }
@@ -403,10 +403,10 @@ class PhpSerial
                 and $length != 1.5
                 and !($length == 1.5 and $this->_os === "linux")
         ) {
-            trigger_error(
-                "Specified stop bit length is invalid",
-                E_USER_WARNING
-            );
+            // trigger_error(
+            //     "Specified stop bit length is invalid",
+            //     E_USER_WARNING
+            // );
 
             return false;
         }
@@ -434,10 +434,10 @@ class PhpSerial
             return true;
         }
 
-        trigger_error(
-            "Unable to set stop bit length : " . $out[1],
-            E_USER_WARNING
-        );
+        // trigger_error(
+        //     "Unable to set stop bit length : " . $out[1],
+        //     E_USER_WARNING
+        // );
 
         return false;
     }
@@ -454,8 +454,8 @@ class PhpSerial
     public function confFlowControl($mode)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set flow control mode : the device is " .
-                          "either not set or opened", E_USER_WARNING);
+            // trigger_error("Unable to set flow control mode : the device is " .
+            //               "either not set or opened", E_USER_WARNING);
 
             return false;
         }
@@ -472,7 +472,7 @@ class PhpSerial
         );
 
         if ($mode !== "none" and $mode !== "rts/cts" and $mode !== "xon/xoff") {
-            trigger_error("Invalid flow control mode specified", E_USER_ERROR);
+            // trigger_error("Invalid flow control mode specified", E_USER_ERROR);
 
             return false;
         }
@@ -497,10 +497,10 @@ class PhpSerial
         if ($ret === 0) {
             return true;
         } else {
-            trigger_error(
-                "Unable to set flow control : " . $out[1],
-                E_USER_ERROR
-            );
+            // trigger_error(
+            //     "Unable to set flow control : " . $out[1],
+            //     E_USER_ERROR
+            // );
 
             return false;
         }
@@ -527,11 +527,11 @@ class PhpSerial
         );
 
         if ($return{0} === "I") {
-            trigger_error("setserial: Invalid flag", E_USER_WARNING);
+            // trigger_error("setserial: Invalid flag", E_USER_WARNING);
 
             return false;
         } elseif ($return{0} === "/") {
-            trigger_error("setserial: Error with device file", E_USER_WARNING);
+            // trigger_error("setserial: Error with device file", E_USER_WARNING);
 
             return false;
         } else {
@@ -562,6 +562,9 @@ class PhpSerial
         }
 
         usleep((int) ($waitForReply * 1000000));
+        // usleep((int) ($waitForReply * 1000000));
+        // return $this->_dState;
+        return $this->deviceOpen();
     }
 
     /**
@@ -574,7 +577,7 @@ class PhpSerial
     public function readPort($count = 0)
     {
         if ($this->_dState !== SERIAL_DEVICE_OPENED) {
-            trigger_error("Device must be opened to read it", E_USER_WARNING);
+            // trigger_error("Device must be opened to read it", E_USER_WARNING);
 
             return false;
         }
@@ -636,13 +639,14 @@ class PhpSerial
             return false;
         }
 
-        if (fwrite($this->_dHandle, $this->_buffer) !== false) {
+        if (@fwrite($this->_dHandle, $this->_buffer) !== false) {
             $this->_buffer = "";
 
             return true;
         } else {
             $this->_buffer = "";
-            trigger_error("Error while sending message", E_USER_WARNING);
+            print("Error while sending message".PHP_EOL);
+            $this->_dState = SERIAL_DEVICE_NOTSET;
 
             return false;
         }
@@ -659,7 +663,7 @@ class PhpSerial
     public function _ckOpened()
     {
         if ($this->_dState !== SERIAL_DEVICE_OPENED) {
-            trigger_error("Device must be opened", E_USER_WARNING);
+            // trigger_error("Device must be opened", E_USER_WARNING);
 
             return false;
         }
@@ -670,7 +674,7 @@ class PhpSerial
     public function _ckClosed()
     {
         if ($this->_dState === SERIAL_DEVICE_OPENED) {
-            trigger_error("Device must be closed", E_USER_WARNING);
+            // trigger_error("Device must be closed", E_USER_WARNING);
 
             return false;
         }
