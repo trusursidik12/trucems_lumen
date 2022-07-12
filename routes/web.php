@@ -17,45 +17,46 @@ use App\Http\Controllers\ExampleController;
 
 $router->get('/', 'DashboardController@index');
 $router->get('/quality-standards', 'DashboardController@qualityStandard');
-$router->group(['prefix' => 'calibration'], function() use ($router){
+$router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
     $router->get('/auto', 'CalibrationController@auto');
     $router->get('/logs', 'CalibrationController@logs');
     $router->get('/{mode}/{type}/process', 'CalibrationController@processCal');
-
 });
 /**
  * API
  */
-$router->group(['prefix' => 'api'], function() use ($router){
+$router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * PLC API
      * 
      */
-    $router->patch('/start-plc','API\PlcController@updatePLC');
-    $router->patch('/start-cal','API\PlcController@updateCal');
+    $router->get('/plc', 'API\PlcController@index'); //get data all plc
+    $router->patch('/alarm/update', 'API\PlcController@updateAlarm');
+    $router->patch('/start-plc', 'API\PlcController@updatePLC');
+    $router->patch('/start-cal', 'API\PlcController@updateCal');
     /**
      * Runtime API
      */
-    $router->get('/runtime','API\RuntimeController@index');
-    $router->patch('/runtime','API\RuntimeController@store');
+    $router->get('/runtime', 'API\RuntimeController@index');
+    $router->patch('/runtime', 'API\RuntimeController@store');
     /**
      * Set Relay API
      */
-    $router->get('/relay','API\ConfigurationController@isRelayOpen');
-    $router->patch('/relay','API\ConfigurationController@setRelay');
+    $router->get('/relay', 'API\ConfigurationController@isRelayOpen');
+    $router->patch('/relay', 'API\ConfigurationController@setRelay');
     // Blowback
-    $router->get('/blowback','API\BlowbackController@checkRemaining');
-    $router->patch('/blowback','API\BlowbackController@setBlowback');
-    $router->patch('/blowback/finish','API\BlowbackController@finishBlowback');
+    $router->get('/blowback', 'API\BlowbackController@checkRemaining');
+    $router->patch('/blowback', 'API\BlowbackController@setBlowback');
+    $router->patch('/blowback/finish', 'API\BlowbackController@finishBlowback');
     /**
      * Set Calibration
      */
-    $router->patch('/set-calibration/{mode}/{type}','API\SetCalibrationController@setCalibration');
-    $router->get('/calibration/check-remaining/{mode}/{type}','API\SetCalibrationController@checkRemaining');
-    $router->get('/calibration/check-retry/{mode}/{type}','API\SetCalibrationController@retryCalibration');
-    $router->get('/calibration/update-calibration/{mode}/{type}','API\SetCalibrationController@updateStatusCalibration');
-    $router->patch('/calibration/update-time-calibration/{mode}/{type}','API\SetCalibrationController@updateTimeCalibration');
+    $router->patch('/set-calibration/{mode}/{type}', 'API\SetCalibrationController@setCalibration');
+    $router->get('/calibration/check-remaining/{mode}/{type}', 'API\SetCalibrationController@checkRemaining');
+    $router->get('/calibration/check-retry/{mode}/{type}', 'API\SetCalibrationController@retryCalibration');
+    $router->get('/calibration/update-calibration/{mode}/{type}', 'API\SetCalibrationController@updateStatusCalibration');
+    $router->patch('/calibration/update-time-calibration/{mode}/{type}', 'API\SetCalibrationController@updateTimeCalibration');
     /**
      * Sensor Value Logs
      */
@@ -79,8 +80,6 @@ $router->group(['prefix' => 'api'], function() use ($router){
     /**
      * Configurations
      */
-    $router->get('/configurations','API\ConfigurationController@index');
-    $router->patch('/configurations','API\ConfigurationController@update');
-
-    
+    $router->get('/configurations', 'API\ConfigurationController@index');
+    $router->patch('/configurations', 'API\ConfigurationController@update');
 });

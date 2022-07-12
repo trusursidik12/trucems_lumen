@@ -172,5 +172,4 @@ class PhpSerialModbus
 			}		
 		return 0; 
 	}
-} 
-?>
+}

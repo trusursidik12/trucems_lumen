@@ -31,8 +31,18 @@ while True:
 
     if(connection == True):
         try:
-            result = client.write_coils(0, [1], unit=1)
-            # result2 = client.write_coils(0, [0], unit=1)
+            response_plc = requests.request(
+                "GET", url + "plc", headers=headers)
+
+            json_plc = json.loads(response_plc.text)
+            alarm = json_plc["data"]["alarm"]
+            # print(alarm)
+            # exit()
+
+            if(alarm == 0):
+                result = client.write_coils(0, [1], unit=1)
+            else:
+                result = client.write_coils(0, [0], unit=1)
 
             response_configuration = requests.request(
                 "GET", url + "sensor-value-logs", headers=headers, data=get_payload)

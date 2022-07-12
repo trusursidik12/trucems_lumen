@@ -707,4 +707,3 @@ class PhpSerial
     // INTERNAL TOOLKIT -- {STOP}
     //
 }
-?>

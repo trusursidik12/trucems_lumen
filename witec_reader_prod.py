@@ -26,6 +26,8 @@ try:
     get_url_configuration = "http://localhost/trucems/public/api/configurations"
     # patch / update configuration
     patch_url_configuration = "http://localhost/trucems/public/api/configurations"
+    # patch / update alarm
+    patch_url_alarm = "http://localhost/trucems/public/api/alarm/update"
     # delete configuration
     delete_url_configuration = "http://localhost/trucems/public/api/calibration-logs"
     # payload
@@ -42,7 +44,6 @@ try:
     bps = 115200
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
-
     # loop
     while True:
         logf = open("error.log", "w")
@@ -55,11 +56,28 @@ try:
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
-
             if(json_get_configuration["success"] == True):
-                msg = bytes.fromhex("50 00 00 00 00 00 55 00")
-                result = witec_ser.write(msg)
+                # alarm
+                msg_alarm = bytes.fromhex("50 00 00 00 00 00 55 00")
+                result = witec_ser.write(msg_alarm)
+                # print(result)
                 data = str(witec_ser.readlines(1))
+                data_value_alarm = data.replace("[b'", "").replace(
+                    "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
+                if(data_value_alarm):
+                    round_value_alarm = round(float(data_value_alarm), 3)
+                else:
+                    round_value_alarm = 0
+                patch_payload_alarm = 'alarm='+str(round_value_alarm)+''
+                response = requests.request(
+                    "PATCH", patch_url_alarm, headers=headers, data=patch_payload_alarm)
+
+                # read concentration
+                msg = bytes.fromhex("0F 00 00 00 00 00 55 00")
+                result = witec_ser.write(msg)
+                # print(result)
+                data = str(witec_ser.readlines(1))
+                print(data)
                 data_value = data.replace("[b'", "").replace(
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                 if(data_value):
@@ -67,7 +85,6 @@ try:
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
-                print(data_value)
                 print(round_value)
                 # exit()
                 # update sensor values
@@ -189,7 +206,7 @@ try:
         except serial.serialutil.SerialException as e:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-            # print("serial not connected!")
+            print("serial not connected!")
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
