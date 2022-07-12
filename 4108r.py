@@ -1,9 +1,25 @@
 from time import sleep
+from pymodbus.client.sync import ModbusSerialClient
+import minimalmodbus
 import mysql.connector
 import serial  # Import module
+
+
+# rs485 = minimalmodbus.Instrument('COM5', 1, 'rtu', False)
+# rs485.serial.baudrate = 9600
+# rs485.serial.parity = serial.PARITY_NONE
+# rs485.serial.bytesize = 8
+# rs485.serial.stopbits = 1
+# rs485.serial.timeout = 5
+
+# reg = rs485.read_registers(1, 8, 3)
+# print(reg)
+# exit()
+
+
 try:
     # portx = "/dev/ttyUSB0"
-    portx = "COM8"
+    portx = "COM5"
     bps = 9600
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1

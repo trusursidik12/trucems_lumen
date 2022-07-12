@@ -36,9 +36,9 @@ try:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     # port on linux
-    portx = "/dev/ttyWITEC"
+    # portx = "/dev/ttyWITEC"
     # port on windows
-    # portx = "COM7"
+    portx = "COM8"
     bps = 115200
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
@@ -57,7 +57,7 @@ try:
             json_get_configuration = json.loads(response_configuration.text)
 
             if(json_get_configuration["success"] == True):
-                msg = bytes.fromhex("17 00 00 00 00 00 55 00")
+                msg = bytes.fromhex("50 00 00 00 00 00 55 00")
                 result = witec_ser.write(msg)
                 data = str(witec_ser.readlines(1))
                 data_value = data.replace("[b'", "").replace(
@@ -67,7 +67,9 @@ try:
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
-                # print(round_value)
+                print(data_value)
+                print(round_value)
+                # exit()
                 # update sensor values
                 patch_payload_sensor_values = 'value='+str(round_value)+''
                 response = requests.request(
@@ -84,6 +86,7 @@ try:
                 # is zero calibration
                 if(json_get_configuration["data"]["is_calibration"] == 3 and json_get_configuration["data"]["calibration_type"] == 1):
                     msg = bytes.fromhex("08 00 00 00 00 00 55 00")
+                    # msg = bytes.fromhex("11 00 00 00 00 00 55 00")
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
                     data_value = data.replace("[b'", "").replace(
@@ -154,7 +157,7 @@ try:
                         "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
 
                     # print("|||||||||||||||||+++++++SPAN++++++++++||||||||||")
-                    # print("60 00 "+str(value1)+" "+str(value2) +
+                    # print("60 02 "+str(value1)+" "+str(value2) +
                     # " "+str(value3)+" "+str(value4)+" 55 00")
                     # print("|||||||||||||||||+++++++SPAN++++++++++||||||||||")
 

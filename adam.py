@@ -14,7 +14,7 @@ import random
 try:
     # connect into database
     mydb = psycopg2.connect(
-        host="localhost", database="trudas_db", user="postgres", password="root", )
+        host="localhost", database="trucems_lumen_db", user="root", password="", )
     mycursor = mydb.cursor()
     # port = '/dev/ttyADAM'
     port = 'COM12'
@@ -44,7 +44,7 @@ try:
                 # print(data)
                 # for values in data:
                 #     print(fix_value1)
-                #     print(fix_value2) 
+                #     print(fix_value2)
                 #     print(fix_value3)
                 #     # print(print(value.registers))
                 #     # update sensor_value_logs

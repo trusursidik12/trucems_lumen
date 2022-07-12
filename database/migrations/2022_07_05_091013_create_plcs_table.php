@@ -26,6 +26,10 @@ class CreatePlcsTable extends Migration
             $table->smallInteger('d5')->default(0)->nullable();
             $table->smallInteger('d6')->default(0)->nullable();
             $table->smallInteger('d7')->default(0)->nullable();
+            $table->integer('sleep_sampling')->default(0)->nullable();
+            $table->integer('sleep_blowback')->default(0)->nullable();
+            $table->integer('loop_sampling')->default(0)->nullable();
+            $table->integer('loop_blowback')->default(0)->nullable();
             $table->timestamps();
         });
     }

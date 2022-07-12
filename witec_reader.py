@@ -64,9 +64,9 @@ try:
     # witec_port = "/dev/ttyUSB0"
     # plc_port = "/dev/ttyUSB1"
     # port on windows
-    witec_port = "COM13"
+    witec_port = "COM8"
     witec_bps = 115200
-    plc_port = "COM8"
+    plc_port = "COM5"
     plc_bps = 9600
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
@@ -91,7 +91,7 @@ try:
 
             if(json_get_configuration["success"] == True):
                 # read data from sensors
-                sampling_msg = bytes.fromhex("17 00 00 00 00 00 55 00")
+                sampling_msg = bytes.fromhex("0F 00 00 00 00 00 55 00")
                 result = witec_ser.write(sampling_msg)
                 data = str(witec_ser.readlines(1))
                 data_value = data.replace("[b'", "").replace(
