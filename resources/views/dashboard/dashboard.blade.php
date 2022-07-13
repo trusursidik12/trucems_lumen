@@ -14,26 +14,8 @@
             </p>
         </div>
         <div class="flex justify-between pt-[14vh] space-x-3">
-            <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
-                <div class="flex justify-end">
-                    <button type="button" id="btn-switch" class="rounded px-4 py-2 bg-indigo-500 text-white">
-                        mg/m<sup>3</sup>
-                    </button>
-                </div>
-                <div id="section-values">
-                    @foreach ($sensorValues as $value)
-                        <div class="flex justify-between items-start space-x-3">
-                            <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
-                            <span class="text-2xl sensor-name">{!! $value->sensor->name !!}</span>
-                            <span class="text-8xl font-bold sensor-value h-64 flex items-center">
-                                <span>{{ $value->value }}</span>
-                            </span>
-                            <span class="text-2xl sensor-unit">{{ $value->sensor->unit->name }}</span>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <div class="w-1/3">
+
+            <div class="w-full">
                 <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
                     <button type="button" id="btn-start-cems" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
                         class="{{ $plc->is_maintenance == 0 ? 'deactive' : 'active' }}">
@@ -42,19 +24,11 @@
                     <button type="button" id="btn-start-cal" data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
                         {{ $plc->is_calibration == 1 ? 'Stop Calibration' : 'Start Calibration' }}
                     </button>
-                    <button onclick="return window.location.href=`{{ url('calibration/manual') }}`" id="btn-cal-menu"
-                        class="{{ $plc->is_calibration == 1 ? '' : 'hide' }} active">
-                        Calibration
-                    </button>
                     <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
                         class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
                         {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
                     </button>
                     <button onclick="return window.location.href=`{{ url('configurations') }}`">Configurations</button>
-                    <button onclick="return window.location.href=`{{ url('calibration/logs') }}`">Calibration
-                        Logs</button>
-                    {{-- <a href="{{ url("settings") }}">Setting</a> --}}
-                    <button onclick="return window.location.href=`{{ url('quality-standards') }}`">Baku Mutu</button>
                 </nav>
             </div>
         </div>
