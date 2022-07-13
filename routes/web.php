@@ -17,6 +17,9 @@ use App\Http\Controllers\ExampleController;
 
 $router->get('/', 'DashboardController@index');
 $router->get('/quality-standards', 'DashboardController@qualityStandard');
+$router->get('/configurations', 'ConfigurationController@index');
+$router->patch('/configurations', 'ConfigurationController@update');
+
 $router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
     $router->get('/auto', 'CalibrationController@auto');
@@ -29,7 +32,7 @@ $router->group(['prefix' => 'calibration'], function () use ($router) {
 $router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * PLC API
-     * 
+     *
      */
     $router->get('/plc', 'API\PlcController@index'); //get data all plc
     $router->patch('/alarm/update', 'API\PlcController@updateAlarm');

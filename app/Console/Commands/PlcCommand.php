@@ -85,7 +85,15 @@ class PlcCommand extends Command
     {
         foreach ($steps as $step) {
             // var_dump([$step['d']." === -1", $step['d'] === -1]);
-            if ($step['d'] === -1) {
+            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                $plc = Plc::find(1); // Get data from db
+                $sleep = $plc->sleep_ . $step['type'];
+                $loop = $plc->loop_ . $step['type'];
+            } else {
+                $sleep = $step['sleep'];
+                $loop = $step['loop'];
+            }
+            if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
                 }
@@ -94,14 +102,14 @@ class PlcCommand extends Command
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
                 }
-                $this->flipFlop($step['d'], $step['sleep'], $step['loop'], $check);
+                $this->flipFlop($step['d'], $sleep, $loop, $check);
             } else {
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
                 }
-                sleep($step['sleep']);
+                sleep($sleep);
                 $this->sendQuery($step['d'], $step['data']);
-                sleep($step['sleep']);
+                sleep($sleep);
             }
         }
     }
@@ -139,12 +147,12 @@ class PlcCommand extends Command
             ['d' => 7, 'data' => '0000', 'sleep' => $timer],
             ['d' => 0, 'data' => 'FF00', 'sleep' => $timer],
             ['d' => 2, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 3, 'data' => 'flipflop', 'sleep' => 2, 'loop' => 9], //sampling
+            ['d' => 3, 'data' => 'flipflop', 'sleep' => 2, 'loop' => 9, 'type' => 'sampling'], //sampling
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2], //blowback
+            ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2], //blowback
+            ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 0, 'data' => 'FF00', 'sleep' => $timer],
             ['d' => 2, 'data' => 'FF00', 'sleep' => $timer],
