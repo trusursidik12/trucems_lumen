@@ -16,8 +16,21 @@
         </div>
         <form id="configuration-form" action="{{ url('configurations') }}" method="PATCH"
             class="bg-gray-300 h-[83vh] rounded" id="form">
-            <div class="flex justify-between space-x-3 items-center pt-[13vh]" id="section-form">
+            <div class="flex justify-between space-x-3 items-center p
+            t-[13vh]" id="section-form">
                 <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
+                    <div class="flex my-2 justify-between items-center">
+                        <span class="w-2/2">
+                            <span class="uppercase font-semibold text-2xl">Time Sampling <small
+                                    class="font-thin text-xs lowercase">(sec)</small></span>
+                        </span>
+                        <span class="w-1/3">
+                            <input type="number" required min="1" name="sleep_sampling"
+                                data-kioskboard-type="numpad" data-kioskboard-placement="bottom"
+                                value="{{ $plc->sleep_sampling }}"
+                                class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
+                        </span>
+                    </div>
                     <div class="flex my-2 justify-between items-center">
                         <span class="w-2/2">
                             <span class="uppercase font-semibold text-2xl">Sampling Loop</span>
@@ -28,20 +41,20 @@
                                 class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                         </span>
                     </div>
+                </div>
+                <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
                     <div class="flex my-2 justify-between items-center">
                         <span class="w-2/2">
-                            <span class="uppercase font-semibold text-2xl">Sleep Sampling <small
+                            <span class="uppercase font-semibold text-2xl">Time Blowback <small
                                     class="font-thin text-xs lowercase">(sec)</small></span>
                         </span>
                         <span class="w-1/3">
-                            <input type="number" required min="1" name="sleep_sampling"
+                            <input type="number" required min="1" name="sleep_blowback"
                                 data-kioskboard-type="numpad" data-kioskboard-placement="bottom"
-                                value="{{ $plc->sleep_sampling }}"
+                                value="{{ $plc->sleep_blowback }}"
                                 class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                         </span>
                     </div>
-                </div>
-                <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
                     <div class="flex my-2 justify-between items-center">
                         <span class="w-2/2">
                             <span class="uppercase font-semibold text-2xl">Blowback Loop</span>
@@ -49,18 +62,6 @@
                         <span class="w-1/3">
                             <input type="number" required min="1" name="loop_blowback" data-kioskboard-type="numpad"
                                 data-kioskboard-placement="bottom" value="{{ $plc->loop_blowback }}"
-                                class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
-                        </span>
-                    </div>
-                    <div class="flex my-2 justify-between items-center">
-                        <span class="w-2/2">
-                            <span class="uppercase font-semibold text-2xl">Sleep Blowback <small
-                                    class="font-thin text-xs lowercase">(sec)</small></span>
-                        </span>
-                        <span class="w-1/3">
-                            <input type="number" required min="1" name="sleep_blowback"
-                                data-kioskboard-type="numpad" data-kioskboard-placement="bottom"
-                                value="{{ $plc->sleep_blowback }}"
                                 class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                         </span>
                     </div>

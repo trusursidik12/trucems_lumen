@@ -8,25 +8,28 @@ use App\Models\SensorValue;
 
 class CalibrationController extends Controller
 {
-    public function auto(){
+    public function auto()
+    {
         $config = Configuration::find(1);
         return view('calibration.auto', compact('config'));
     }
-    public function manual(){
+    public function manual()
+    {
         $config = Configuration::find(1);
         return view('calibration.manual', compact('config'));
     }
-    public function logs(){
+    public function logs()
+    {
         return view('calibration.logs');
     }
 
-    public function processCal($mode, $type){
+    public function processCal($mode, $type)
+    {
         $type = strtoupper($type);
         $mode = strtoupper($mode);
         $sensorValues = SensorValue::limit(10)->get();
         $calibrationType = ($type == "SPAN" ? 2 : 1);
-        $lastAvg = CalibrationAvgLog::select("value")->where('calibration_type' , $calibrationType)->orderBy("id","desc")->first();
-        return view('calibration.process', compact('type','mode','sensorValues','lastAvg'));
-
+        $lastAvg = CalibrationAvgLog::select("value")->where('calibration_type', $calibrationType)->orderBy("id", "desc")->first();
+        return view('calibration.process', compact('type', 'mode', 'sensorValues', 'lastAvg'));
     }
 }

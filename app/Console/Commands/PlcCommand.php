@@ -87,8 +87,13 @@ class PlcCommand extends Command
             // var_dump([$step['d']." === -1", $step['d'] === -1]);
             if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
                 $plc = Plc::find(1); // Get data from db
-                $sleep = $plc->sleep_ . $step['type'];
-                $loop = $plc->loop_ . $step['type'];
+                if ($step['type'] == "sampling") {
+                    $sleep = $plc->sleep_sampling;
+                    $loop = $plc->loop_sampling;
+                } else {
+                    $sleep = $plc->sleep_blowback;
+                    $loop = $plc->loop_blowback;
+                }
             } else {
                 $sleep = $step['sleep'];
                 $loop = $step['loop'];
