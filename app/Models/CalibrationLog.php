@@ -15,13 +15,15 @@ class CalibrationLog extends Model
      * @var array
      */
     protected $fillable = [
-        'sensor_id', 'value', 'calibration_type'
+        'sensor_id', 'calibration_type', 'start_value', 'target_value', 'result_value'
     ];
 
-    public function Sensor(){
+    public function Sensor()
+    {
         return $this->belongsTo(Sensor::class);
     }
-    public function getCreatedAtAttribute($value){
+    public function getCreatedAtAttribute($value)
+    {
         return Carbon::parse($value)->timezone(env('APP_TIMEZONE'))->format("H:i:s");
     }
 }

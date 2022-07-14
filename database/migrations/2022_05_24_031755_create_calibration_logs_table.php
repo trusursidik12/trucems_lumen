@@ -20,8 +20,10 @@ class CreateCalibrationLogsTable extends Migration
                 ->constrained('sensors')
                 ->onUpdate('cascade')
                 ->onDelete('set null');
-            $table->double('value')->default(0)->nullable();
             $table->smallInteger('calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
+            $table->double('start_value')->default(0)->nullable();
+            $table->double('target_value')->default(0)->nullable();
+            $table->double('result_value')->default(0)->nullable();
             $table->timestamps();
         });
     }
