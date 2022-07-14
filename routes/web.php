@@ -60,6 +60,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/calibration/check-retry/{mode}/{type}', 'API\SetCalibrationController@retryCalibration');
     $router->get('/calibration/update-calibration/{mode}/{type}', 'API\SetCalibrationController@updateStatusCalibration');
     $router->patch('/calibration/update-time-calibration/{mode}/{type}', 'API\SetCalibrationController@updateTimeCalibration');
+
+    /**
+     * Start Calibration
+     */
+    $router->post('/calibration-start', 'API\SetCalibrationController@calibrationStart');
+    $router->post('/calibration-set-value/{type}', 'API\SetCalibrationController@offsetAndGain');
+    $router->post('/calibration-last-value', 'API\SetCalibrationController@getLastRecord');
+    $router->post('/calibration-stop', 'API\SetCalibrationController@closeCalibration');
+
     /**
      * Sensor Value Logs
      */

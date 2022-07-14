@@ -4,25 +4,28 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\CalibrationAvgLog;
+use App\Models\CalibrationLog;
 use Illuminate\Http\Request;
 
 class CalibrationAvgLogsController extends Controller
 {
-    public function index(){
-        $calibrationLogs = CalibrationAvgLog::with(['sensor:id,unit_id,code,name','sensor.unit:id,name'])
-        ->orderBy("id","desc")->limit(30)->get();
+    public function index()
+    {
+        $calibrationLogs = CalibrationLog::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
+            ->orderBy("id", "desc")->limit(30)->get();
         return response()->json(['success' => true, 'data' => $calibrationLogs]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
-            $column = $this->validate($request,[
+            $column = $this->validate($request, [
                 'sensor_id' => 'required|numeric',
                 'value' => 'required|numeric',
                 'row_count' => 'required|numeric',
                 'cal_gas_ppm' => 'required|numeric',
                 'cal_duration' => 'required|numeric',
-            ],[
+            ], [
                 "sensor_id.required" => "Sensor cant be empty!",
                 "value.required" => "Value cant be empty!",
                 "row_count.required" => "Total ROW cant be empty!",
@@ -34,24 +37,26 @@ class CalibrationAvgLogsController extends Controller
                 "cal_gas_ppm.numeric" => "Cal. gas PPM must be numeric format!",
                 "cal_duration.numeric" => "Cal. duration must be numeric format!",
             ]);
-            CalibrationAvgLog::create($column);
+            CalibrationLog::create($column);
             return response()->json(["success" => true, "message" => "Successfully insert calibration logs!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(["success" => false, "errors" => $e->response->original]);
         }
     }
 
-    public function logs(){
-        $calibrationAvgLogs = CalibrationAvgLog::with(["sensor:id,unit_id,name","sensor.unit:id,name"])
-        // ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
-        ->orderBy("calibration_avg_logs.id","desc")->paginate(10);
-        return $calibrationAvgLogs;
+    public function logs()
+    {
+        $calibrationLogs = CalibrationLog::with(["sensor:id,unit_id,name", "sensor.unit:id,name"])
+            // ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
+            ->orderBy("id", "desc")->paginate(10);
+        return $calibrationLogs;
     }
 
-    public function export(){
-        $now = date("Y-m-d")."-".rand(99,999);
-        $fileName = $now."-calibration-averaging-logs.csv";
-        $calibrationLogs = CalibrationAvgLog::orderBy("id","desc")->limit(500)->get();
+    public function export()
+    {
+        $now = date("Y-m-d") . "-" . rand(99, 999);
+        $fileName = $now . "-calibration-averaging-logs.csv";
+        $calibrationLogs = CalibrationLog::orderBy("id", "desc")->limit(500)->get();
         $headers = array(
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$fileName",
@@ -60,9 +65,9 @@ class CalibrationAvgLogsController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Date Time', 'Parameter','Calibration Type', 'Concentrate', 'Row Count', 'Unit');
+        $columns = array('Date Time', 'Parameter', 'Calibration Type', 'Concentrate', 'Row Count', 'Unit');
 
-        $callback = function() use($calibrationLogs, $columns) {
+        $callback = function () use ($calibrationLogs, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
@@ -74,7 +79,7 @@ class CalibrationAvgLogsController extends Controller
                 $row['Row Count']    = $log->row_count;
                 $row['Unit']  = $log->sensor->unit->name;
 
-                fputcsv($file, array($row['DateTime'], $row['Parameter'],$row['Calibration Type'], $row['Concentrate'], $row['Row Count'], $row['Unit']));
+                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Calibration Type'], $row['Concentrate'], $row['Row Count'], $row['Unit']));
             }
 
             fclose($file);
@@ -82,6 +87,4 @@ class CalibrationAvgLogsController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use App\Models\CalibrationAvgLog;
@@ -9,7 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class DemoCommand extends Command{
+class DemoCommand extends Command
+{
     /**
      * How to run function
      * php artisan runDemo
@@ -17,7 +19,8 @@ class DemoCommand extends Command{
      */
     protected $signature = 'runDemo';
     protected $description = 'Command description';
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
     public function handle()
@@ -27,23 +30,23 @@ class DemoCommand extends Command{
             $config = Configuration::find(1);
             $values = SensorValue::limit(10)->get();
             foreach ($values as $value) {
-                $value->value = rand(2,20) / (rand(1,10) * 10);
+                $value->value = round(rand(2, 20) / (rand(1, 10) * 10), 2);
                 $value->save();
-                if($config->is_calibration == 1 || $config->is_calibration == 2){
+                if ($config->is_calibration == 1 || $config->is_calibration == 2) {
                     CalibrationLog::create([
                         'sensor_id' => $value->sensor_id,
                         'value' => $value->value,
                         'calibration_type' => $config->calibration_type // Span / Zero
                     ]);
                 }
-                if($config->is_calibration > 2 ){ //
+                if ($config->is_calibration > 2) { //
                     // When Analyzer done for calibration
-                    if($config->loop_count >= 1){
+                    if ($config->loop_count >= 1) {
                         $column = [
                             'loop_count' => ($config->loop_count - 1),
                             'is_calibration' => $config->is_calibration_history,
-                        ]; 
-                    }else{
+                        ];
+                    } else {
                         $column = [
                             'loop_count' => 0,
                             'is_calibration' => 0,
@@ -52,7 +55,7 @@ class DemoCommand extends Command{
                     $config->update($column);
 
                     $calibrationLogs = CalibrationLog::first();
-                    if(!empty($calibrationLogs)){
+                    if (!empty($calibrationLogs)) {
                         $sum = CalibrationLog::sum("value");
                         $rowCount = CalibrationLog::get()->count();
                         $avg = $rowCount > 0 ? ($sum / $rowCount) : 0;

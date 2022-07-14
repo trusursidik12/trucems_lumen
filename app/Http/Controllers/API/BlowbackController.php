@@ -23,21 +23,9 @@ class BlowbackController extends Controller
     public function setBlowback(Request $request)
     {
         try {
-            $column = $this->validate($request, [
-                'blowback_duration' => 'required|numeric',
-            ],[
-                'blowback_duration.required' => 'Blowback duration is required!',
-                'blowback_duration.numeric' => 'Invalid type blow back duration!',
-            ]);
-            $now = Carbon::now();
-            $endAt = $now->addSeconds($column['blowback_duration'] + 1);
-            $endAt = $endAt->format("Y-m-d H:i:s");
-            $column['is_relay_open'] = 4;
-            $column['start_at'] = date('Y-m-d H:i:s');
-            $column['end_blowback_at'] = $endAt;
             $configuration = Configuration::find(1);
-            $configuration->update($column);
-            return response()->json(["success" => true, "message" => "Blowback updated!"]);
+            $configuration->update(['is_blowback' => 1]);
+            return response()->json(["success" => true, "message" => "Start Blowback!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(["success" => false, "errors" => $e->response->original]);
         }
@@ -53,19 +41,15 @@ class BlowbackController extends Controller
     public function checkRemaining()
     {
         $config = Configuration::find(1);
-        $now = Carbon::now();
-        $endAt = Carbon::parse($config->end_blowback_at);
-        $diff = $now->diffInSeconds($endAt, false);
         return response()->json([
             'success' => true,
-            'end_at' => $endAt->format("Y-m-d H:i:s"),
-            'remaining_time' => $diff,
-            'is_relay_open' => $config->is_relay_open
+            'is_blowback' => $config->is_blowback,
         ]);
     }
 
-    public function finishBlowback(){
-        try{
+    public function finishBlowback()
+    {
+        try {
             $config = Configuration::find(1);
             $config->update([
                 'is_relay_open' => 0,
@@ -73,9 +57,8 @@ class BlowbackController extends Controller
                 'start_blowback_at' => null,
             ]);
             return response()->json(['success' => true, 'message' => 'Blowback was update to finished!']);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
-
 }

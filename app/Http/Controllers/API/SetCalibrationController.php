@@ -27,11 +27,11 @@ class SetCalibrationController extends Controller
             $fieldLoop = substr($mode, 0, 1) . "_default_" . strtolower($type) . "_loop";
             $initialMode = substr($mode, 0, 1); // is m_ or a_
             $column = $this->validate($request, [
-                 $initialMode.'_default_zero_loop' => 'required|numeric|min:1',
-                 $initialMode.'_time_zero_loop' => 'required|numeric|min:1',
-                 $initialMode.'_default_span_loop' => 'required|numeric|min:1',
-                 $initialMode.'_time_span_loop' => 'required|numeric|min:1',
-                 $initialMode.'_max_span_ppm' => 'required|numeric|min:1',
+                $initialMode . '_default_zero_loop' => 'required|numeric|min:1',
+                $initialMode . '_time_zero_loop' => 'required|numeric|min:1',
+                $initialMode . '_default_span_loop' => 'required|numeric|min:1',
+                $initialMode . '_time_span_loop' => 'required|numeric|min:1',
+                $initialMode . '_max_span_ppm' => 'required|numeric|min:1',
             ], [
                 $initialMode . '_default_zero_loop.required' => 'Default Zero Loop cant empty!',
                 $initialMode . '_time_zero_loop.required' => 'Time Zero Loop cant empty!',
@@ -86,7 +86,7 @@ class SetCalibrationController extends Controller
         $diff = $now->diffInSeconds($endAt, false);
         $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->orderBy("id", "desc")->get();
-        $calibrationLogs = CalibrationLog::where('calibration_type' , $calibrationType)
+        $calibrationLogs = CalibrationLog::where('calibration_type', $calibrationType)
             ->with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
             ->limit(3)->orderBy("id", "desc")->get();
         return response()->json([
@@ -152,5 +152,43 @@ class SetCalibrationController extends Controller
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public function calibrationStart()
+    {
+        $config = Configuration::find(1);
+        $config->update(['is_calibration' => 1]);
+        return response()->json(["success" => true, "message" => 'Calibration Start']);
+    }
+
+    public function offsetAndGain(Request $request, $type)
+    {
+        try {
+            $this->validate($request, ['target_value' => 'required', ['target_value.required' => 'Target value cant empty!']]);
+            $value = $request->target_value;
+            if (isset($value)) {
+                $config = Configuration::find(1);
+                $config->update(['calibration_type' => $type, 'target_value' => $value]);
+                CalibrationLog::create(['sensor_id' => 1, 'calibration_type' => $type, 'start_value' => SensorValue::find(1)->value, 'target_value' => $value, 'result_value' => null]);
+                return response()->json(["success" => true, "message" => 'Target Value Has Been Saved']);
+            }
+            return response()->json(["success" => false, "error" => 'Saving Target Value Failed']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(["success" => false, "error" => "Target value cant empty"]);
+        }
+    }
+
+    public function getLastRecord()
+    {
+        $lastRow = CalibrationLog::latest('id')->first();
+        $lastRow->update(['result_value' => SensorValue::find(1)->value]);
+        return response()->json(["success" => true, "message" => 'Latest Value Has Been Saved']);
+    }
+
+    public function closeCalibration()
+    {
+        $config = Configuration::first();
+        $config->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0]);
+        return response()->json(["success" => true, "message" => 'Calibration Stoped']);
     }
 }

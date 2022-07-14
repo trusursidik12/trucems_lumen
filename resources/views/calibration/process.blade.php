@@ -8,7 +8,8 @@
     <div class="px-6 py-3 bg-gray-200 rounded">
 
         <div class="h-[88vh] bg-gray-300 rounded-xl">
-            <button class="px-5 py-4 bg-red-500 rounded-tl-xl rounded-br-xl text-white">Close</button>
+            <button id="btn_close"
+                class="px-5 py-4 bg-red-500 rounded-tl-xl rounded-br-xl text-white disabled:bg-gray-500"{{ $calibrationLog->result_value == null ? 'disabled' : '' }}>Close</button>
             <div class="flex justify-content-betwen items-center px-4 py-24">
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700">Realtime Value : </p>
@@ -46,12 +47,19 @@
                 </div>
             </div>
             <div class="w-full px-3">
-                <div class="mx-auto max-w-screen-sm">
-                    <input type="text" name="" data-kioskboard-type="numpad"
+                <div id="error-msg"></div>
+                <form id="form" class="mx-auto max-w-screen-sm">
+                    <input type="text" name="target_value" value="" data-kioskboard-type="numpad"
                         class="js-virtual-keyboard px-5 py-4 rounded w-1/2" placeholder="Target Value">
-                    <button class="px-5 py-4 bg-indigo-500 rounded text-white">Set Target</button>
-                    <button class="px-5 py-4 bg-blue-500 rounded text-white">Save Last Data</button>
-                </div>
+                    <button type="submit" id="btn_set_target_value"
+                        class="px-5 py-4 bg-indigo-500 rounded text-white disabled:bg-gray-500"
+                        {{ $calibrationLog->result_value == null ? 'disabled' : '' }}>
+                        Set Target</button>
+                    <button type="button" id="btn_last_data"
+                        class="px-5 py-4 bg-blue-500 rounded text-white disabled:bg-gray-500"
+                        {{ $calibrationLog->result_value == null ? '' : 'disabled' }}>Save Last
+                        Data</button>
+                </form>
             </div>
         </div>
     </div>
@@ -144,6 +152,118 @@
             })
             KioskBoard.run('.js-virtual-keyboard', {
 
+            })
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            let internvalRealtime = setInterval(getRealtimeValue, 1000);
+
+            function getRealtimeValue() {
+                let random = Math.floor(Math.random() * 100)
+                $.ajax({
+                    url: `{{ url('api/calibration/check-remaining') . '/' . strtolower($mode) . '/' . strtolower($type) }}?t=${random}`,
+                    type: 'get',
+                    dataType: 'json',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        let section = $('#section-values')
+                        let sectionLogs = $('#section-logs')
+                        if (data.success) {
+                            if (data.remaining_time < 0) {
+                                clearInterval(internvalRealtime)
+                                $('#section-left').removeClass('block')
+                                $('#section-left').addClass('hidden')
+                                $('#section-right').removeClass('w-1/2')
+                                $('#section-right').addClass('w-full')
+                                $('#remaining').addClass('hidden')
+                                $('#last-value').removeClass('hidden')
+                            }
+                            let sensorValues = data.sensor_values
+                            sensorValues.map(function(value) {
+                                let div = section.find(
+                                    `.section-value[data-sensor-id=${value.sensor_id}]`)
+                                div.find('.sensor-value').html(`${value.value}`)
+                                $('.last-value').html(`${value.value}`)
+                            })
+                            // Logs
+                            let calibrationLogs = data.calibration_logs
+                            let i = 2
+                            let logs = []
+                            let html = ``
+                            calibrationLogs.map(function(value) {
+                                logs[i] =
+                                    ` <p class="block text-xs">${value.value} ${value.sensor.unit.name} - ${value.created_at}</p>`
+                                i--
+                            })
+                            logs.map(function(element) {
+                                html += element
+                            })
+                            sectionLogs.html(html)
+                            $('#remaining').html(`${data.remaining_time} sec`)
+                        }
+                    }
+                })
+                // setTimeout(getRealtimeValue, 1000);
+            }
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#form').submit(function(e) {
+                e.preventDefault()
+                $.ajax({
+                    url: `{{ url('api/calibration-set-value') . '/' . ($type == 'ZERO' ? 1 : 2) }}`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        if (data.success) {
+                            $('#btn_last_data').prop('disabled', false)
+                            $('#error-msg').html(`
+                            <p class="rounded p-4 font-medium text-white bg-green-500 my-4">${data.message}!</p>
+                            `)
+                            $('#btn_set_target_value').prop('disabled', true)
+                            $('#btn_close').prop('disabled', true)
+                        } else {
+                            $('#error-msg').html(`
+                            <p class="rounded p-4 font-medium text-white bg-red-500 my-4">${data.error}!</p>
+                            `)
+                        }
+                        setTimeout(() => {
+                            $('#error-msg').html(``);
+                        }, 5000);
+                    }
+                })
+            })
+            $('#btn_last_data').click(function(e) {
+                e.preventDefault()
+                $.ajax({
+                    url: `{{ url('api/calibration-last-value') }}`,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            $('#btn_close').prop('disabled', false)
+                            $('#btn_set_target_value').prop('disabled', false)
+                            $('#btn_last_data').prop('disabled', true)
+                        }
+                    }
+                })
+            })
+            $('#btn_close').click(function(e) {
+                e.preventDefault()
+                $.ajax({
+                    url: `{{ url('api/calibration-stop') }}`,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            window.location.href =
+                                `{{ url('calibration/manual') }}`
+                        }
+                    }
+                })
             })
         })
     </script>
