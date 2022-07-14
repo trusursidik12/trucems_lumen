@@ -17,8 +17,8 @@ class CreateConfigurationsTable extends Migration
         Schema::create('configurations', function (Blueprint $table) {
             $table->id();
             $table->smallInteger('is_calibration')->default(0)->nullable()->comment("0 = Nothing, 1 = Auto, 2 = Manual");
+            $table->smallInteger('is_blowback')->default(5)->nullable()->comment('1 = Blowback, 0 = No');
             $table->smallInteger('calibration_type')->default(0)->nullable()->comment('1 = Zero, 2 = Span, 0 = Nothing');
-            $table->integer('is_blowback')->default(5)->nullable()->comment('1 = Blowback, 0 = No');
             $table->timestamp('date_and_time')->default(DB::raw('current_timestamp()'))->nullable();
             $table->timestamps();
         });
