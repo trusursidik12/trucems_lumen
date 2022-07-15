@@ -15,7 +15,6 @@ logf = open("error.log", "w")
 # logf.close()
 try:
     # ser.open()
-
     # patch / update data sensor values
     patch_url_sensor_values = "http://localhost/trucems/public/api/sensor-value/1"
     # post data into calibration_logs
@@ -77,7 +76,7 @@ try:
                 result = witec_ser.write(msg)
                 # print(result)
                 data = str(witec_ser.readlines(1))
-                print(data)
+                # print(data)
                 data_value = data.replace("[b'", "").replace(
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                 if(data_value):
@@ -85,7 +84,7 @@ try:
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
-                print(round_value)
+                # print(round_value)
                 # exit()
                 # update sensor values
                 patch_payload_sensor_values = 'value='+str(round_value)+''
@@ -206,7 +205,7 @@ try:
         except serial.serialutil.SerialException as e:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-            print("serial not connected!")
+            # print("serial not connected!")
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)

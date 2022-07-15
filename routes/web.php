@@ -46,8 +46,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * Set Relay API
      */
-    $router->get('/relay', 'API\ConfigurationController@isRelayOpen');
-    $router->patch('/relay', 'API\ConfigurationController@setRelay');
+    $router->get('/relay', 'API\RelayController@index');
+    $router->patch('/relay', 'API\RelayController@setRelay');
     // Blowback
     $router->get('/blowback', 'API\BlowbackController@checkRemaining');
     $router->patch('/blowback', 'API\BlowbackController@setBlowback');
@@ -89,9 +89,4 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/calibration-avg-logs', 'API\CalibrationAvgLogsController@index');
     $router->get('/calibration-avg-logs/paginate', 'API\CalibrationAvgLogsController@logs');
     $router->get('/calibration-avg-logs/export', 'API\CalibrationAvgLogsController@export');
-    /**
-     * Configurations
-     */
-    $router->get('/configurations', 'API\ConfigurationController@index');
-    $router->patch('/configurations', 'API\ConfigurationController@update');
 });

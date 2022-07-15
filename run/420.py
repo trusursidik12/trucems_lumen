@@ -36,8 +36,6 @@ while True:
 
             json_plc = json.loads(response_plc.text)
             alarm = json_plc["data"]["alarm"]
-            # print(alarm)
-            # exit()
 
             if(alarm == 0):
                 result = client.write_coils(0, [1], unit=1)
@@ -54,16 +52,9 @@ while True:
                 value = value
             fix_value = int(((0.008 * value) + 4) * 1000) + \
                 random.randint(10000, 16000)
-            # print(fix_value)
             if(fix_value < 20000):
                 # digital to analog 4~20
                 write = client.write_register(0, fix_value, unit=2)
-                # write = client.write_register(0, fix_value, unit=1)
-                # write2 = client.write_register(1, (fix_value - 5000), unit=1)
-                # write3 = client.write_register(2, (fix_value - 10000), unit=1)
-                # print(write)
-                # print(write2)
-                # print(write3)
         except Exception as e:
             do_nothing = ''
     else:

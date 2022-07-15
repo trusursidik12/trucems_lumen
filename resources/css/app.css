@@ -129,7 +129,7 @@
 		opacity: 1;
 	}
 	20%, 50% {
-		opacity: 0; 
+		opacity: 0;
 	}
 	60%{
 		opacity: 1;
@@ -141,9 +141,22 @@
 
 @keyframes rotate {
 	20%, 50% {
-		transform: rotate(180deg); 
+		transform: rotate(180deg);
 	}
 	70%, 100% {
-		transform: rotate(360deg); 
+		transform: rotate(360deg);
 	}
 }
+
+/* checkbox switch */
+/* Toggle A */
+input:checked ~ .dot {
+    transform: translateX(100%);
+    background-color: #48bb78;
+  }
+
+  /* Toggle B */
+  input:checked ~ .dot {
+    transform: translateX(100%);
+    background-color: #48bb78;
+  }

@@ -50,6 +50,10 @@
                         class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
                         {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
                     </button>
+                    <button onclick="return window.location.href=`{{ url('api/relay') }}`" id="btn-relay-test-menu"
+                        class="{{ $plc->is_maintenance == 1 ? '' : 'hide' }} active">
+                        Relay Test
+                    </button>
                     <button onclick="return window.location.href=`{{ url('configurations') }}`">Configurations</button>
                     <button onclick="return window.location.href=`{{ url('calibration/logs') }}`">Calibration
                         Logs</button>
@@ -189,7 +193,6 @@
                             $('#btn-start-cems').removeClass('active')
                             $('#btn-start-cems').addClass('deactive')
                             $('#btn-start-cems').html('Stop CEMS')
-                            // $('#btn-cal-menu').addClass('hide')
                             $('#error-msg').removeClass('hidden')
                             $('#error-msg').html(data.message)
                             setTimeout(() => {
@@ -266,6 +269,7 @@
                                     $('#btn-start-cems').removeClass('active').addClass(
                                         'deactive')
                                     $('#btn-start-cems').html('Stop CEMS')
+                                    $('#btn-relay-test-menu').addClass('hide')
                                 } else {
                                     $('#btn-start-mt').attr('data-status', "0")
                                     $('#btn-start-mt').addClass('deactive')
@@ -275,6 +279,7 @@
                                     $('#btn-start-cems').removeClass('deactive')
                                         .addClass('active')
                                     $('#btn-start-cems').html('Start CEMS')
+                                    $('#btn-relay-test-menu').removeClass('hide')
                                 }
                             }, 5000);
                         } else {
@@ -282,9 +287,9 @@
                             $('#btn-start-mt').attr('data-status', "1")
                             $('#btn-start-mt').removeClass('deactive')
                             $('#btn-start-mt').html('Start Maintenance')
-                            // $('#btn-cal-menu').addClass('hide')
                             $('#error-msg').removeClass('hidden')
                             $('#error-msg').html(data.message)
+                            $('#btn-relay-test-menu').addClass('hide')
                             setTimeout(() => {
                                 $('#error-msg').addClass('hidden')
                             }, 3000);

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Helper\PhpSerialModbus;
+use App\Models\Configuration;
 use App\Models\Plc;
 use Exception;
 use Illuminate\Console\Command;
@@ -39,7 +40,6 @@ class PlcCommand extends Command
             $this->isConnect = true;
         } catch (Exception $e) {
             $this->isConnect = false;
-            // echo "Error :".$e->getMessage().PHP_EOL;
         }
     }
     public function flipFlop($d, $timer = 5, $loop = 2, $check = true)
@@ -72,19 +72,15 @@ class PlcCommand extends Command
     }
     public function sendQuery($d, $data)
     {
-        // var_dump("Executing : D".$d.": ".$data);
         $connect = $this->modbus->sendQuery(1, 5, "000$d", $data, true);
-        // var_dump("Connect : ".$connect);
         $this->isConnect = $connect;
         if (!$this->isConnect) {
-            // echo "Trying to reconnect...".PHP_EOL;
             $this->connectDevice();
         }
     }
     public function runPLC($steps, $check = true)
     {
         foreach ($steps as $step) {
-            // var_dump([$step['d']." === -1", $step['d'] === -1]);
             if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
                 $plc = Plc::find(1); // Get data from db
                 if ($step['type'] == "sampling") {
@@ -120,7 +116,8 @@ class PlcCommand extends Command
     }
     public function calibrationAndMaintenance()
     {
-        $plc = Plc::select(['is_calibration', 'is_maintenance', 'd_off'])->find(1);
+        $timer = 5;
+        $plc = Plc::find(1);
         if ($plc->is_calibration == 1) {
             if ($plc->d_off == 0) {
                 $this->runPLC($this->calibrationSteps, false);
@@ -128,6 +125,18 @@ class PlcCommand extends Command
                 return true;
             }
             return true;
+            if (Configuration::find(1)->is_blowback == 1) {
+                $steps = [
+                    ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
+                    ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+                    ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
+                    ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+                    ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+                    ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
+                ];
+                $this->runPLC($steps);
+                Configuration::find(1)->update(['is_blowback' => 0]);
+            }
         }
         if ($plc->is_maintenance == 1) {
             if ($plc->d_off == 0) {
@@ -135,6 +144,13 @@ class PlcCommand extends Command
                 Plc::find(1)->update(['d_off' => 1]);
                 return true;
             }
+            $steps = [];
+            for ($i = 0; $i <= 7; $i++) {
+                $field = "d$i";
+                $d = $plc->$field;
+                $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
+            }
+            $this->runPLC($steps);
             return true;
         }
         return false;
@@ -143,7 +159,7 @@ class PlcCommand extends Command
     {
         Plc::find(1)->update(['d_off' => 0]);
         // $this->info('PLC Command is running... [Ctrl+C] to stop it');
-        $timer = 2;
+        $timer = 5;
         $initStep = [
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
