@@ -157,7 +157,8 @@ class PlcCommand extends Command
     }
     public function handle()
     {
-        Plc::find(1)->update(['d_off' => 0]);
+        Plc::find(1)->update(['is_calibration' => 0, 'is_maintenance' => 0, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
+        Configuration::find(1)->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0]);
         // $this->info('PLC Command is running... [Ctrl+C] to stop it');
         $timer = 5;
         $initStep = [
