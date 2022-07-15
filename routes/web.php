@@ -89,4 +89,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/calibration-avg-logs', 'API\CalibrationAvgLogsController@index');
     $router->get('/calibration-avg-logs/paginate', 'API\CalibrationAvgLogsController@logs');
     $router->get('/calibration-avg-logs/export', 'API\CalibrationAvgLogsController@export');
+    /**
+     * Configurations
+     */
+    $router->get('/configurations', 'API\ConfigurationController@index');
+    $router->patch('/configurations', 'API\ConfigurationController@update');
 });
