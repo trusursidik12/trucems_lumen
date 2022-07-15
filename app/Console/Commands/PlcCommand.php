@@ -101,7 +101,7 @@ class PlcCommand extends Command
                 $this->switchAll($step['data']);
             } else if ($step['data'] == 'flipflop') {
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                    // continue;
+                    continue;
                 }
                 $this->flipFlop($step['d'], $sleep, $loop, $check);
             } else {
