@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\CalibrationAvgLog;
 use App\Models\CalibrationLog;
 use Illuminate\Http\Request;
 
@@ -47,7 +46,6 @@ class CalibrationAvgLogsController extends Controller
     public function logs()
     {
         $calibrationLogs = CalibrationLog::with(["sensor:id,unit_id,name", "sensor.unit:id,name"])
-            // ->withCasts(["created_at" => "datetime:j F Y H:i:s"])
             ->orderBy("id", "desc")->paginate(10);
         return $calibrationLogs;
     }
