@@ -81,6 +81,7 @@ class PlcCommand extends Command
     public function runPLC($steps, $check = true)
     {
         foreach ($steps as $step) {
+
             if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
                 $plc = Plc::find(1); // Get data from db
                 if ($step['type'] == "sampling") {
@@ -93,6 +94,20 @@ class PlcCommand extends Command
             } else {
                 $sleep = @$step['sleep'];
                 $loop = @$step['loop'];
+            }
+
+            if (Plc::find(1)->is_calibration == 1 && Configuration::find(1)->is_blowback == 1) {
+                $steps = [
+                    ['d' => 1, 'data' => 'FF00', 'sleep' => $sleep],
+                    ['d' => 5, 'data' => 'flipflop', 'sleep' => $sleep, 'loop' => 2, 'type' => 'blowback'], //blowback
+                    ['d' => 3, 'data' => 'FF00', 'sleep' => $sleep],
+                    ['d' => 6, 'data' => 'flipflop', 'sleep' => $sleep, 'loop' => 2, 'type' => 'blowback'], //blowback
+                    ['d' => -1, 'data' => '0000', 'sleep' => $sleep],
+                    ['d' => 7, 'data' => 'FF00', 'sleep' => $sleep],
+                ];
+                // aaa
+                $this->runPLC($steps);
+                Configuration::find(1)->update(['is_blowback' => 0]);
             }
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
@@ -122,22 +137,10 @@ class PlcCommand extends Command
             if ($plc->d_off == 0) {
                 $this->runPLC($this->calibrationSteps, false);
                 Plc::find(1)->update(['d_off' => 1]);
-                $start = 1;
-                while ($start == 1) {
-                    if (Configuration::find(1)->is_blowback == 1) {
-                        $steps = [
-                            ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
-                            ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
-                            ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
-                            ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
-                            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
-                            ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
-                        ];
-                        // aaa
-                        $this->runPLC($steps, false);
-                        Configuration::find(1)->update(['is_blowback' => 0]);
-                    }
-                }
+                // $start = 1;
+                // while ($start == 1) {
+
+                // }
                 return true;
             }
 
