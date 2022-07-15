@@ -23,7 +23,9 @@ $router->patch('/configurations', 'ConfigurationController@update');
 $router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
     $router->get('/auto', 'CalibrationController@auto');
-    $router->get('/logs', 'CalibrationController@logs');
+    $router->get('/logs', function () {
+        return view('calibration.logs');
+    });
     $router->get('/{mode}/{type}/process', 'CalibrationController@processCal');
 });
 /**
