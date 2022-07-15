@@ -96,7 +96,7 @@ class PlcCommand extends Command
             }
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                    // continue;
+                    continue;
                 }
                 $this->switchAll($step['data']);
             } else if ($step['data'] == 'flipflop') {
@@ -106,7 +106,7 @@ class PlcCommand extends Command
                 $this->flipFlop($step['d'], $sleep, $loop, $check);
             } else {
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                    // continue;
+                    continue;
                 }
                 sleep($sleep);
                 $this->sendQuery($step['d'], $step['data']);
