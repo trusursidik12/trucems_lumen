@@ -37,7 +37,7 @@ try:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     # port on linux
-    # portx = "/dev/ttyWITEC"
+    portx = "/dev/ttyWITEC"
     # port on windows
     portx = "COM8"
     bps = 115200

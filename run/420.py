@@ -11,8 +11,8 @@ from time import sleep
 import minimalmodbus
 
 
-# port = '/dev/ttyD420'
-port = 'COM5'
+port = '/dev/ttyANALOG'
+# port = 'COM5'
 baudrate = 9600
 client = ModbusClient(
     method='rtu', port=port, baudrate=baudrate, parity='N', timeout=1
