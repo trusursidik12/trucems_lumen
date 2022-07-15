@@ -116,7 +116,7 @@ class PlcCommand extends Command
     }
     public function calibrationAndMaintenance()
     {
-        $timer = 5;
+        $timer = 2;
         $plc = Plc::find(1);
         if ($plc->is_calibration == 1) {
             if ($plc->d_off == 0) {
@@ -160,7 +160,7 @@ class PlcCommand extends Command
         Plc::find(1)->update(['is_calibration' => 0, 'is_maintenance' => 0, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
         Configuration::find(1)->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0]);
         // $this->info('PLC Command is running... [Ctrl+C] to stop it');
-        $timer = 5;
+        $timer = 2;
         $initStep = [
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
         ];
@@ -195,7 +195,7 @@ class PlcCommand extends Command
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
         ];
         $this->runPLC($initStep);
-        sleep(300);
+        sleep(5);
         $this->runPLC($startStep);
         while (true) {
             if (!$this->calibrationAndMaintenance()) {
