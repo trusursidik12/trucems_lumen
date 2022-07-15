@@ -163,6 +163,9 @@ class PlcCommand extends Command
         $timer = 5;
         $initStep = [
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+        ];
+        $startStep = [
+            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
         ];
         $steps = [
@@ -192,6 +195,8 @@ class PlcCommand extends Command
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
         ];
         $this->runPLC($initStep);
+        sleep(300);
+        $this->runPLC($startStep);
         while (true) {
             if (!$this->calibrationAndMaintenance()) {
                 $this->runPLC($steps);
