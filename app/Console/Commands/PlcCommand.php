@@ -91,8 +91,8 @@ class PlcCommand extends Command
                     $loop = $plc->loop_blowback;
                 }
             } else {
-                $sleep = $step['sleep'];
-                $loop = $step['loop'];
+                $sleep = @$step['sleep'];
+                $loop = @$step['loop'];
             }
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
