@@ -94,8 +94,8 @@ class PlcCommand extends Command
             //     $sleep = $step['sleep'];
             //     $loop = $step['loop'];
             // }
-            $sleep = $step['sleep'];
-            $loop = $step['loop'];
+            // $sleep = $step['sleep'];
+            // $loop = $step['loop'];
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
@@ -105,14 +105,14 @@ class PlcCommand extends Command
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
                 }
-                $this->flipFlop($step['d'], $sleep, $loop, $check);
+                $this->flipFlop($step['d'], $step['sleep'], $step['loop'], $check);
             } else {
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
                 }
-                sleep($sleep);
+                sleep($step['sleep']);
                 $this->sendQuery($step['d'], $step['data']);
-                sleep($sleep);
+                sleep($step['sleep']);
             }
         }
     }
