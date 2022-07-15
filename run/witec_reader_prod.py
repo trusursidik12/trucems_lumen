@@ -39,7 +39,7 @@ try:
     # port on linux
     portx = "/dev/ttyWITEC"
     # port on windows
-    portx = "COM8"
+    # portx = "COM8"
     bps = 115200
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1

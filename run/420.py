@@ -8,7 +8,6 @@ import time
 import random
 import serial
 from time import sleep
-import minimalmodbus
 
 
 port = '/dev/ttyANALOG'
