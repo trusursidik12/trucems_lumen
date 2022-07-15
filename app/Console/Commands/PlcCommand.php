@@ -122,7 +122,7 @@ class PlcCommand extends Command
             if ($plc->d_off == 0) {
                 $this->runPLC($this->calibrationSteps, false);
                 Plc::find(1)->update(['d_off' => 1]);
-                return true;
+                // return false;
             }
             if (Configuration::find(1)->is_blowback == 1) {
                 $steps = [
@@ -136,7 +136,7 @@ class PlcCommand extends Command
                 $this->runPLC($steps);
                 Configuration::find(1)->update(['is_blowback' => 0]);
             }
-            return true;
+            // return false;
         }
         if ($plc->is_maintenance == 1) {
             if ($plc->d_off == 0) {
