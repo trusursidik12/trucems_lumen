@@ -133,7 +133,8 @@ class PlcCommand extends Command
                             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
                             ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
                         ];
-                        $this->runPLC($steps);
+                        // aaa
+                        $this->runPLC($steps, false);
                         Configuration::find(1)->update(['is_blowback' => 0]);
                     }
                 }
