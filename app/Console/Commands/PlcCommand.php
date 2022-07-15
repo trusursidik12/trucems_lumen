@@ -81,19 +81,21 @@ class PlcCommand extends Command
     public function runPLC($steps, $check = true)
     {
         foreach ($steps as $step) {
-            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                $plc = Plc::find(1); // Get data from db
-                if ($step['type'] == "sampling") {
-                    $sleep = $plc->sleep_sampling;
-                    $loop = $plc->loop_sampling;
-                } else {
-                    $sleep = $plc->sleep_blowback;
-                    $loop = $plc->loop_blowback;
-                }
-            } else {
-                $sleep = $step['sleep'];
-                $loop = $step['loop'];
-            }
+            // if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+            //     $plc = Plc::find(1); // Get data from db
+            //     if ($step['type'] == "sampling") {
+            //         $sleep = $plc->sleep_sampling;
+            //         $loop = $plc->loop_sampling;
+            //     } else {
+            //         $sleep = $plc->sleep_blowback;
+            //         $loop = $plc->loop_blowback;
+            //     }
+            // } else {
+            //     $sleep = $step['sleep'];
+            //     $loop = $step['loop'];
+            // }
+            $sleep = $step['sleep'];
+            $loop = $step['loop'];
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($check && $this->checkIsMaintenanceAndCalibration()) {
                     continue;
