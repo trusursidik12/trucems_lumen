@@ -203,7 +203,7 @@ class PlcCommand extends Command
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
         ];
         $this->runPLC($initStep);
-        sleep(5);
+        sleep(5);   
         $this->runPLC($startStep);
         while (true) {
             if (!$this->calibrationAndMaintenance()) {

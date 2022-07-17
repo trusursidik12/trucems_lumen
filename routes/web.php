@@ -20,6 +20,9 @@ $router->get('/quality-standards', 'DashboardController@qualityStandard');
 $router->get('/configurations', 'ConfigurationController@index');
 $router->patch('/configurations', 'ConfigurationController@update');
 
+$router->get('/plc-simulation', 'Debug\DebugController@plc');
+$router->get('/plc-simulation/data', 'Debug\DebugController@getPLC');
+
 $router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
     $router->get('/auto', 'CalibrationController@auto');
