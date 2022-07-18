@@ -77,116 +77,40 @@ class PlcRunCommand extends Command
         }
     }
 
-
-
-    public function runPLC($steps)
+    public function runCalAndMaintenance()
     {
-        foreach ($steps as $step) {
+        try {
             $plc = Plc::first();
-            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                if ($step['type'] == "sampling") {
-                    $sleep = $plc->sleep_sampling;
-                    $loop = $plc->loop_sampling;
-                } else {
-                    $sleep = $plc->sleep_blowback;
-                    $loop = $plc->loop_blowback;
+            if ($plc->is_calibration == 1) {
+                $config = Configuration::first();
+                if ($plc->d_off == 0) {
+                    foreach ($this->calibrationSteps as $step) {
+                        if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                            if ($step['type'] == "sampling") {
+                                $sleep = @$plc->sleep_sampling;
+                                $loop = @$plc->loop_sampling;
+                            } else {
+                                $sleep = @$plc->sleep_blowback;
+                                $loop = @$plc->loop_blowback;
+                            }
+                        } else {
+                            $sleep = @$plc->sleep_default;
+                            $loop = @$step['loop'];
+                        }
+                        if ($step['d'] === -1) {
+                            $this->switchAll($step['data']);
+                        } else if ($step['data'] == 'flipflop') {
+                            $this->flipFlop($step['d'], $sleep, $loop);
+                        } else {
+                            sleep($sleep);
+                            $this->sendQuery($step['d'], $step['data']);
+                            sleep($sleep);
+                        }
+                    }
+                    $plc->update(['d_off' => 1]);
                 }
-            } else {
-                $sleep = @$plc->sleep_default;
-                $loop = @$step['loop'];
-            }
-            if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
-                if ($plc->is_calibration == 1) {
-                    $config = Configuration::first();
-                    if ($plc->d_off == 0) {
-                        foreach ($this->calibrationSteps as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $plc->update(['d_off' => 1]);
-                    }
-                    if ($config->is_blowback == 1) {
-                        echo "blocback 1";
-                        foreach ($this->blowback as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $config->update(['is_blowback' => 0]);
-                        echo "update blowback";
-                    }
-                } elseif ($plc->is_maintenance == 1) {
-                    if ($plc->d_off == 0) {
-                        foreach ($this->maintenanceSteps as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $plc->update(['d_off' => 1]);
-                    }
-                    $steps = [];
-                    for ($i = 0; $i <= 7; $i++) {
-                        $field = "d$i";
-                        $d = $plc->$field;
-                        $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
-                        echo "RELAY d$i";
-                    }
-                    foreach ($steps as $step) {
+                if ($config->is_blowback == 1) {
+                    foreach ($this->blowback as $step) {
                         if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
                             if ($step['type'] == "sampling") {
                                 $sleep = $plc->sleep_sampling;
@@ -209,123 +133,101 @@ class PlcRunCommand extends Command
                             sleep($sleep);
                         }
                     }
+                    $config->update(['is_blowback' => 0]);
+                }
+                return true;
+            } elseif ($plc->is_maintenance == 1) {
+                if ($plc->d_off == 0) {
+                    foreach ($this->maintenanceSteps as $step) {
+                        if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                            if ($step['type'] == "sampling") {
+                                $sleep = $plc->sleep_sampling;
+                                $loop = $plc->loop_sampling;
+                            } else {
+                                $sleep = $plc->sleep_blowback;
+                                $loop = $plc->loop_blowback;
+                            }
+                        } else {
+                            $sleep = @$plc->sleep_default;
+                            $loop = @$step['loop'];
+                        }
+                        if ($step['d'] === -1) {
+                            $this->switchAll($step['data']);
+                        } else if ($step['data'] == 'flipflop') {
+                            $this->flipFlop($step['d'], $sleep, $loop);
+                        } else {
+                            sleep($sleep);
+                            $this->sendQuery($step['d'], $step['data']);
+                            sleep($sleep);
+                        }
+                    }
+                    $plc->update(['d_off' => 1]);
+                }
+                $steps = [];
+                for ($i = 0; $i <= 7; $i++) {
+                    $field = "d$i";
+                    $d = $plc->$field;
+                    $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
+                    echo "RELAY d$i";
+                }
+                foreach ($steps as $step) {
+                    if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                        if ($step['type'] == "sampling") {
+                            $sleep = $plc->sleep_sampling;
+                            $loop = $plc->loop_sampling;
+                        } else {
+                            $sleep = $plc->sleep_blowback;
+                            $loop = $plc->loop_blowback;
+                        }
+                    } else {
+                        $sleep = @$plc->sleep_default;
+                        $loop = @$step['loop'];
+                    }
+                    if ($step['d'] === -1) {
+                        $this->switchAll($step['data']);
+                    } else if ($step['data'] == 'flipflop') {
+                        $this->flipFlop($step['d'], $sleep, $loop);
+                    } else {
+                        sleep($sleep);
+                        $this->sendQuery($step['d'], $step['data']);
+                        sleep($sleep);
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            echo "error => $e";
+        }
+    }
+
+    public function runPLC($steps)
+    {
+        foreach ($steps as $step) {
+            $plc = Plc::first();
+            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                if ($step['type'] == "sampling") {
+                    $sleep = $plc->sleep_sampling;
+                    $loop = $plc->loop_sampling;
                 } else {
+                    $sleep = $plc->sleep_blowback;
+                    $loop = $plc->loop_blowback;
+                }
+            } else {
+                $sleep = @$plc->sleep_default;
+                $loop = @$step['loop'];
+            }
+            if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
+                if ($this->runCalAndMaintenance() == false) {
                     $this->switchAll($step['data']);
                 }
             } else if ($step['data'] == 'flipflop') {
-                if ($plc->is_calibration == 1) {
-                    if ($plc->d_off == 0) {
-                        foreach ($this->calibrationSteps as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $plc->update(['d_off' => 1]);
-                    }
-                } elseif ($plc->is_maintenance == 1) {
-                    if ($plc->d_off == 0) {
-                        foreach ($this->maintenanceSteps as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $plc->update(['d_off' => 1]);
-                    }
-                } else {
+                if ($this->runCalAndMaintenance() == false) {
                     $this->flipFlop($step['d'], $sleep, $loop);
                 }
             } else {
-                if ($plc->is_calibration == 1) {
-                    if ($plc->d_off == 0) {
-                        foreach ($this->calibrationSteps as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $plc->update(['d_off' => 1]);
-                    }
-                } elseif ($plc->is_maintenance == 1) {
-                    if ($plc->d_off == 0) {
-                        foreach ($this->maintenanceSteps as $step) {
-                            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                                if ($step['type'] == "sampling") {
-                                    $sleep = $plc->sleep_sampling;
-                                    $loop = $plc->loop_sampling;
-                                } else {
-                                    $sleep = $plc->sleep_blowback;
-                                    $loop = $plc->loop_blowback;
-                                }
-                            } else {
-                                $sleep = @$plc->sleep_default;
-                                $loop = @$step['loop'];
-                            }
-                            if ($step['d'] === -1) {
-                                $this->switchAll($step['data']);
-                            } else if ($step['data'] == 'flipflop') {
-                                $this->flipFlop($step['d'], $sleep, $loop);
-                            } else {
-                                sleep($sleep);
-                                $this->sendQuery($step['d'], $step['data']);
-                                sleep($sleep);
-                            }
-                        }
-                        $plc->update(['d_off' => 1]);
-                    }
-                } else {
+                if ($this->runCalAndMaintenance() == false) {
                     sleep($sleep);
                     $this->sendQuery($step['d'], $step['data']);
                     sleep($sleep);
@@ -333,40 +235,7 @@ class PlcRunCommand extends Command
             }
         }
     }
-    // public function calibrationAndMaintenance()
-    // {
-    //     $timer = 3;
-    //     $plc = Plc::find(1);
-    //     if ($plc->is_calibration == 1) {
-    //         if ($plc->d_off == 0) {
-    //             $this->runPLC($this->calibrationSteps, false);
-    //             Plc::find(1)->update(['d_off' => 1]);
-    //             // $start = 1;
-    //             // while ($start == 1) {
 
-    //             // }
-    //             return true;
-    //         }
-
-    //         return true;
-    //     }
-    //     if ($plc->is_maintenance == 1) {
-    //         if ($plc->d_off == 0) {
-    //             $this->runPLC($this->maintenanceSteps, false);
-    //             Plc::find(1)->update(['d_off' => 1]);
-    //             return true;
-    //         }
-    //         $steps = [];
-    //         for ($i = 0; $i <= 7; $i++) {
-    //             $field = "d$i";
-    //             $d = $plc->$field;
-    //             $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
-    //         }
-    //         $this->runPLC($steps);
-    //         return true;
-    //     }
-    //     return false;
-    // }
     public function handle()
     {
         Plc::find(1)->update(['is_calibration' => 0, 'is_maintenance' => 0, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
@@ -418,20 +287,6 @@ class PlcRunCommand extends Command
         sleep(5);
         $this->runPLC($startStep);
         while (true) {
-            // $plc = Plc::first();
-            // $config = Configuration::first();
-            // if ($plc->is_calibration == 1) {
-            //     if ($plc->d_off == 0) {
-            //         $this->runPLC($this->calibrationSteps, false);
-            //         Plc::find(1)->update(['d_off' => 1]);
-            //     }
-            // }
-            // if ($plc->is_maintenance == 1) {
-            //     if ($plc->d_off == 0) {
-            //         $this->runPLC($this->calibrationSteps, false);
-            //         Plc::find(1)->update(['d_off' => 1]);
-            //     }
-            // }
             $this->runPLC($steps);
         }
     }
