@@ -264,6 +264,7 @@ class PlcRunCommand extends Command
             ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
         ];
         $this->runPLC($initStep);
+        exit();
         sleep(5);
         $this->runPLC($startStep);
         while (true) {
