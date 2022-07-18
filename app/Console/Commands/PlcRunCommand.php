@@ -273,12 +273,12 @@ class PlcRunCommand extends Command
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
         ];
         $this->blowback = [
-            ['d' => 1, 'data' => 'FF00', 'sleep' => 3],
-            ['d' => 5, 'data' => 'flipflop', 'sleep' => 3, 'loop' => 2, 'type' => 'blowback'], //blowback
-            ['d' => 3, 'data' => 'FF00', 'sleep' => 3],
-            ['d' => 6, 'data' => 'flipflop', 'sleep' => 3, 'loop' => 2, 'type' => 'blowback'], //blowback
-            ['d' => -1, 'data' => '0000', 'sleep' => 3],
-            ['d' => 7, 'data' => 'FF00', 'sleep' => 3],
+            ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
+            ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+            ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
+            ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+            ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
         ];
         $this->runPLC($initStep);
         sleep(5);
