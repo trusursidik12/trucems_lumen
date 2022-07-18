@@ -39,7 +39,8 @@
                         class="{{ $plc->is_maintenance == 0 ? 'deactive' : 'active' }}">
                         {{ $plc->is_maintenance == 1 ? ' Start CEMS' : 'Stop CEMS' }}
                     </button>
-                    <button type="button" id="btn-start-cal" data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
+                    <button type="button" id="btn-start-cal" class="{{ $plc->is_calibration == 1 ? 'deactive' : '' }}"
+                        data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
                         {{ $plc->is_calibration == 1 ? 'Stop Calibration' : 'Start Calibration' }}
                     </button>
                     <button onclick="return window.location.href=`{{ url('calibration/manual') }}`" id="btn-cal-menu"
@@ -229,7 +230,7 @@
                                     $('#btn-start-cal').html('Stop Calibration')
                                     $('#btn-cal-menu').removeClass('hide')
                                 }
-                            }, 5000);
+                            }, 20000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cal').attr('data-status', "1")
@@ -281,7 +282,7 @@
                                     $('#btn-start-cems').html('Start CEMS')
                                     $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, 5000);
+                            }, 10000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")
