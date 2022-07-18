@@ -131,6 +131,10 @@ try:
                     value2 = k[2:4]
                     value3 = k[4:6]
                     value4 = k[6:8]
+                    print(value1)
+                    print(value2)
+                    print(value3)
+                    print(value4)
 
                     setZero = "08 00 " + \
                         str(value1)+" "+str(value2) + " " + \
