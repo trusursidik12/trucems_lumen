@@ -135,7 +135,6 @@ class PlcRunCommand extends Command
                     }
                     $config->update(['is_blowback' => 0]);
                 }
-                return true;
             } elseif ($plc->is_maintenance == 1) {
                 if ($plc->d_off == 0) {
                     foreach ($this->maintenanceSteps as $step) {
@@ -168,7 +167,6 @@ class PlcRunCommand extends Command
                     $field = "d$i";
                     $d = $plc->$field;
                     $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
-                    echo "RELAY d$i";
                 }
                 foreach ($steps as $step) {
                     if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
@@ -193,7 +191,6 @@ class PlcRunCommand extends Command
                         sleep($sleep);
                     }
                 }
-                return true;
             } else {
                 return false;
             }
