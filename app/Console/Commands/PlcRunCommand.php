@@ -72,14 +72,6 @@ class PlcRunCommand extends Command
         }
         // return true;
     }
-    // public function checkIsMaintenanceAndCalibration()
-    // {
-    //     $plc = Plc::select(['is_calibration', 'is_maintenance', 'd_off'])->find(1);
-    //     if ($plc->is_calibration == 1 || $plc->is_maintenance == 1) {
-    //         return $this->calibrationAndMaintenance();
-    //     }
-    //     return false;
-    // }
     public function sendQuery($d, $data)
     {
         $connect = $this->modbus->sendQuery(1, 5, "000$d", $data, true);
