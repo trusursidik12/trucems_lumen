@@ -96,7 +96,6 @@ class PlcRunCommand extends Command
             if ($plc->is_calibration == 1) {
                 $plc = Plc::first();
                 $config = Configuration::first();
-                echo "is calibration";
                 if ($plc->d_off == 0) {
                     foreach ($this->calibrationSteps as $step) {
                         if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
@@ -121,10 +120,8 @@ class PlcRunCommand extends Command
                         }
                     }
                     $plc->update(['d_off' => 1]);
-                    echo "loop is calibration 1x";
                 }
                 if ($config->is_blowback == 1) {
-                    echo "start blowback";
                     foreach ($this->blowback as $step) {
                         if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
                             if ($step['type'] == "sampling") {
@@ -149,7 +146,6 @@ class PlcRunCommand extends Command
                         print_r($step);
                     }
                     $config->update(['is_blowback' => 0]);
-                    echo "is blocback success";
                 }
                 return true;
             } else if ($plc->is_maintenance == 1) {
@@ -187,7 +183,6 @@ class PlcRunCommand extends Command
                 }
                 return true;
             } else {
-                echo "false";
                 return false;
             }
         } catch (Exception $e) {
@@ -212,23 +207,17 @@ class PlcRunCommand extends Command
                 $loop = @$step['loop'];
             }
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
-                echo $step['d'];
                 if ($this->runCalAndMaintenance() == false) {
                     $this->switchAll($step['data']);
-                    echo "sampling 1";
                 }
             } else if ($step['data'] == 'flipflop') {
-                echo $step['d'];
                 if ($this->runCalAndMaintenance() == false) {
                     $this->flipFlop($step['d'], $sleep, $loop);
-                    echo "sampling 2";
                 }
             } else {
-                echo $step['d'];
                 if ($this->runCalAndMaintenance() == false) {
                     sleep($sleep);
                     $this->sendQuery($step['d'], $step['data']);
-                    echo "sampling 3";
                 }
             }
         }
@@ -286,7 +275,6 @@ class PlcRunCommand extends Command
         sleep(5);
         $this->runPLC($startStep);
         while (true) {
-            echo "loop";
             $this->runPLC($steps);
         }
     }
