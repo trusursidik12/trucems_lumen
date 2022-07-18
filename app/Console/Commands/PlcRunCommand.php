@@ -223,6 +223,7 @@ class PlcRunCommand extends Command
                     Plc::find(1)->update(['d_off' => 1]);
                 }
             }
+            $this->runPLC($steps);
         }
     }
 }
