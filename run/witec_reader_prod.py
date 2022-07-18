@@ -131,11 +131,14 @@ try:
                     value3 = k[4:6]
                     value4 = k[6:8]
 
+                    setZero = "08 00 " + \
+                        str(value1)+" "+str(value2) + " " + \
+                        str(value3)+" "+str(value4)+" 55 00"
                     # setZero = "11 00 " + \
                     #     str(value1)+" "+str(value2) + " " + \
                     #     str(value3)+" "+str(value4)+" 55 00"
-                    zero = "08 00 00 00 00 00 55 00"
-                    msg = bytes.fromhex(zero)
+                    # zero = "08 00 00 00 00 00 55 00"
+                    msg = bytes.fromhex(setZero)
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
 
