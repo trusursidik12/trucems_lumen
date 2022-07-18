@@ -42,6 +42,7 @@ class StopAppCommand extends Command
             'is_calibration' => 0,
             'is_blowback' => 0,
             'calibration_type' => 0,
+            'target_value' => null
         ]);
         for ($i=0; $i <= 7; $i++) { 
             $this->sendQuery($i,"0000");
