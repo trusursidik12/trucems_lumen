@@ -117,6 +117,7 @@ try:
                     n = float_to_hex(
                         json_get_configuration["data"]["target_value"])[2:]
                     m = str(n)
+                    print(m)
 
                     # reverse
                     def little(string):
