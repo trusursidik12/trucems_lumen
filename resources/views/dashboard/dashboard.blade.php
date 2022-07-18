@@ -218,7 +218,7 @@
                         if (data.success) {
                             setTimeout(() => {
                                 $('button').prop('disabled', false)
-                                if (data.data.is_calibration == 0) {
+                                if (data.data.is_calibration == 0 || data.data.is_calibration == 2) {
                                     $('#btn-start-cal').attr('data-status', "1")
                                     $('#btn-start-cal').removeClass('deactive')
                                     $('#btn-start-cal').html('Start Calibration')
