@@ -264,18 +264,15 @@ class PlcRunCommand extends Command
             ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
         ];
         $this->runPLC($initStep);
-        // for ($i = 0; $i <= 7; $i++) {
-        //     $this->sendQuery($i, '0000');
-        //     print_r($i);
-        // }
-        $this->sendQuery([0], '0000');
-        $this->sendQuery([1], '0000');
-        $this->sendQuery([2], '0000');
-        $this->sendQuery([3], '0000');
-        $this->sendQuery([4], '0000');
-        $this->sendQuery([5], '0000');
-        $this->sendQuery([6], '0000');
-        $this->sendQuery([7], '0000');
+        for ($i = 0; $i <= 7; $i++) {
+            $this->sendQuery($i, 'FF00');
+            print_r($i);
+        }
+        sleep(10);
+        for ($i = 0; $i <= 7; $i++) {
+            $this->sendQuery($i, '0000');
+            print_r($i);
+        }
         exit();
         sleep(5);
         $this->runPLC($startStep);
