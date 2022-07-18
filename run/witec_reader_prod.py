@@ -45,6 +45,9 @@ try:
     timex = 1
     # loop
 
+    def float_to_hex(f):
+        return hex(struct.unpack('<I', struct.pack('<f', f))[0])
+
     while True:
         logf = open("error.log", "w")
         try:
@@ -102,7 +105,7 @@ try:
 
                 # is zero calibration
                 if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
-                    print(json_get_configuration)
+                    # print(json_get_configuration)
                     # msg = bytes.fromhex("08 00 00 00 00 00 55 00")
                     # msg = bytes.fromhex("11 00 00 00 00 00 55 00")
                     # result = witec_ser.write(msg)
@@ -111,34 +114,7 @@ try:
                     #     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                     # print("ZERO")
 
-                    def float_to_hex(f):
-                        return hex(struct.unpack('<I', struct.pack('<f', f))[0])
-
-                    n = float_to_hex(
-                        json_get_configuration["data"]["target_value"])[2:]
-                    m = str(n)
-                    print(m)
-
-                    # reverse
-                    def little(string):
-                        t = bytearray.fromhex(string)
-                        t.reverse()
-                        return ''.join(format(x, '02x') for x in t).upper()
-
-                    k = little(m)
-                    # print(k)
-
-                    value1 = k[0:2]
-                    value2 = k[2:4]
-                    value3 = k[4:6]
-                    value4 = k[6:8]
-                    print(value1)
-                    print(value2)
-                    print(value3)
-                    print(value4)
-
-                    setZero = "08 00 00 00 00 00 55 00"
-                    print(setZero)
+                    setZero = "11 00 00 00 00 00 55 00"
                     # setZero = "11 00 " + \
                     #     str(value1)+" "+str(value2) + " " + \
                     #     str(value3)+" "+str(value4)+" 55 00"
@@ -200,12 +176,12 @@ try:
                     value3 = k[4:6]
                     value4 = k[6:8]
 
-                    # setZero = "60 02 " + \
-                    #     str(value1)+" "+str(value2) + " " + \
-                    #     str(value3)+" "+str(value4)+" 55 00"
-                    # msg = bytes.fromhex(zero)
-                    # result = witec_ser.write(msg)
-                    # data = str(witec_ser.readlines(1))
+                    setSpan = "60 02 " + \
+                        str(value1)+" "+str(value2) + " " + \
+                        str(value3)+" "+str(value4)+" 55 00"
+                    msg = bytes.fromhex(setSpan)
+                    result = witec_ser.write(msg)
+                    data = str(witec_ser.readlines(1))
 
                     # patch_payload_configuration = 'target_value=""'
                     # response = requests.request(
@@ -276,7 +252,7 @@ try:
         except serial.serialutil.SerialException as e:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-            print(e)
+            # print(e)
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
@@ -297,6 +273,6 @@ try:
 except Exception as e:
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("[X]  Not connected ", e)
+    # print("[X]  Not connected ", e)
     logf.write("Error "+timestamp+" : \n".format(str(e)))
     logf.close()
