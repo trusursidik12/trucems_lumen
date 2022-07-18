@@ -46,19 +46,21 @@ class PlcRunCommand extends Command
     public function flipFlop($d, $timer = 5, $loop = 2)
     {
         for ($i = 1; $i <= $loop; $i++) {
-            $this->sendQuery($d, "FF00");
-            sleep($timer);
-            $this->sendQuery($d, "0000");
-            sleep($timer);
+            if ($this->runCalAndMaintenance() == false) {
+                $this->sendQuery($d, "FF00");
+                sleep($timer);
+                $this->sendQuery($d, "0000");
+                sleep($timer);
+            }
         }
-        return true;
+        // return true;
     }
     public function switchAll($data)
     {
         for ($i = 0; $i <= 7; $i++) {
             $this->sendQuery($i, $data);
         }
-        return true;
+        // return true;
     }
     // public function checkIsMaintenanceAndCalibration()
     // {
@@ -104,7 +106,6 @@ class PlcRunCommand extends Command
                         } else {
                             sleep($sleep);
                             $this->sendQuery($step['d'], $step['data']);
-                            sleep($sleep);
                         }
                     }
                     $plc->update(['d_off' => 1]);
@@ -130,7 +131,6 @@ class PlcRunCommand extends Command
                         } else {
                             sleep($sleep);
                             $this->sendQuery($step['d'], $step['data']);
-                            sleep($sleep);
                         }
                     }
                     $config->update(['is_blowback' => 0]);
@@ -157,7 +157,6 @@ class PlcRunCommand extends Command
                         } else {
                             sleep($sleep);
                             $this->sendQuery($step['d'], $step['data']);
-                            sleep($sleep);
                         }
                     }
                     $plc->update(['d_off' => 1]);
@@ -188,7 +187,6 @@ class PlcRunCommand extends Command
                     } else {
                         sleep($sleep);
                         $this->sendQuery($step['d'], $step['data']);
-                        sleep($sleep);
                     }
                 }
             } else {
@@ -227,7 +225,6 @@ class PlcRunCommand extends Command
                 if ($this->runCalAndMaintenance() == false) {
                     sleep($sleep);
                     $this->sendQuery($step['d'], $step['data']);
-                    sleep($sleep);
                 }
             }
         }
