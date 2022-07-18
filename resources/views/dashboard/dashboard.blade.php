@@ -230,7 +230,7 @@
                                     $('#btn-start-cal').html('Stop Calibration')
                                     $('#btn-cal-menu').removeClass('hide')
                                 }
-                            }, 20000);
+                            }, 10000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cal').attr('data-status', "1")
