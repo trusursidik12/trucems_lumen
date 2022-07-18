@@ -10,15 +10,8 @@
         <div class="h-[88vh] bg-gray-300 rounded-xl">
             <button id="btn_close"
                 class="px-5 py-4 bg-red-500 rounded-tl-xl rounded-br-xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null ? 'disabled' : '' }}>Close</button>
-            <div class="flex justify-content-betwen items-center px-4 py-24">
+            <div class="flex justify-content-betwen items-center px-4 pt-16">
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
-                    <p class="block font-semibold text-sm text-indigo-700">Realtime Value : </p>
-                    <span class="block ml-3" id="section-logs">
-                    </span>
-                    <p class="block font-semibold text-sm text-indigo-700 last-avg">Last AVG. Value :</p>
-                    <span
-                        class="block font-semibold text-sm text-gray-700 ml-3">{{ @$lastAvg->value ? $lastAvg->value : 0 }}
-                        PPM</span>
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>
                     <div id="section-values">
                         @foreach ($sensorValues as $value)
@@ -186,21 +179,6 @@
                                 div.find('.sensor-value').html(`${value.value}`)
                                 $('.last-value').html(`${value.value}`)
                             })
-                            // Logs
-                            let calibrationLogs = data.calibration_logs
-                            let i = 2
-                            let logs = []
-                            let html = ``
-                            calibrationLogs.map(function(value) {
-                                logs[i] =
-                                    ` <p class="block text-xs">${value.value} ${value.sensor.unit.name} - ${value.created_at}</p>`
-                                i--
-                            })
-                            logs.map(function(element) {
-                                html += element
-                            })
-                            sectionLogs.html(html)
-                            $('#remaining').html(`${data.remaining_time} sec`)
                         }
                     }
                 })

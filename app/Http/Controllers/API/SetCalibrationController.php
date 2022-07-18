@@ -181,7 +181,9 @@ class SetCalibrationController extends Controller
     public function getLastRecord()
     {
         $lastRow = CalibrationLog::latest('id')->first();
-        $lastRow->update(['result_value' => SensorValue::find(1)->value]);
+        if($lastRow->result_value == null){
+            $lastRow->update(['result_value' => SensorValue::find(1)->value]);
+        }
         return response()->json(["success" => true, "message" => 'Latest Value Has Been Saved']);
     }
 

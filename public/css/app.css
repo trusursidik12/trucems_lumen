@@ -724,6 +724,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.py-20 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
 .pt-\[13vh\] {
   padding-top: 13vh;
 }
@@ -732,6 +744,33 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .pt-\[3vh\] {
   padding-top: 3vh;
+}
+.pt-16 {
+  padding-top: 4rem;
+}
+.pt-\[1-vh\] {
+  padding-top: 1 - vh;
+}
+.pt-\[10-vh\] {
+  padding-top: 10 - vh;
+}
+.pt-\[12-vh\] {
+  padding-top: 12 - vh;
+}
+.pt-\[14-vh\] {
+  padding-top: 14 - vh;
+}
+.pt-\[12vh\] {
+  padding-top: 12vh;
+}
+.pt-\[10vh\] {
+  padding-top: 10vh;
+}
+.pt-\[8vh\] {
+  padding-top: 8vh;
+}
+.pt-\[6vh\] {
+  padding-top: 6vh;
 }
 .text-left {
   text-align: left;
