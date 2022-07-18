@@ -268,7 +268,7 @@ class PlcRunCommand extends Command
             $this->sendQuery($i, 'FF00');
             print_r($i);
         }
-        sleep(10);
+        sleep(2);
         for ($i = 0; $i <= 7; $i++) {
             $this->sendQuery($i, '0000');
             print_r($i);
