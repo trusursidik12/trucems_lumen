@@ -13,7 +13,7 @@
 
             </p>
         </div>
-        <div class="flex justify-between pt-[6vh] space-x-3">
+        <div class="flex justify-between pt-[2vh] space-x-3">
             <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
                 <div class="flex justify-end">
                     <button type="button" id="btn-switch" class="rounded px-4 py-2 bg-indigo-500 text-white">
