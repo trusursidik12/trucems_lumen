@@ -174,6 +174,12 @@ class PlcRunCommand extends Command
                     $this->sendQuery($step['d'], $step['data']);
                 }
                 return true;
+            } else if ($plc->is_maintenance == 2) {
+                for ($i = 0; $i <= 7; $i++) {
+                    $this->sendQuery($i, '0000');
+                }
+                $plc->update(['is_is_maintenance' => 0]);
+                return true;
             } else {
                 return false;
             }
