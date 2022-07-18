@@ -274,6 +274,7 @@ class PlcRunCommand extends Command
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
         ];
         $this->blowback = [
+            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
             ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
