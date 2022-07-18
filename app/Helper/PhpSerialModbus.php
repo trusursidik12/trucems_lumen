@@ -21,7 +21,7 @@ class PhpSerialModbus
         $this->serial->confCharacterLength($char);
         $this->serial->confStopBits($sbits);
         $this->serial->confFlowControl($flow);
-        // exec('stty -F '.$port.' -brkint -icrnl -imaxbel -opost -isig -icanon -echo -echoe');
+        exec('stty -F ' . $port . ' -brkint -icrnl -imaxbel -opost -isig -icanon -echo -echoe');
         return $this->serial->_dState;
     }
 
