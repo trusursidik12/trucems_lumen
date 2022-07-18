@@ -104,7 +104,7 @@ try:
                 # print(response.text)
 
                 # is zero calibration
-                if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["target_value"] == 1 and json_get_configuration["data"]["target_value"] != ''):
+                if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
                     # msg = bytes.fromhex("08 00 00 00 00 00 55 00")
                     # msg = bytes.fromhex("11 00 00 00 00 00 55 00")
                     # result = witec_ser.write(msg)
