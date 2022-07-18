@@ -137,9 +137,7 @@ try:
                     print(value3)
                     print(value4)
 
-                    setZero = "08 00 " + \
-                        str(value1)+" "+str(value2) + " " + \
-                        str(value3)+" "+str(value4)+" 55 00"
+                    setZero = "08 00 00 00 00 00 55 00"
                     print(setZero)
                     # setZero = "11 00 " + \
                     #     str(value1)+" "+str(value2) + " " + \
