@@ -265,7 +265,7 @@ class PlcRunCommand extends Command
         ];
         $this->runPLC($initStep);
         for ($i = 0; $i <= 7; $i++) {
-            $this->sendQuery($i, '0000');
+            $this->sendQuery($i, 'FF00');
             print_r($i);
         }
         exit();
