@@ -105,6 +105,7 @@ try:
 
                 # is zero calibration
                 if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
+                    print(json_get_configuration)
                     # msg = bytes.fromhex("08 00 00 00 00 00 55 00")
                     # msg = bytes.fromhex("11 00 00 00 00 00 55 00")
                     # result = witec_ser.write(msg)
@@ -271,7 +272,7 @@ try:
         except serial.serialutil.SerialException as e:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-            # print("serial not connected!")
+            print(e)
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
@@ -292,6 +293,6 @@ try:
 except Exception as e:
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-    # print("[X]  Not connected ", e)
+    print("[X]  Not connected ", e)
     logf.write("Error "+timestamp+" : \n".format(str(e)))
     logf.close()
