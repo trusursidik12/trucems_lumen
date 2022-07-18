@@ -45,7 +45,7 @@ class PlcController extends Controller
                     return response()->json(['success' => false, 'message' => 'You need to start cems first!']);
                 }
             }
-            Plc::find(1)->update(['is_calibration' => $status, 'd_off' => 0]);
+            Plc::find(1)->update(['is_calibration' => ($status == 0 ? 2 : $status), 'd_off' => 0]);
             $data = Plc::find(1);
             return response()->json(['success' => true, 'message' => 'Success update!', 'data' => $data]);
         } catch (Exception $e) {
