@@ -135,6 +135,7 @@ try:
                     setZero = "08 00 " + \
                         str(value1)+" "+str(value2) + " " + \
                         str(value3)+" "+str(value4)+" 55 00"
+                    print(setZero)
                     # setZero = "11 00 " + \
                     #     str(value1)+" "+str(value2) + " " + \
                     #     str(value3)+" "+str(value4)+" 55 00"
