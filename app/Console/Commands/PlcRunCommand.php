@@ -8,14 +8,14 @@ use App\Models\Plc;
 use Exception;
 use Illuminate\Console\Command;
 
-class PlcCommand extends Command
+class PlcRunCommand extends Command
 {
     /**
      * How to run function
      * php artisan runDemo
      * @var string
      */
-    protected $signature = 'runPLC';
+    protected $signature = 'plcRUN';
     protected $description = 'Command description';
     public $modbus;
     public $calibrationSteps;
@@ -42,12 +42,9 @@ class PlcCommand extends Command
             $this->isConnect = false;
         }
     }
-    public function flipFlop($d, $timer = 5, $loop = 2, $check = true)
+    public function flipFlop($d, $timer = 5, $loop = 2)
     {
         for ($i = 1; $i <= $loop; $i++) {
-            if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                return false;
-            }
             $this->sendQuery($d, "FF00");
             sleep($timer);
             $this->sendQuery($d, "0000");
@@ -62,14 +59,14 @@ class PlcCommand extends Command
         }
         return true;
     }
-    public function checkIsMaintenanceAndCalibration()
-    {
-        $plc = Plc::select(['is_calibration', 'is_maintenance', 'd_off'])->find(1);
-        if ($plc->is_calibration == 1 || $plc->is_maintenance == 1) {
-            return $this->calibrationAndMaintenance();
-        }
-        return false;
-    }
+    // public function checkIsMaintenanceAndCalibration()
+    // {
+    //     $plc = Plc::select(['is_calibration', 'is_maintenance', 'd_off'])->find(1);
+    //     if ($plc->is_calibration == 1 || $plc->is_maintenance == 1) {
+    //         return $this->calibrationAndMaintenance();
+    //     }
+    //     return false;
+    // }
     public function sendQuery($d, $data)
     {
         $connect = $this->modbus->sendQuery(1, 5, "000$d", $data, true);
@@ -78,12 +75,27 @@ class PlcCommand extends Command
             $this->connectDevice();
         }
     }
-    public function runPLC($steps, $check = true)
+
+
+
+    public function runPLC($steps)
     {
         foreach ($steps as $step) {
+            $plc = Plc::first();
+            if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                if ($step['type'] == "sampling") {
+                    $sleep = $plc->sleep_sampling;
+                    $loop = $plc->loop_sampling;
+                } else {
+                    $sleep = $plc->sleep_blowback;
+                    $loop = $plc->loop_blowback;
+                }
+            } else {
+                $sleep = @$plc->sleep_default;
+                $loop = @$step['loop'];
+            }
 
             if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
-                $plc = Plc::find(1); // Get data from db
                 if ($step['type'] == "sampling") {
                     $sleep = $plc->sleep_sampling;
                     $loop = $plc->loop_sampling;
@@ -96,7 +108,7 @@ class PlcCommand extends Command
                 $loop = @$step['loop'];
             }
 
-            if (Plc::find(1)->is_calibration == 1 && Configuration::find(1)->is_blowback == 1) {
+            if ($plc->is_calibration == 1 && $plc->is_blowback == 1) {
                 $steps = [
                     ['d' => 1, 'data' => 'FF00', 'sleep' => $sleep],
                     ['d' => 5, 'data' => 'flipflop', 'sleep' => $sleep, 'loop' => 2, 'type' => 'blowback'], //blowback
@@ -107,62 +119,53 @@ class PlcCommand extends Command
                 ];
                 // aaa
                 $this->runPLC($steps);
-                Configuration::find(1)->update(['is_blowback' => 0]);
+                $plc->update(['is_blowback' => 0]);
             }
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
-                if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                    continue;
-                }
                 $this->switchAll($step['data']);
             } else if ($step['data'] == 'flipflop') {
-                if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                    continue;
-                }
-                $this->flipFlop($step['d'], $sleep, $loop, $check);
+                $this->flipFlop($step['d'], $sleep, $loop);
             } else {
-                if ($check && $this->checkIsMaintenanceAndCalibration()) {
-                    continue;
-                }
                 sleep($sleep);
                 $this->sendQuery($step['d'], $step['data']);
                 sleep($sleep);
             }
         }
     }
-    public function calibrationAndMaintenance()
-    {
-        $timer = 3;
-        $plc = Plc::find(1);
-        if ($plc->is_calibration == 1) {
-            if ($plc->d_off == 0) {
-                $this->runPLC($this->calibrationSteps, false);
-                Plc::find(1)->update(['d_off' => 1]);
-                // $start = 1;
-                // while ($start == 1) {
+    // public function calibrationAndMaintenance()
+    // {
+    //     $timer = 3;
+    //     $plc = Plc::find(1);
+    //     if ($plc->is_calibration == 1) {
+    //         if ($plc->d_off == 0) {
+    //             $this->runPLC($this->calibrationSteps, false);
+    //             Plc::find(1)->update(['d_off' => 1]);
+    //             // $start = 1;
+    //             // while ($start == 1) {
 
-                // }
-                return true;
-            }
+    //             // }
+    //             return true;
+    //         }
 
-            return true;
-        }
-        if ($plc->is_maintenance == 1) {
-            if ($plc->d_off == 0) {
-                $this->runPLC($this->maintenanceSteps, false);
-                Plc::find(1)->update(['d_off' => 1]);
-                return true;
-            }
-            $steps = [];
-            for ($i = 0; $i <= 7; $i++) {
-                $field = "d$i";
-                $d = $plc->$field;
-                $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
-            }
-            $this->runPLC($steps);
-            return true;
-        }
-        return false;
-    }
+    //         return true;
+    //     }
+    //     if ($plc->is_maintenance == 1) {
+    //         if ($plc->d_off == 0) {
+    //             $this->runPLC($this->maintenanceSteps, false);
+    //             Plc::find(1)->update(['d_off' => 1]);
+    //             return true;
+    //         }
+    //         $steps = [];
+    //         for ($i = 0; $i <= 7; $i++) {
+    //             $field = "d$i";
+    //             $d = $plc->$field;
+    //             $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
+    //         }
+    //         $this->runPLC($steps);
+    //         return true;
+    //     }
+    //     return false;
+    // }
     public function handle()
     {
         Plc::find(1)->update(['is_calibration' => 0, 'is_maintenance' => 0, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
@@ -206,8 +209,19 @@ class PlcCommand extends Command
         sleep(5);
         $this->runPLC($startStep);
         while (true) {
-            if (!$this->calibrationAndMaintenance()) {
-                $this->runPLC($steps);
+            $plc = Plc::first();
+            $config = Configuration::first();
+            if ($plc->is_calibration == 1) {
+                if ($plc->d_off == 0) {
+                    $this->runPLC($this->calibrationSteps, false);
+                    Plc::find(1)->update(['d_off' => 1]);
+                }
+            }
+            if ($plc->is_maintenance == 1) {
+                if ($plc->d_off == 0) {
+                    $this->runPLC($this->calibrationSteps, false);
+                    Plc::find(1)->update(['d_off' => 1]);
+                }
             }
         }
     }
