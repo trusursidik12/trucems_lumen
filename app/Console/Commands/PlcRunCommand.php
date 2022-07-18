@@ -47,11 +47,13 @@ class PlcRunCommand extends Command
     {
         for ($i = 1; $i <= $loop; $i++) {
             if ($this->runCalAndMaintenance() == false) {
+                echo "false";
                 $this->sendQuery($d, "FF00");
                 sleep($timer);
                 $this->sendQuery($d, "0000");
                 sleep($timer);
             }
+            echo "keluar";
         }
         // return true;
     }
