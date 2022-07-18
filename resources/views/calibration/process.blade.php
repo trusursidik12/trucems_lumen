@@ -9,7 +9,7 @@
 
         <div class="h-[88vh] bg-gray-300 rounded-xl">
             <button id="btn_close"
-                class="px-5 py-4 bg-red-500 rounded-tl-xl rounded-br-xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null ? 'disabled' : '' }}>Close</button>
+                class="px-5 py-4 bg-red-500 rounded-tl-xl rounded-br-xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>Close</button>
             <div class="flex justify-content-betwen items-center px-4 pt-16">
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>
@@ -46,11 +46,11 @@
                         class="js-virtual-keyboard px-5 py-4 rounded w-1/2" placeholder="Target Value">
                     <button type="submit" id="btn_set_target_value"
                         class="px-5 py-4 bg-indigo-500 rounded text-white disabled:bg-gray-500"
-                        {{ @$calibrationLog->result_value == null ? 'disabled' : '' }}>
+                        {{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>
                         Set Target</button>
                     <button type="button" id="btn_last_data"
                         class="px-5 py-4 bg-blue-500 rounded text-white disabled:bg-gray-500"
-                        {{ @$calibrationLog->result_value == null ? '' : 'disabled' }}>Save Last
+                        {{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? '' : 'disabled' }}>Save Last
                         Data</button>
                 </form>
             </div>
