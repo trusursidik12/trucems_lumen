@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         DemoCommand::class,
-        // PlcCommand::class,
+        PlcCommand::class,
         PlcDemoCommand::class,
     ];
 

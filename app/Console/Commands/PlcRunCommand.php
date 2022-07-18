@@ -15,7 +15,7 @@ class PlcRunCommand extends Command
      * php artisan runDemo
      * @var string
      */
-    protected $signature = 'plcRUN';
+    protected $signature = 'testingPLC';
     protected $description = 'Command description';
     public $modbus;
     public $calibrationSteps;
