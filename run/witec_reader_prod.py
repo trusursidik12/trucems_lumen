@@ -45,9 +45,6 @@ try:
     timex = 1
     # loop
 
-    def float_to_hex(f):
-        return hex(struct.unpack('<I', struct.pack('<f', f))[0])
-
     while True:
         logf = open("error.log", "w")
         try:
@@ -113,6 +110,9 @@ try:
                     # data_value = data.replace("[b'", "").replace(
                     #     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                     # print("ZERO")
+
+                    def float_to_hex(f):
+                        return hex(struct.unpack('<I', struct.pack('<f', f))[0])
 
                     n = float_to_hex(
                         json_get_configuration["data"]["target_value"])[2:]
