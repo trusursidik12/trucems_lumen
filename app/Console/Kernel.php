@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\DemoCommand;
 use App\Console\Commands\PlcCommand;
 use App\Console\Commands\PlcDemoCommand;
+use App\Console\Commands\PlcRunCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
