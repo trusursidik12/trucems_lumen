@@ -88,66 +88,22 @@ try:
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
-                # print(round_value)
-                # exit()
                 # update sensor values
                 patch_payload_sensor_values = 'value='+str(round_value)+''
                 response = requests.request(
                     "PATCH", patch_url_sensor_values, headers=headers, data=patch_payload_sensor_values)
-                # print(json.loads(response.text))
-
-                # if(json_get_configuration["data"]["is_calibration"] == 1 or json_get_configuration["data"]["is_calibration"] == 2):
-                #     post_payload_calibration_logs = 'value=' + \
-                #         str(round_value)+''
-                #     response = requests.request(
-                #         "POST", post_url_calibration_logs, headers=headers, data=post_payload_calibration_logs)
-                # print(response.text)
 
                 # is zero calibration
                 if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
                     # print(json_get_configuration)
-                    # msg = bytes.fromhex("08 00 00 00 00 00 55 00")
-                    # msg = bytes.fromhex("11 00 00 00 00 00 55 00")
-                    # result = witec_ser.write(msg)
-                    # data = str(witec_ser.readlines(1))
-                    # data_value = data.replace("[b'", "").replace(
-                    #     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
-                    # print("ZERO")
 
-                    setZero = "11 00 00 00 00 00 55 00"
-                    # setZero = "11 00 " + \
-                    #     str(value1)+" "+str(value2) + " " + \
-                    #     str(value3)+" "+str(value4)+" 55 00"
-                    # zero = "08 00 00 00 00 00 55 00"
-                    msg = bytes.fromhex(setZero)
+                    msg = bytes.fromhex("11 00 00 00 00 00 55 00")
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
 
                     patch_payload_configuration = 'target_value=""'
                     response = requests.request(
                         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-
-                    # if(json_get_configuration["data"]["loop_count"] != 0):
-                    #     loop_count = json_get_configuration["data"]["loop_count"] - 1
-                    #     patch_payload_configuration = 'is_calibration='+str(json_get_configuration["data"]["is_calibration_history"])+'&calibration_type=' + \
-                    #         str(json_get_configuration["data"]
-                    #             ["calibration_type"])+'&loop_count='+str(loop_count)
-                    #     response = requests.request(
-                    #         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-                    #     # print(response.text)
-                    #     patch_payload_truncate = {}
-                    #     response_delete = requests.request(
-                    #         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
-                    #     # print(response_delete.text)
-                    # else:
-                    #     patch_payload_configuration = 'is_calibration=0&calibration_type=0&is_calibration_history=0&loop_count=0'
-                    #     response = requests.request(
-                    #         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-                    #     # print(response.text)
-                    #     patch_payload_truncate = {}
-                    #     response_delete = requests.request(
-                    #         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
-                    # print(response_delete.text)
 
                 # is span calibration
                 if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != ''):
@@ -156,7 +112,6 @@ try:
                         "GET", get_url_calibration_logs, headers=headers, data=get_payload)
                     json_get_calibation_logs = json.loads(
                         response_calibration_logs.text)
-                    # print(json_get_calibation_logs["data"]["value"])
 
                     n = float_to_hex(
                         json_get_configuration["data"]["target_value"])[2:]
@@ -182,68 +137,6 @@ try:
                     msg = bytes.fromhex(setSpan)
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
-
-                    # patch_payload_configuration = 'target_value=""'
-                    # response = requests.request(
-                    #     "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-
-                    # def float_to_hex(f):
-                    #     return hex(struct.unpack('<I', struct.pack('<f', f))[0])
-
-                    # n = float_to_hex(
-                    #     json_get_calibation_logs["data"]["value"])[2:]
-                    # m = str(n)
-                    # # print(m)
-
-                    # # reverse
-                    # def little(string):
-                    #     t = bytearray.fromhex(string)
-                    #     t.reverse()
-                    #     return ''.join(format(x, '02x') for x in t).upper()
-
-                    # k = little(m)
-                    # # print(k)
-
-                    # value1 = k[0:2]
-                    # value2 = k[2:4]
-                    # value3 = k[4:6]
-                    # value4 = k[6:8]
-                    # print(value1)
-                    # print(value2)
-                    # print(value3)
-                    # print(value4)
-
-                    # msg = bytes.fromhex("08 00 00 00 00 00 55 00")
-                    # result = witec_ser.write(msg)
-                    # data = str(witec_ser.readlines(1))
-                    # data_value = data.replace("[b'", "").replace(
-                    #     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
-
-                    # print("|||||||||||||||||+++++++SPAN++++++++++||||||||||")
-                    # print("60 02 "+str(value1)+" "+str(value2) +
-                    # " "+str(value3)+" "+str(value4)+" 55 00")
-                    # print("|||||||||||||||||+++++++SPAN++++++++++||||||||||")
-
-                    # if(json_get_configuration["data"]["loop_count"] != 0):
-                    #     loop_count = json_get_configuration["data"]["loop_count"] - 1
-                    #     patch_payload_configuration = 'is_calibration='+str(json_get_configuration["data"]["is_calibration_history"])+'&calibration_type=' + \
-                    #         str(json_get_configuration["data"]
-                    #             ["calibration_type"])+'&loop_count='+str(loop_count)
-                    #     response = requests.request(
-                    #         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-                    #     # print(response.text)
-                    #     patch_payload_truncate = {}
-                    #     response_delete = requests.request(
-                    #         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
-                    #     # print(response_delete.text)
-                    # else:
-                    #     patch_payload_configuration = 'is_calibration=0&calibration_type=0&is_calibration_history=0&loop_count=0'
-                    #     response = requests.request(
-                    #         "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-                    #     # print(response.text)
-                    #     patch_payload_truncate = {}
-                    #     response_delete = requests.request(
-                    #         "DELETE", delete_url_configuration, headers=headers, data=patch_payload_truncate)
                     # print(response_delete.text)
             # else:
                 # print(json_get_configuration)
