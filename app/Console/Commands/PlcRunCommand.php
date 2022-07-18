@@ -95,11 +95,6 @@ class PlcRunCommand extends Command
                 $sleep = @$plc->sleep_default;
                 $loop = @$step['loop'];
             }
-            if ($plc->is_blowback == 1) {
-
-                $this->runPLC($steps);
-                $plc->update(['is_blowback' => 0]);
-            }
             if ($step['d'] === -1) { // All D. D0, D1, D2, D3, D4, D5, D6, D7
                 if ($plc->is_calibration == 1) {
                     $config = Configuration::first();
@@ -190,6 +185,29 @@ class PlcRunCommand extends Command
                         $d = $plc->$field;
                         $steps[] = ['d' => $i, 'data' => ($d == 1 ? 'FF00' : '0000'), 'sleep' => 1];
                         echo "RELAY d$i";
+                    }
+                    foreach ($steps as $step) {
+                        if (@$step['type'] == "sampling" || @$step['type'] == "blowback") { // Check is sampling or blowback
+                            if ($step['type'] == "sampling") {
+                                $sleep = $plc->sleep_sampling;
+                                $loop = $plc->loop_sampling;
+                            } else {
+                                $sleep = $plc->sleep_blowback;
+                                $loop = $plc->loop_blowback;
+                            }
+                        } else {
+                            $sleep = @$plc->sleep_default;
+                            $loop = @$step['loop'];
+                        }
+                        if ($step['d'] === -1) {
+                            $this->switchAll($step['data']);
+                        } else if ($step['data'] == 'flipflop') {
+                            $this->flipFlop($step['d'], $sleep, $loop);
+                        } else {
+                            sleep($sleep);
+                            $this->sendQuery($step['d'], $step['data']);
+                            sleep($sleep);
+                        }
                     }
                 } else {
                     $this->switchAll($step['data']);
