@@ -87,8 +87,10 @@ try:
                     if(json_get_configuration["data"]["is_calibration"] == 1):
                         round_value = round(float(data_value), 2)
                     else:
+                        data_value = data_value if float(
+                            data_value) >= 0 else 0
                         round_value = round(
-                            float(data_value if int(data_value) >= 0 else 0), 2)
+                            float(data_value), 2)
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
