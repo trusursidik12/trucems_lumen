@@ -3,6 +3,11 @@
 @section('css')
     <link rel="stylesheet" href="{{ url('js/kioskboard/kioskboard-2.2.0.min.css') }}">
     <link rel="stylesheet" href="{{ url('sweetalert2/sweetalert2.min.css') }}">
+    <style>
+        #KioskBoard-VirtualKeyboard{
+            height: 36vh;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="px-6 py-3 bg-gray-200 rounded">
@@ -43,7 +48,7 @@
                 <div id="error-msg"></div>
                 <form id="form" class="mx-auto max-w-screen-sm">
                     <input type="hidden" id="current_value" name="current_value" value="">
-                    <input type="text" name="target_value" value="" data-kioskboard-type="numpad"
+                    <input type="text" name="target_value" value="" data-kioskboard-type="keyboard" data-kioskboard-specialcharacters="false" data-kioskboard-key-capslock="false"
                         class="js-virtual-keyboard px-5 py-4 rounded w-1/2" placeholder="Target Value">
                     <button type="submit" id="btn_set_target_value"
                         class="px-5 py-4 bg-indigo-500 rounded text-white disabled:bg-gray-500"
@@ -65,46 +70,31 @@
     <script>
         $(document).ready(function() {
             KioskBoard.init({
-                keysArrayOfObjects: [{
-                        "0": "Q",
-                        "1": "W",
-                        "2": "E",
-                        "3": "R",
-                        "4": "T",
-                        "5": "Y",
-                        "6": "U",
-                        "7": "I",
-                        "8": "O",
-                        "9": "P"
+                keysArrayOfObjects: [
+                    {
+                        "0": "0",
+                        "1": "1",
+                        "2": "2",
+                        "3": "3",
+                        "4": "4",
                     },
                     {
-                        "0": "A",
-                        "1": "S",
-                        "2": "D",
-                        "3": "F",
-                        "4": "G",
-                        "5": "H",
-                        "6": "J",
-                        "7": "K",
-                        "8": "L"
+                        "0": "5",
+                        "1": "6",
+                        "2": "7",
+                        "3": "8",
+                        "4": "9",
+                        "5": ".",
                     },
-                    {
-                        "0": "Z",
-                        "1": "X",
-                        "2": "C",
-                        "3": "V",
-                        "4": "B",
-                        "5": "N",
-                        "6": "M"
-                    }
                 ],
+                keysSpecialCharsArrayOfStrings: ['.'],
                 keysJsonUrl: `{{ url('js/kioskboard-keys-english.json') }}`,
                 // Language Code (ISO 639-1) for custom keys (for language support) => e.g. "de" || "en" || "fr" || "hu" || "tr" etc...
                 language: 'en',
                 // The theme of keyboard => "light" || "dark" || "flat" || "material" || "oldschool"
                 theme: 'oldschool',
                 // Uppercase or lowercase to start. Uppercased when "true"
-                capsLockActive: true,
+                capsLockActive: false,
 
                 /*
                  * Allow or prevent real/physical keyboard usage. Prevented when "false"
@@ -125,7 +115,7 @@
                 cssAnimationsStyle: 'slide',
 
                 // Enable or Disable Spacebar functionality on the keyboard. The Spacebar will be passive when "false"
-                keysAllowSpacebar: true,
+                keysAllowSpacebar: false,
 
                 // Text of the space key (Spacebar). Without text => " "
                 keysSpacebarText: 'Space',
@@ -134,13 +124,13 @@
                 keysFontFamily: 'sans-serif',
 
                 // Font size of the keys
-                keysFontSize: '16px',
+                keysFontSize: '20px',
 
                 // Font weight of the keys
-                keysFontWeight: 'normal',
+                keysFontWeight: 'bold',
 
                 // Size of the icon keys
-                keysIconSize: '22px',
+                keysIconSize: '24px',
 
                 // Scrolls the document to the top or bottom(by the placement option) of the input/textarea element. Prevented when "false"
                 autoScroll: true,
