@@ -18,7 +18,7 @@
                             <div class="flex justify-between items-center px-3 section-value"
                                 data-sensor-id="{{ $value->sensor_id }}">
                                 <span class="text-xl sensor-name">{!! $value->sensor->name !!}</span>
-                                <span class="text-8xl font-bold text-indigo-700 sensor-value">4</span>
+                                <span class="text-8xl font-bold text-indigo-700 sensor-value"></span>
                                 <span class="text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
                             </div>
                         @endforeach
@@ -42,6 +42,7 @@
             <div class="w-full px-3">
                 <div id="error-msg"></div>
                 <form id="form" class="mx-auto max-w-screen-sm">
+                    <input type="hidden" id="current_value" name="current_value" value="">
                     <input type="text" name="target_value" value="" data-kioskboard-type="numpad"
                         class="js-virtual-keyboard px-5 py-4 rounded w-1/2" placeholder="Target Value">
                     <button type="submit" id="btn_set_target_value"
@@ -152,11 +153,10 @@
     <script>
         $(document).ready(function() {
             let internvalRealtime = setInterval(getRealtimeValue, 1000);
-
             function getRealtimeValue() {
                 let random = Math.floor(Math.random() * 100)
                 $.ajax({
-                    url: `{{ url('api/calibration/check-remaining') . '/' . strtolower($mode) . '/' . strtolower($type) }}?t=${random}`,
+                    url: `{{ url('api/calibration/get-realtime-value')}}?t=${random}`,
                     type: 'get',
                     dataType: 'json',
                     data: $(this).serialize(),
@@ -164,31 +164,23 @@
                         let section = $('#section-values')
                         let sectionLogs = $('#section-logs')
                         if (data.success) {
-                            if (data.remaining_time < 0) {
-                                clearInterval(internvalRealtime)
-                                $('#section-left').removeClass('block')
-                                $('#section-left').addClass('hidden')
-                                $('#section-right').removeClass('w-1/2')
-                                $('#section-right').addClass('w-full')
-                                $('#remaining').addClass('hidden')
-                                $('#last-value').removeClass('hidden')
-                            }
                             let sensorValues = data.sensor_values
                             sensorValues.map(function(value) {
                                 let div = section.find(
                                     `.section-value[data-sensor-id=${value.sensor_id}]`)
                                 div.find('.sensor-value').html(`${value.value}`)
+                                $('#current_value').val(value.value)
                                 $('.last-value').html(`${value.value}`)
                             })
                         }
                     }
                 })
-                // setTimeout(getRealtimeValue, 1000);
             }
         })
     </script>
     <script>
         $(document).ready(function() {
+            // Set Target Value On Calibration
             $('#form').submit(function(e) {
                 e.preventDefault()
                 $.ajax({
@@ -220,6 +212,7 @@
                 $.ajax({
                     url: `{{ url('api/calibration-last-value') }}`,
                     type: 'POST',
+                    data : {current_value : $('#current_value').val()},
                     dataType: 'json',
                     success: function(data) {
                         if (data.success) {
