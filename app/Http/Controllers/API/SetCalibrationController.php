@@ -36,26 +36,6 @@ class SetCalibrationController extends Controller
        }
     }
 
-    public function updateStatusCalibration($mode, $type)
-    {
-        try {
-            $is_retry = $this->isRetry($mode, $type);
-            $config = Configuration::find(1);
-            $config->update(['is_calibration' => 3]);
-            return response()->json([
-                'success' => true,
-                'is_retry' => $is_retry,
-                'message' => 'Update Status Calibration Success!'
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'is_retry' => $is_retry,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
     public function calibrationStart()
     {
         $config = Configuration::find(1);

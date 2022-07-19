@@ -8,11 +8,6 @@ use App\Models\SensorValue;
 
 class CalibrationController extends Controller
 {
-    public function auto()
-    {
-        $config = Configuration::find(1);
-        return view('calibration.auto', compact('config'));
-    }
     public function manual()
     {
         $config = Configuration::find(1);

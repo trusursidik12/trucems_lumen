@@ -6,9 +6,22 @@
             <a href="{{ url('/') }}" role="button" class="rounded px-4 py-2 bg-gray-500 text-white">
                 Back
             </a>
-            <button type="button" id="btn-export" class="rounded px-4 py-2 bg-green-500 text-white">
-                Export CSV
-            </button>
+            <div>
+                <span>Filter:</span>
+                <input type="hidden" name="filter" value="all">
+                <button type="button" data-type="all" class="btn-filter rounded px-4 py-2 bg-indigo-300 text-white">
+                    All
+                </button>
+                <button type="button" data-type="2" class="btn-filter rounded px-4 py-2 bg-indigo-300 text-white">
+                    Span Only
+                </button>
+                <button type="button" data-type="1" class="btn-filter rounded px-4 py-2 bg-indigo-500 text-white">
+                    Zero Only
+                </button>
+                <button type="button" id="btn-export" class="rounded ml-4 px-4 py-2 bg-green-500 text-white">
+                    Export All
+                </button>
+            </div>
         </div>
         <div class="bg-gray-300 p-2 rounded mt-[12vh]">
             <table class="table w-full text-left rounded">
@@ -16,9 +29,9 @@
                     <th>Date Time</th>
                     <th>Parameter</th>
                     <th>Calibration Type</th>
-                    <th>Start Value</th>
-                    <th>Target Value</th>
-                    <th>Result Value</th>
+                    <th>Before Cal</th>
+                    <th>Set Point</th>
+                    <th>Offset or Gain</th>
                     <th>Unit</th>
                 </thead>
                 <tbody id="tbody-logs">
@@ -36,13 +49,16 @@
     <script>
         $(document).ready(function() {
             let tbody = $("#tbody-logs");
-
+            $('.btn-filter').click(function(){
+                let type = $(this).data('type')
+                $('input[name="filter"]').val(type)
+            })
             function paginate(url) {
                 $.ajax({
                     url: url,
                     type: 'get',
                     dataType: 'json',
-                    // data : $(this).serialize(),
+                    data : {calibration_type : $('input[name="filter"]').val()},
                     success: function(data) {
                         let links = data.links
                         let logs = data.data
@@ -93,13 +109,13 @@
                 })
             }
 
-            paginate(`{{ url('api/calibration-avg-logs/paginate') }}`)
+            paginate(`{{ url('api/calibration-logs/paginate') }}`)
         })
     </script>
     <script>
         $(document).ready(function() {
             $('#btn-export').click(function() {
-                window.location.href = `{{ url('api/calibration-avg-logs/export') }}`
+                window.location.href = `{{ url('api/calibration-logs/export') }}`
             })
         })
     </script>
