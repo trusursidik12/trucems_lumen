@@ -50,7 +50,8 @@
                         Set Target</button>
                     <button type="button" id="btn_last_data"
                         class="px-5 py-4 bg-blue-500 rounded text-white disabled:bg-gray-500"
-                        {{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? '' : 'disabled' }}>Save Last
+                        {{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? '' : 'disabled' }}>Save
+                        Last
                         Data</button>
                 </form>
             </div>
