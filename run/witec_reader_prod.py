@@ -85,9 +85,9 @@ try:
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                 if(data_value):
                     if(json_get_configuration["data"]["is_calibration"] == 1):
-                        round_value = round(float(data_value), 2)
+                        round_value = round(float(0), 2)
                     else:
-                        round_value = round(float(data_value), 2)
+                        round_value = round(float(0), 2)
                         # if(data_value < 0):
                         #     data_value = 0
                         # else:
