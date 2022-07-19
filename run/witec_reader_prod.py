@@ -97,7 +97,7 @@ try:
                 if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
                     # print(json_get_configuration)
 
-                    msg = bytes.fromhex("11 00 00 00 00 00 55 00")
+                    msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
 
@@ -133,7 +133,7 @@ try:
 
                     setSpan = "60 02 " + \
                         str(value1)+" "+str(value2) + " " + \
-                        str(value3)+" "+str(value4)+" 55 00"
+                        str(value3)+" "+str(value4)+" 7A 00"
                     msg = bytes.fromhex(setSpan)
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
