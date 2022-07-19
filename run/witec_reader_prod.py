@@ -88,7 +88,7 @@ try:
                         round_value = round(float(data_value), 2)
                     else:
                         round_value = round(
-                            float(data_value if data_value >= 0 else 0), 2)
+                            float(data_value if int(data_value) >= 0 else 0), 2)
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
@@ -149,7 +149,7 @@ try:
         except serial.serialutil.SerialException as e:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-            print(e)
+            # print(e)
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
@@ -170,6 +170,6 @@ try:
 except Exception as e:
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("[X]  Not connected ", e)
+    # print("[X]  Not connected ", e)
     logf.write("Error "+timestamp+" : \n".format(str(e)))
     logf.close()
