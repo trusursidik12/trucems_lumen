@@ -176,7 +176,7 @@ class PlcRunCommand extends Command
                 return true;
             } else if ($plc->is_calibration == 2) {
                 for ($i = 0; $i <= 7; $i++) {
-                    $this->sendQuery($i, ($i == 0 or $i == 2 ? 'FF00' : '0000'));
+                    $this->sendQuery($i, ($i == 0 || $i == 2 ? 'FF00' : '0000'));
                 }
                 $plc->update(['is_calibration' => 0]);
                 return true;
