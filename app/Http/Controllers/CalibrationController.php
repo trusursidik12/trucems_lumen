@@ -30,9 +30,6 @@ class CalibrationController extends Controller
         $sensorValues = SensorValue::limit(10)->get();
         $calibrationLog = CalibrationLog::latest('id')->first();
         $calibrationType = ($type == "SPAN" ? 2 : 1);
-        // $lastAvg = CalibrationAvgLog::select("value")->where('calibration_type', $calibrationType)->orderBy("id", "desc")->first();
-        $lastAvg = 1;
-        // dd($calibrationLog);
-        return view('calibration.process', compact('type', 'mode', 'sensorValues', 'lastAvg', 'calibrationLog'));
+        return view('calibration.process', compact('type', 'mode', 'sensorValues', 'calibrationLog'));
     }
 }

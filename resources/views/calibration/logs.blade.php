@@ -9,13 +9,13 @@
             <div>
                 <span>Filter:</span>
                 <input type="hidden" name="filter" value="all">
-                <button type="button" data-type="all" class="btn-filter rounded px-4 py-2 bg-indigo-300 text-white">
+                <button type="button" data-type="all" class="btn-filter rounded px-4 py-2 bg-indigo-500 text-white">
                     All
                 </button>
                 <button type="button" data-type="2" class="btn-filter rounded px-4 py-2 bg-indigo-300 text-white">
                     Span Only
                 </button>
-                <button type="button" data-type="1" class="btn-filter rounded px-4 py-2 bg-indigo-500 text-white">
+                <button type="button" data-type="1" class="btn-filter rounded px-4 py-2 bg-indigo-300 text-white">
                     Zero Only
                 </button>
                 <button type="button" id="btn-export" class="rounded ml-4 px-4 py-2 bg-green-500 text-white">
@@ -51,7 +51,10 @@
             let tbody = $("#tbody-logs");
             $('.btn-filter').click(function(){
                 let type = $(this).data('type')
+                $('.btn-filter').removeClass('bg-indigo-500').addClass('bg-indigo-300')
                 $('input[name="filter"]').val(type)
+                $(this).addClass('bg-indigo-500').removeClass('bg-indigo-300')
+                paginate(`{{ url('api/calibration-logs/paginate') }}`)
             })
             function paginate(url) {
                 $.ajax({

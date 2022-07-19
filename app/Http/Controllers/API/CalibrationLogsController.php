@@ -4,12 +4,21 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\CalibrationLog;
+use Illuminate\Http\Request;
 
 class CalibrationLogsController extends Controller
 {
-    public function logs()
+    public function logs(Request $request)
     {
+        $whereRaw = "1=1";
+        if($request->has('calibration_type')){
+            $filter = $request->calibration_type;
+            if($filter != "all"){
+                $whereRaw.=" AND calibration_type = '{$filter}'";
+            }
+        }
         $calibrationLogs = CalibrationLog::with(["sensor:id,unit_id,name", "sensor.unit:id,name"])
+            ->whereRaw($whereRaw)
             ->orderBy("id", "desc")->paginate(10);
         return $calibrationLogs;
     }
