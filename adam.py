@@ -13,11 +13,11 @@ import random
 
 try:
     # connect into database
-    mydb = psycopg2.connect(
-        host="localhost", database="trucems_lumen_db", user="root", password="", )
-    mycursor = mydb.cursor()
+    # mydb = psycopg2.connect(
+    #     host="localhost", database="trucems_lumen_db", user="root", password="", )
+    # mycursor = mydb.cursor()
     # port = '/dev/ttyADAM'
-    port = 'COM12'
+    port = 'COM10'
     baudrate = 9600
     client = ModbusClient(
         method='rtu', port=port, baudrate=baudrate, parity='N', timeout=1
@@ -32,12 +32,14 @@ try:
                 read = client.read_holding_registers(0, 8, unit=1)
                 # print(read.registers)
                 value1 = read.registers[0]  # reading register 30223
-                value2 = read.registers[1]  # reading register 30223
-                value3 = read.registers[2]  # reading register 30223
-                fix_value1 = round(float(value1 * 20 / 4095), 2)
-                fix_value2 = float(value2 * 20 / 4095)
-                print(round(1.5625 * fix_value2 - 6.25, 2))
-                fix_value3 = round(float(value3 * 20 / 4095), 3)
+                # value2 = read.registers[1]  # reading register 30223
+                # value3 = read.registers[2]  # reading register 30223
+                fix_value1 = float(value1 * 20 / 4095)
+                # fix_value2 = float(value2 * 20 / 4095)
+                # print(round(1.5625 * fix_value1 - 6.25, 2))
+                print(round(((6.25 * fix_value1) - 25), 3))
+                # fix_value3 = round(float(value3 * 20 / 4095), 3)
+                # print(fix_value1)
                 # getdata = ("SELECT * FROM sensors WHERE is_deleted = '0'")
                 # mycursor.execute(getdata)
                 # data = mycursor.fetchall()
