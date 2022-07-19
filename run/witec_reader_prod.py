@@ -91,7 +91,8 @@ try:
                             data_value = 0
                         else:
                             data_value = data_value
-                        round_value = round(float(data_value), 2)
+                        round_value = round(
+                            float((data_value if data_value >= 0 else 0)), 2)
                 else:
                     # value set when the sensor disconnected!
                     round_value = -2.222
