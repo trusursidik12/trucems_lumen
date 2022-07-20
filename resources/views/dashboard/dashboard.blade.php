@@ -16,7 +16,7 @@
                 <span class="px-5 py-4 bg-indigo-700 text-white">
                 </span>
             </div>
-            <div class="flex justify-between pt-[14vh] space-x-3">
+            <div class="flex justify-between pt-[6vh] space-x-3">
 
                 <div class="w-full">
                     <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
