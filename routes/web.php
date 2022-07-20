@@ -20,9 +20,11 @@ $router->get('/quality-standards', 'DashboardController@qualityStandard');
 $router->get('/configurations', 'ConfigurationController@index');
 $router->patch('/configurations', 'ConfigurationController@update');
 
+$router->get('/plc-simulation', 'Debug\DebugController@plc');
+$router->get('/plc-simulation/data', 'Debug\DebugController@getPLC');
+
 $router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
-    $router->get('/auto', 'CalibrationController@auto');
     $router->get('/logs', 'CalibrationController@logs');
     $router->get('/{mode}/{type}/process', 'CalibrationController@processCal');
 });
@@ -46,8 +48,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * Set Relay API
      */
-    $router->get('/relay', 'API\ConfigurationController@isRelayOpen');
-    $router->patch('/relay', 'API\ConfigurationController@setRelay');
+    $router->get('/relay', 'API\RelayController@index');
+    $router->patch('/relay', 'API\RelayController@setRelay');
     // Blowback
     $router->get('/blowback', 'API\BlowbackController@checkRemaining');
     $router->patch('/blowback', 'API\BlowbackController@setBlowback');
@@ -56,10 +58,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
      * Set Calibration
      */
     $router->patch('/set-calibration/{mode}/{type}', 'API\SetCalibrationController@setCalibration');
-    $router->get('/calibration/check-remaining/{mode}/{type}', 'API\SetCalibrationController@checkRemaining');
-    $router->get('/calibration/check-retry/{mode}/{type}', 'API\SetCalibrationController@retryCalibration');
-    $router->get('/calibration/update-calibration/{mode}/{type}', 'API\SetCalibrationController@updateStatusCalibration');
-    $router->patch('/calibration/update-time-calibration/{mode}/{type}', 'API\SetCalibrationController@updateTimeCalibration');
+    $router->get('/calibration/get-realtime-value', 'API\SetCalibrationController@getRealtimeValue');
+
+    /**
+     * Start Calibration
+     */
+    $router->post('/calibration-start', 'API\SetCalibrationController@calibrationStart');
+    $router->post('/calibration-set-value/{type}', 'API\SetCalibrationController@offsetAndGain');
+    $router->post('/calibration-last-value', 'API\SetCalibrationController@getLastRecord');
+    $router->post('/calibration-stop', 'API\SetCalibrationController@closeCalibration');
+
     /**
      * Sensor Value Logs
      */
@@ -69,17 +77,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * Calibration Logs
      */
-    $router->get('/calibration-logs/get-last', 'API\CalibrationLogsController@getLast');
-    $router->post('/calibration-logs', 'API\CalibrationLogsController@store');
-    $router->get('/calibration-logs', 'API\CalibrationLogsController@index');
-    $router->delete('/calibration-logs', 'API\CalibrationLogsController@destroy');
-    /**
-     * Calibration AVG Logs
-     */
-    $router->post('/calibration-avg-logs', 'API\CalibrationAvgLogsController@store');
-    $router->get('/calibration-avg-logs', 'API\CalibrationAvgLogsController@index');
-    $router->get('/calibration-avg-logs/paginate', 'API\CalibrationAvgLogsController@logs');
-    $router->get('/calibration-avg-logs/export', 'API\CalibrationAvgLogsController@export');
+    $router->get('/calibration-logs/paginate', 'API\CalibrationLogsController@logs');
+    $router->get('/calibration-logs/export', 'API\CalibrationLogsController@export');
     /**
      * Configurations
      */

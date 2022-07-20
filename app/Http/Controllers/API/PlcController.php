@@ -25,8 +25,10 @@ class PlcController extends Controller
                 if ($plc->is_calibration == 1) {
                     return response()->json(['success' => false, 'message' => 'You need to stop calibration first!']);
                 }
+                Plc::find(1)->update(['is_maintenance' => $status, 'd_off' => 0]);
+            } else {
+                Plc::find(1)->update(['is_maintenance' => $status, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
             }
-            Plc::find(1)->update(['is_maintenance' => $status, 'd_off' => 0]);
             $data = Plc::find(1);
             return response()->json(['success' => true, 'message' => 'Success update!', 'data' => $data]);
         } catch (Exception $e) {
@@ -43,7 +45,7 @@ class PlcController extends Controller
                     return response()->json(['success' => false, 'message' => 'You need to start cems first!']);
                 }
             }
-            Plc::find(1)->update(['is_calibration' => $status, 'd_off' => 0]);
+            Plc::find(1)->update(['is_calibration' => ($status == 0 ? 2 : $status), 'd_off' => 0]);
             $data = Plc::find(1);
             return response()->json(['success' => true, 'message' => 'Success update!', 'data' => $data]);
         } catch (Exception $e) {

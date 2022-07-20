@@ -21,12 +21,17 @@
                         class="{{ $plc->is_maintenance == 0 ? 'deactive' : 'active' }}">
                         {{ $plc->is_maintenance == 1 ? ' Start CEMS' : 'Stop CEMS' }}
                     </button>
-                    <button type="button" id="btn-start-cal" data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
+                    <button type="button" id="btn-start-cal" class="{{ $plc->is_calibration == 1 ? 'deactive' : '' }}"
+                        data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
                         {{ $plc->is_calibration == 1 ? 'Stop Calibration' : 'Start Calibration' }}
                     </button>
                     <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
                         class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
                         {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
+                    </button>
+                    <button onclick="return window.location.href=`{{ url('api/relay') }}`" id="btn-relay-test-menu"
+                        class="{{ $plc->is_maintenance == 1 ? '' : 'hide' }} active">
+                        Relay Test
                     </button>
                     <button onclick="return window.location.href=`{{ url('configurations') }}`">Configurations</button>
                 </nav>
@@ -163,7 +168,6 @@
                             $('#btn-start-cems').removeClass('active')
                             $('#btn-start-cems').addClass('deactive')
                             $('#btn-start-cems').html('Stop CEMS')
-                            // $('#btn-cal-menu').addClass('hide')
                             $('#error-msg').removeClass('hidden')
                             $('#error-msg').html(data.message)
                             setTimeout(() => {
@@ -188,7 +192,7 @@
                         if (data.success) {
                             setTimeout(() => {
                                 $('button').prop('disabled', false)
-                                if (data.data.is_calibration == 0) {
+                                if (data.data.is_calibration == 0 || data.data.is_calibration == 2) {
                                     $('#btn-start-cal').attr('data-status', "1")
                                     $('#btn-start-cal').removeClass('deactive')
                                     $('#btn-start-cal').html('Start Calibration')
@@ -200,7 +204,7 @@
                                     $('#btn-start-cal').html('Stop Calibration')
                                     $('#btn-cal-menu').removeClass('hide')
                                 }
-                            }, 5000);
+                            }, 10000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cal').attr('data-status', "1")
@@ -240,6 +244,7 @@
                                     $('#btn-start-cems').removeClass('active').addClass(
                                         'deactive')
                                     $('#btn-start-cems').html('Stop CEMS')
+                                    $('#btn-relay-test-menu').addClass('hide')
                                 } else {
                                     $('#btn-start-mt').attr('data-status', "0")
                                     $('#btn-start-mt').addClass('deactive')
@@ -249,16 +254,17 @@
                                     $('#btn-start-cems').removeClass('deactive')
                                         .addClass('active')
                                     $('#btn-start-cems').html('Start CEMS')
+                                    $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, 5000);
+                            }, 10000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")
                             $('#btn-start-mt').removeClass('deactive')
                             $('#btn-start-mt').html('Start Maintenance')
-                            // $('#btn-cal-menu').addClass('hide')
                             $('#error-msg').removeClass('hidden')
                             $('#error-msg').html(data.message)
+                            $('#btn-relay-test-menu').addClass('hide')
                             setTimeout(() => {
                                 $('#error-msg').addClass('hidden')
                             }, 3000);

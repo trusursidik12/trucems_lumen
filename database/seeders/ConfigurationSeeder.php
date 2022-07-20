@@ -18,11 +18,9 @@ class ConfigurationSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         Configuration::truncate();
         Configuration::create([
-            'm_default_zero_loop' => 7,
-            'm_default_span_loop' => 7,
-            'm_time_zero_loop' => 120,
-            'm_time_span_loop' => 120,
-            'm_max_span_ppm' => 1000,
+            'is_calibration' => 0,
+            'is_blowback' => 0,
+            'calibration_type' => 0,
         ]);
     }
 }

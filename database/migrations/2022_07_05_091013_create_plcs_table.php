@@ -30,6 +30,7 @@ class CreatePlcsTable extends Migration
             $table->integer('sleep_blowback')->default(0)->nullable();
             $table->integer('loop_sampling')->default(0)->nullable();
             $table->integer('loop_blowback')->default(0)->nullable();
+            $table->integer('sleep_default')->default(3)->nullable();
             $table->double('alarm')->default(0)->nullable();
             $table->timestamps();
         });

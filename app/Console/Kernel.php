@@ -4,6 +4,9 @@ namespace App\Console;
 
 use App\Console\Commands\DemoCommand;
 use App\Console\Commands\PlcCommand;
+use App\Console\Commands\PlcDemoCommand;
+use App\Console\Commands\PlcRunCommand;
+use App\Console\Commands\StopAppCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -15,8 +18,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        StopAppCommand::class,
         DemoCommand::class,
         PlcCommand::class,
+        PlcRunCommand::class,
+        PlcDemoCommand::class,
     ];
 
     /**

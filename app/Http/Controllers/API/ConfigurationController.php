@@ -54,28 +54,30 @@ class ConfigurationController extends Controller
             return response()->json(["success" => false, "errors" => $e->response->original]);
         }
     }
-    public function setRelay(Request $request){
-        try{
-            $column = $this->validate($request,[
+    public function setRelay(Request $request)
+    {
+        try {
+            $column = $this->validate($request, [
                 'is_relay_open' => 'required|numeric'
-            ],[
+            ], [
                 'is_relay_open.required' => 'Is Relay Open cant empty!',
                 'is_relay_open.numeric' => 'Invalid Format Is Relay Open!',
             ]);
             $config = Configuration::find(1);
             $config->update($column);
             return response()->json(['success' => true, 'message' => 'Success! Relay is open']);
-        }catch(\Illuminate\Validation\ValidationException $e){
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['success' => false, 'errors' => $e->response->original]);
         }
     }
-    public function isRelayOpen(){
-        try{
+    public function isRelayOpen()
+    {
+        try {
             $config = Configuration::select('is_relay_open')->find(1);
             $isOpen = ($config->is_relay_open == 3 ? true : false);
             return response()->json(['success' => true, 'data' => ['is_open' => $isOpen, 'is_relay_open' => $config->is_relay_open]]);
-        }catch(Exception $e){
-            return response()->json(['success' => false, 'message' => 'Error : '.$e->getMessage()]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error : ' . $e->getMessage()]);
         }
     }
 }
