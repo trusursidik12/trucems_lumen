@@ -259,7 +259,7 @@
                         if (data.success) {
                             setTimeout(() => {
                                 $('button').prop('disabled', false)
-                                if (data.data.is_maintenance == 0) {
+                                if (data.data.is_maintenance == 0 || data.data.is_maintenance == 2) {
                                     $('#btn-start-mt').attr('data-status', "1")
                                     $('#btn-start-mt').removeClass('deactive')
                                     $('#btn-start-mt').html('Start Maintenance')
@@ -280,7 +280,7 @@
                                     $('#btn-start-cems').html('Start CEMS')
                                     $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, 15000);
+                            }, {{ env('APP_ENV') == "local" ? 1000 : 30000 }});
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")
