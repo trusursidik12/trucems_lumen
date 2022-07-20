@@ -14,7 +14,7 @@ class Sensor extends Model
      * @var array
      */
     protected $fillable = [
-        'unit_id', 'code', 'name' , 'formula'
+        'unit_id', 'code', 'name' , 'formula', 'quality_standard'
     ];
 
     public function Unit(){

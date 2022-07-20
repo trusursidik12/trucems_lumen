@@ -2,17 +2,22 @@
 @section('title','Quality Standards')
 @section('content')
 <div class="px-6 py-3 bg-gray-200 rounded">
-    <div class="flex justify-start mb-3">
-        <a href="{{ url("/") }}" role="button" class="rounded px-4 py-2 bg-gray-500 text-white">
-            Back
-        </a>
-    </div>
-    <div class="flex justify-between pt-[3vh] space-x-3">
-        <div class="w-full rounded px-6 py-3 bg-gray-300 h-[68vh]">
-            <h2 class="text-xl text-center"><span id="concentrate"></span> mg/m<sup>3</sup></h2>
-            <div class="flex justify-end">
-               <canvas id="chart" class="max-h-[60vh]"></canvas>
+    <div class="flex justify-between pt-[3vh] space-x-3 ">
+        <div class="w-full rounded-tl-3xl rounded-br-3xl bg-gray-300 h-[69vh]">
+            <div class="flex justify-between">
+                <a href="{{ url('/') }}" role="button" class="rounded-tl-3xl rounded-br-3xl px-5 py-4 bg-red-500 text-white">
+                    Back
+                </a>
+                <span class="bg-indigo-700 px-5 py-4"></span>
+
             </div>
+            <div class="px-6 py-3">
+                <h2 class="text-xl text-center"><span id="concentrate"></span> mg/m<sup>3</sup></h2>
+                <div class="flex justify-end">
+                   <canvas id="chart" class="max-h-[60vh]"></canvas>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>

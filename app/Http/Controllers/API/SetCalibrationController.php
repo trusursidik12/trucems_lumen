@@ -15,25 +15,25 @@ class SetCalibrationController extends Controller
 
     /**
      * get realtime value on calibration process
-     * 
+     *
      * @param Request $request
      * @return json
      */
     public function getRealtimeValue()
     {
-       try{
+        try {
             $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
-            ->orderBy("id", "desc")->get();
+                ->orderBy("id", "desc")->get();
             return response()->json([
                 'success' => true,
                 'sensor_values' => $sensorValues,
             ]);
-       }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'sensor_values' => -1
             ]);
-       }
+        }
     }
 
     public function calibrationStart()
@@ -47,8 +47,8 @@ class SetCalibrationController extends Controller
     {
         try {
             $this->validate($request, [
-                'current_value' => 'required|numeric', 
-                'target_value' => 'required|numeric', 
+                'current_value' => 'required|numeric',
+                'target_value' => 'required|numeric',
             ], [
                 'current_value.required' => 'Current value cant empty!',
                 'target_value.required' => 'Target value cant empty!',
@@ -60,23 +60,13 @@ class SetCalibrationController extends Controller
             if (isset($targetValue)) {
                 $config = Configuration::find(1);
                 $config->update(['calibration_type' => $type, 'target_value' => $targetValue]);
-                CalibrationLog::create(['sensor_id' => 1, 'calibration_type' => $type, 'start_value' => $currentValue, 'target_value' => $targetValue, 'result_value' => null]);
+                CalibrationLog::create(['sensor_id' => 1, 'calibration_type' => $type, 'start_value' => $currentValue, 'target_value' => $targetValue, 'result_value' => ($type == 1 ? $currentValue + 0 : $currentValue / $targetValue)]);
                 return response()->json(["success" => true, "message" => 'Target Value Has Been Saved']);
             }
             return response()->json(["success" => false, "error" => 'Saving Target Value Failed']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(["success" => false, "error" => "Target value cant empty"]);
         }
-    }
-
-    public function getLastRecord(Request $request)
-    {
-        $lastRow = CalibrationLog::latest('id')->first();
-        $currentValue = (double) $request->current_value;
-        if ($lastRow->result_value == null && isset($currentValue)) {
-            $lastRow->update(['result_value' => $currentValue]);
-        }
-        return response()->json(["success" => true, "message" => 'Latest Value Has Been Saved']);
     }
 
     public function closeCalibration()

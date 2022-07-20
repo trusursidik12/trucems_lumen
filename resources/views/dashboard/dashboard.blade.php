@@ -2,39 +2,43 @@
 @section('title', 'Dashboard')
 @section('content')
     <div class="px-6 py-3 bg-gray-200 rounded">
-        <div class="flex justify-start mb-3">
-            <div>
-                <span class="text-gray-700">Runtime : </span>
-                <span id="runtime" class="text-indigo-900 text-bold"></span>
-            </div>
-        </div>
         <div>
             <p class="px-3 py-2 bg-red-500 text-white rounded hidden" id="error-msg">
 
             </p>
         </div>
-        <div class="flex justify-between pt-[14vh] space-x-3">
+        <div class="h-[88vh] bg-gray-300 rounded-tl-3xl rounded-br-3xl">
+            <div class="flex justify-between">
+                <div class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
+                    <span>Runtime : </span>
+                    <span id="runtime" class="text-bold"></span>
+                </div>
+                <span class="px-5 py-4 bg-indigo-700 text-white">
+                </span>
+            </div>
+            <div class="flex justify-between pt-[14vh] space-x-3">
 
-            <div class="w-full">
-                <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
-                    <button type="button" id="btn-start-cems" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
-                        class="{{ $plc->is_maintenance == 0 ? 'deactive' : 'active' }}">
-                        {{ $plc->is_maintenance == 1 ? ' Start CEMS' : 'Stop CEMS' }}
-                    </button>
-                    <button type="button" id="btn-start-cal" class="{{ $plc->is_calibration == 1 ? 'deactive' : '' }}"
-                        data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
-                        {{ $plc->is_calibration == 1 ? 'Stop Calibration' : 'Start Calibration' }}
-                    </button>
-                    <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
-                        class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
-                        {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
-                    </button>
-                    <button onclick="return window.location.href=`{{ url('api/relay') }}`" id="btn-relay-test-menu"
-                        class="{{ $plc->is_maintenance == 1 ? '' : 'hide' }} active">
-                        Relay Test
-                    </button>
-                    <button onclick="return window.location.href=`{{ url('configurations') }}`">Configurations</button>
-                </nav>
+                <div class="w-full">
+                    <nav class="sidebar grid grid-rows justify-center gap-3 h-full">
+                        <button type="button" id="btn-start-cems" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
+                            class="{{ $plc->is_maintenance == 0 ? 'deactive' : 'active' }}">
+                            {{ $plc->is_maintenance == 1 ? ' Start CEMS' : 'Stop CEMS' }}
+                        </button>
+                        <button type="button" id="btn-start-cal" class="{{ $plc->is_calibration == 1 ? 'deactive' : '' }}"
+                            data-status="{{ $plc->is_calibration == 1 ? 0 : 1 }}">
+                            {{ $plc->is_calibration == 1 ? 'Stop Calibration' : 'Start Calibration' }}
+                        </button>
+                        <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
+                            class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
+                            {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
+                        </button>
+                        <button onclick="return window.location.href=`{{ url('api/relay') }}`" id="btn-relay-test-menu"
+                            class="{{ $plc->is_maintenance == 1 ? '' : 'hide' }} active">
+                            Relay Test
+                        </button>
+                        <button onclick="return window.location.href=`{{ url('configurations') }}`">Configurations</button>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
@@ -256,7 +260,7 @@
                                     $('#btn-start-cems').html('Start CEMS')
                                     $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, 10000);
+                            }, 15000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")

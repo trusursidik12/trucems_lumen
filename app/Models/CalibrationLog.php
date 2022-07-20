@@ -24,6 +24,6 @@ class CalibrationLog extends Model
     }
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->timezone(env('APP_TIMEZONE'))->format("H:i:s");
+        return Carbon::parse($value)->timezone(env('APP_TIMEZONE'))->format("d/m/Y H:i:s");
     }
 }

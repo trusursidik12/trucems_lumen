@@ -15,7 +15,7 @@
     @apply hidden;
 }
 .sidebar > button{
-    @apply block w-full bg-gray-500 text-white text-2xl px-5 py-3 rounded text-center uppercase
+    @apply block w-full bg-gray-500 text-white text-2xl px-5 py-3 rounded-tl-md rounded-br-md text-center uppercase
 }
 .sidebar > button.active{
     @apply bg-green-600
@@ -32,10 +32,10 @@
     @apply px-2 py-1 border border-gray-700
 }
 .table thead th{
-    @apply font-bold text-white bg-indigo-500
+    @apply font-bold text-white bg-indigo-700
 }
 .table tbody td{
-    @apply text-gray-700
+    @apply text-black font-semibold
 }
 .table tbody tr{
     @apply odd:bg-slate-400 even:bg-transparent
