@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ url('js/kioskboard/kioskboard-2.2.0.min.css') }}">
     <link rel="stylesheet" href="{{ url('sweetalert2/sweetalert2.min.css') }}">
     <style>
-        #KioskBoard-VirtualKeyboard{
+        #KioskBoard-VirtualKeyboard {
             height: 36vh;
         }
     </style>
@@ -49,19 +49,15 @@
             </div>
             <div class="w-full px-3">
                 <div id="error-msg"></div>
-                <form id="form" class="mx-auto max-w-screen-sm">
+                <form id="form" class="mx-auto max-w-screen-md text-center">
                     <input type="hidden" id="current_value" name="current_value" value="">
-                    <input type="text" name="target_value" value="" data-kioskboard-type="keyboard" data-kioskboard-specialcharacters="false" data-kioskboard-key-capslock="false"
+                    <input type="{{ $type == 'ZERO' ? 'hidden' : 'text' }}" name="target_value"
+                        value="{{ $type == 'ZERO' ? 0 : '' }}" data-kioskboard-type="keyboard"
+                        data-kioskboard-specialcharacters="false" data-kioskboard-key-capslock="false"
                         class="js-virtual-keyboard px-5 py-4 rounded w-1/2" placeholder="Target Value">
                     <button type="submit" id="btn_set_target_value"
-                        class="px-5 py-4 bg-indigo-500 rounded text-white disabled:bg-gray-500"
-                        {{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>
+                        class="px-20 py-4 bg-indigo-500 rounded text-white disabled:bg-gray-500">
                         Set Target</button>
-                    <button type="button" id="btn_last_data"
-                        class="px-5 py-4 bg-blue-500 rounded text-white disabled:bg-gray-500"
-                        {{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? '' : 'disabled' }}>Save
-                        Last
-                        Data</button>
                 </form>
             </div>
         </div>
@@ -73,8 +69,7 @@
     <script>
         $(document).ready(function() {
             KioskBoard.init({
-                keysArrayOfObjects: [
-                    {
+                keysArrayOfObjects: [{
                         "0": "0",
                         "1": "1",
                         "2": "2",
@@ -146,10 +141,11 @@
     <script>
         $(document).ready(function() {
             let internvalRealtime = setInterval(getRealtimeValue, 1000);
+
             function getRealtimeValue() {
                 let random = Math.floor(Math.random() * 100)
                 $.ajax({
-                    url: `{{ url('api/calibration/get-realtime-value')}}?t=${random}`,
+                    url: `{{ url('api/calibration/get-realtime-value') }}?t=${random}`,
                     type: 'get',
                     dataType: 'json',
                     data: $(this).serialize(),
@@ -183,12 +179,9 @@
                     data: $(this).serialize(),
                     success: function(data) {
                         if (data.success) {
-                            $('#btn_last_data').prop('disabled', false)
                             $('#error-msg').html(`
                             <p class="rounded p-4 font-medium text-white bg-green-500 my-4">${data.message}!</p>
                             `)
-                            $('#btn_set_target_value').prop('disabled', true)
-                            $('#btn_close').prop('disabled', true)
                         } else {
                             $('#error-msg').html(`
                             <p class="rounded p-4 font-medium text-white bg-red-500 my-4">${data.error}!</p>
@@ -197,22 +190,6 @@
                         setTimeout(() => {
                             $('#error-msg').html(``);
                         }, 5000);
-                    }
-                })
-            })
-            $('#btn_last_data').click(function(e) {
-                e.preventDefault()
-                $.ajax({
-                    url: `{{ url('api/calibration-last-value') }}`,
-                    type: 'POST',
-                    data : {current_value : $('#current_value').val()},
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.success) {
-                            $('#btn_close').prop('disabled', false)
-                            $('#btn_set_target_value').prop('disabled', false)
-                            $('#btn_last_data').prop('disabled', true)
-                        }
                     }
                 })
             })

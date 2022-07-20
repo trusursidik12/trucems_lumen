@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\CalibrationLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CalibrationLogsController extends Controller
@@ -36,21 +37,23 @@ class CalibrationLogsController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Date Time', 'Parameter', 'Calibration Type', 'Concentrate', 'Row Count', 'Unit');
+        $columns = array('Date Time', 'Parameter', 'Calibration Type', 'Before Cal', 'Set Point','Offset or Gain', 'Unit');
 
         $callback = function () use ($calibrationLogs, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
             foreach ($calibrationLogs as $log) {
+                // $row['DateTime']  = Carbon::parse($log->created_at)->format("d/m/Y H:i:s");
                 $row['DateTime']  = $log->created_at;
                 $row['Parameter']    = strtoupper($log->sensor->code);
                 $row['Calibration Type']    = $log->calibration_type  == 1 ? 'Zero' : 'Span';
-                $row['Concentrate']    = "{$log->value} / {$log->cal_gas_ppm}";
-                $row['Row Count']    = $log->row_count;
+                $row['Before Cal']    =  $log->start_value;
+                $row['Set Point']    =  $log->target_value;
+                $row['Offset or Gain']    =  $log->result_value;
                 $row['Unit']  = $log->sensor->unit->name;
 
-                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Calibration Type'], $row['Concentrate'], $row['Row Count'], $row['Unit']));
+                fputcsv($file, array($row['DateTime'], $row['Parameter'], $row['Calibration Type'], $row['Before Cal'], $row['Set Point'], $row['Offset or Gain'],$row['Unit']));
             }
 
             fclose($file);
