@@ -15,7 +15,7 @@
     @apply hidden;
 }
 .sidebar > button{
-    @apply block w-full bg-gray-500 text-white text-2xl px-5 py-4 rounded-tl-md rounded-br-md text-center uppercase
+    @apply block w-full bg-gray-500 text-white text-2xl px-5 py-[1.3rem] rounded-tl-md rounded-br-md text-center uppercase
 }
 .sidebar > button.active{
     @apply bg-green-600
