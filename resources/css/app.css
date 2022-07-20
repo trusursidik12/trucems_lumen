@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 .sidebar > a{
     @apply block w-full bg-gray-500 text-white text-2xl px-5 py-3 rounded text-center uppercase
 }

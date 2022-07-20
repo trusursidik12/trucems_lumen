@@ -8,7 +8,13 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ url('css/app.css') }}">
     @yield('css')
-
+    @env('production')
+    <style>
+        *{
+            cursor: none !important;
+        }
+    </style>
+    @endenv
 </head>
 <body>
     <div class="max-w-5xl mx-auto bg-gray-200 rounded min-h-[100vh] relative">
