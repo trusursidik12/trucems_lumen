@@ -12,9 +12,12 @@
 @section('content')
     <div class="px-6 py-3 bg-gray-200 rounded">
 
-        <div class="h-[88vh] bg-gray-300 rounded-xl">
+        <div class="h-[88vh] bg-gray-300 rounded-tl-3xl rounded-br-3xl">
+           <div class="flex justify-between">
             <button id="btn_close"
-                class="px-5 py-4 bg-red-500 rounded-tl-xl rounded-br-xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>Close</button>
+            class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>Close</button>
+            <span class="bg-indigo-700 px-5 py-4"></span>
+           </div>
             <div class="flex justify-content-betwen items-center px-4 pt-16">
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>

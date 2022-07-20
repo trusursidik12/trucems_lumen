@@ -2,30 +2,35 @@
 @section('title', 'Manual Calibration')
 @section('content')
     <div class="px-6 py-3 bg-gray-200 rounded">
-        <div class="flex justify-between mb-3">
-            <a href="{{ url('/') }}" role="button" class="rounded px-4 py-2 bg-gray-500 text-white">
-                Back
-            </a>
-            <div id="blowback-form" class="hidden flex-row space-x-3 items-center">
-                <div class="text-red-500"></div>
-                <button type="button" id="btn-start-blowback"
-                    class="rounded disabled:bg-gray-500 px-4 py-2 bg-indigo-700 text-white">
-                    Start Blow Back
-                </button>
-                <button type="button" id="btn-cancel-blowback"
-                    class="rounded disabled:bg-gray-500 px-4 py-2 bg-red-500 text-white">
-                    Close
-                </button>
-            </div>
-            <button id="btn-show-blowback" type="button"
-                class="rounded disabled:bg-gray-500 px-4 py-2 bg-indigo-700 text-white">
-                Blow Back
-            </button>
-        </div>
+       
         <div id="error-msg">
 
         </div>
-        <form action="" class="bg-gray-300 h-[83vh] rounded" id="form">
+        <form action="" class="bg-gray-300 h-[88vh]  rounded-tl-3xl rounded-br-3xl" id="form">
+            <div class="flex justify-between items-start">
+                <a href="{{ url('/') }}" role="button" class="rounded-tl-3xl rounded-br-3xl px-5 py-4 bg-red-500 text-white">
+                    Back
+                </a>
+                <div>
+                    <button id="btn-show-blowback" type="button"
+                        class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
+                        Blow Back
+                    </button>
+                    <div class="flex justify-between mb-3">
+                        <div id="blowback-form" class="hidden flex-row space-x-3 items-center">
+                            <div class="text-red-500"></div>
+                            <button type="button" id="btn-start-blowback"
+                                class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
+                                Start Blow Back
+                            </button>
+                            <button type="button" id="btn-cancel-blowback"
+                                class="disabled:bg-gray-500 px-5 py-4 bg-red-500 text-white">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <input type="hidden" name="type">
             <div class="flex justify-between space-x-3 items-center pt-[13vh]" id="section-form">
                 <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">

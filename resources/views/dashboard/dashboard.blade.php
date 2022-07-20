@@ -2,30 +2,28 @@
 @section('title', 'Dashboard')
 @section('content')
     <div class="px-6 py-3 bg-gray-200 rounded">
-        <div class="flex justify-start mb-3">
-            <div>
-                <span class="text-gray-700">Runtime : </span>
-                <span id="runtime" class="text-indigo-900 text-bold"></span>
-            </div>
-        </div>
         <div>
             <p class="px-3 py-2 bg-red-500 text-white rounded hidden" id="error-msg">
 
             </p>
         </div>
-        <div class="flex justify-between pt-[2vh] space-x-3">
-            <div class="w-2/3 px-6 py-3 bg-gray-300 rounded">
-                <div class="flex justify-end">
-                    <button type="button" id="btn-switch" class="rounded px-4 py-2 bg-indigo-500 text-white">
+        <div class="flex justify-between space-x-3">
+            <div class="w-2/3 bg-gray-300 rounded-tl-3xl rounded-br-3xl">
+                <div class="flex justify-between">
+                    <div class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
+                        <span>Runtime : </span>
+                        <span id="runtime" class="text-bold"></span>
+                    </div>
+                    <button type="button" id="btn-switch" class="px-5 py-4 bg-indigo-700 text-white">
                         mg/m<sup>3</sup>
                     </button>
                 </div>
-                <div id="section-values">
+                <div id="section-values" class="px-3">
                     @foreach ($sensorValues as $value)
                         <div class="flex justify-between items-start space-x-3">
                             <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
-                            <span class="text-2xl sensor-name">{!! $value->sensor->name !!}</span>
-                            <span class="text-8xl font-bold sensor-value h-64 flex items-center">
+                            <span class="text-2xl sensor-name pt-9">{!! $value->sensor->name !!}</span>
+                            <span class="text-8xl font-bold sensor-value h-64 flex items-center pt-16">
                                 <span>{{ $value->value }}</span>
                             </span>
                             <span class="text-2xl sensor-unit">{{ $value->sensor->unit->name }}</span>
@@ -47,9 +45,9 @@
                         class="{{ $plc->is_calibration == 1 ? '' : 'hide' }} active">
                         Calibration
                     </button>
-                    <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
-                        class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
-                        {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
+                    <button type="button" id="btn-start-mt" data-status="{{ ($plc->is_maintenance == 1) ? 0 : 1 }}"
+                        class="{{ ($plc->is_maintenance == 1) ? 'deactive' : '' }}">
+                        {{ ($plc->is_maintenance == 1) ? 'Stop Maintenance' : 'Start Maintenance' }}
                     </button>
                     <button onclick="return window.location.href=`{{ url('api/relay') }}`" id="btn-relay-test-menu"
                         class="{{ $plc->is_maintenance == 1 ? '' : 'hide' }} active">
@@ -282,7 +280,7 @@
                                     $('#btn-start-cems').html('Start CEMS')
                                     $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, 10000);
+                            }, 15000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")
