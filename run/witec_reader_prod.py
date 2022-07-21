@@ -158,8 +158,14 @@ try:
                             value3 = k[4:6]
                             value4 = k[6:8]
                             # end parse
-
-                            # msg = bytes.fromhex(ch['write_formula'])
+                            setSpan = "60 02 " + \
+                                str(value1)+" "+str(value2) + " " + \
+                                str(value3)+" "+str(value4)+" 7A 00"
+                            data_formula = ch['write_formula']
+                            formula = data_formula.replace("AA", str(value1)).replace(
+                                "BB", str(value2)).replace("CC", str(value3)).replace("DD", str(value4))
+                            print(formula)
+                            # msg = bytes.fromhex(formula)
                             # result = witec_ser.write(msg)
                             # data = str(witec_ser.readlines(1))
                             print(ch['write_formula'])
