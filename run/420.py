@@ -1,11 +1,7 @@
-from pymodbus.pdu import ModbusRequest
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
-from pymodbus.transaction import ModbusRtuFramer
 import requests
 import json
 import time
-import random
-import serial
 from time import sleep
 
 
