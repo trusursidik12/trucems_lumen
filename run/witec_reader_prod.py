@@ -131,9 +131,9 @@ try:
                     # start calibration
                     # start is zero calibration
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != None):
-                        # msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
-                        # result = witec_ser.write(msg)
-                        # data = str(witec_ser.readlines(1))
+                        msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
+                        result = witec_ser.write(msg)
+                        data = str(witec_ser.readlines(1))
                         patch_payload_configuration = 'target_value=-1'
                         response = requests.request(
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
@@ -157,9 +157,9 @@ try:
                             value4 = k[6:8]
                             # end parse
 
-                            # msg = bytes.fromhex(ch['write_formula'])
-                            # result = witec_ser.write(msg)
-                            # data = str(witec_ser.readlines(1))
+                            msg = bytes.fromhex(ch['write_formula'])
+                            result = witec_ser.write(msg)
+                            data = str(witec_ser.readlines(1))
                             print(ch['write_formula'])
 
                             patch_payload_configuration = 'target_value=-1'
