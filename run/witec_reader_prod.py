@@ -140,6 +140,9 @@ try:
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     # end is zero calibration
                     # is span calibration
+                    print(json_get_configuration["data"]["sensor_id"])
+                    print(ch['id'])
+                    exit()
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != None):
                         # start check to select parameters to calibration
                         if(json_get_configuration["data"]["sensor_id"] == ch['id']):
