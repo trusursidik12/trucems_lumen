@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\CalibrationLog;
 use App\Models\Configuration;
 use App\Models\SensorValue;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -78,4 +77,5 @@ class SetCalibrationController extends Controller
         $config->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0, 'sensor_id' => null]);
         return response()->json(["success" => true, "message" => 'Calibration Stoped']);
     }
+
 }

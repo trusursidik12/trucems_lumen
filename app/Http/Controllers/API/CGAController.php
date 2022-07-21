@@ -4,10 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
+use App\Models\Plc;
+use App\Models\SensorValue;
 use Exception;
 use Illuminate\Http\Request;
 
-class BlowbackController extends Controller
+class CGAController extends Controller
 {
     /**
      * set Blowback function
@@ -16,19 +18,19 @@ class BlowbackController extends Controller
      * @param Request $request
      * @return json
      */
-    public function setBlowback(Request $request)
+    public function setCGA(Request $request)
     {
         try {
-            $configuration = Configuration::find(1);
-            $configuration->update(['is_blowback' => 1]);
-            return response()->json(["success" => true, "message" => "Start Blowback!"]);
+            $plc = Plc::find(1);
+            $plc->update(['is_cga' => 1, 'd_off' => 0, 'is_calibration' => 0]);
+            return response()->json(["success" => true, "message" => "Start CGA!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(["success" => false, "errors" => $e->response->original]);
         }
     }
 
     /**
-     * check remaining blow back progress
+     * check remaining CGA progress
      *
      * @param [string] $type is condition span or zero
      * @param Request $request
@@ -36,25 +38,26 @@ class BlowbackController extends Controller
      */
     public function checkRemaining()
     {
-        $config = Configuration::find(1);
+        $plc = Plc::find(1);
         return response()->json([
             'success' => true,
-            'is_blowback' => $config->is_blowback,
+            'is_cga' => $plc->is_cga,
         ]);
     }
 
-    public function finishBlowback()
+    public function finishCGA()
     {
         try {
-            $config = Configuration::find(1);
-            $config->update([
-                'is_relay_open' => 0,
-                'end_blowback_at' => null,
-                'start_blowback_at' => null,
-            ]);
-            return response()->json(['success' => true, 'message' => 'Blowback was update to finished!']);
+            $plc = Plc::find(1);
+            $plc->update(['is_cga' => 2, 'd_off' => 1, 'is_calibration' => 1]);
+            return response()->json(['success' => true, 'message' => 'CGA was update to finished!']);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
+    }
+
+    public function process(){
+        $sensorValues = SensorValue::limit(10)->get();
+        return view('cga.process', compact('sensorValues'));
     }
 }

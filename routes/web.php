@@ -24,6 +24,7 @@ $router->group(['prefix' => 'sensor'], function () use ($router) {
     $router->get('/edit/{sensorId}', 'SensorController@edit');
     $router->patch('/update/{sensorId}', 'SensorController@update');
 });
+$router->get('/cga/process', 'API\CGAController@process');
 
 $router->group(['prefix' => 'calibration'], function () use ($router) {
     $router->get('/manual', 'CalibrationController@manual');
@@ -56,6 +57,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/blowback', 'API\BlowbackController@checkRemaining');
     $router->patch('/blowback', 'API\BlowbackController@setBlowback');
     $router->patch('/blowback/finish', 'API\BlowbackController@finishBlowback');
+    // CGA
+    $router->get('/cga', 'API\CGAController@checkRemaining');
+    $router->patch('/cga', 'API\CGAController@setCGA');
+    $router->patch('/cga/finish', 'API\CGAController@finishCGA');
     /**
      * Set Calibration
      */

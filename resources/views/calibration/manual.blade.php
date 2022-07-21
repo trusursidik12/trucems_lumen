@@ -122,7 +122,7 @@
             $('#btn-start-cga').click(function() {
                 $(this).html(`CGA...`)
                 $.ajax({
-                    url: `{{ url('api/blowback') }}`,
+                    url: `{{ url('api/cga') }}`,
                     type: 'PATCH',
                     dataType: 'json',
                     success: function(data) {
