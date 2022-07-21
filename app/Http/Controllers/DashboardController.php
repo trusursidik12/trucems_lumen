@@ -10,7 +10,8 @@ class DashboardController extends Controller
     public function index(){
         $plc = Plc::find(1);
         $sensorValues = SensorValue::limit(10)->get();
-        return view('dashboard.dashboard', compact('sensorValues', 'plc'));
+        $count = $sensorValues->count();
+        return view('dashboard.dashboard', compact('sensorValues', 'plc', 'count'));
     }
     public function qualityStandard(){
         return view('quality-standard.index');

@@ -58,6 +58,7 @@ class CGAController extends Controller
 
     public function process(){
         $sensorValues = SensorValue::limit(10)->get();
-        return view('cga.process', compact('sensorValues'));
+        $count = $sensorValues->count();
+        return view('cga.process', compact('sensorValues', 'count'));
     }
 }
