@@ -10,33 +10,40 @@
         <div class="flex justify-between space-x-3">
             <div class="w-full bg-gray-300 rounded-tl-3xl rounded-br-3xl">
                 <div class="flex justify-between">
-                    <button type="button" id="btn-close" class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
+                    <button type="button" id="btn-close"
+                        class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
                         Close
                     </button>
-                   <div>
+                    <div>
                         <button class="px-5 py-4 bg-indigo-700 text-white" id="timer">
                             <span id="second">0</span> sec
                         </button>
                         <button type="button" id="btn-switch" class="px-5 py-4 bg-indigo-700 text-white">
                             mg/m<sup>3</sup>
                         </button>
-                   </div>
+                    </div>
                 </div>
                 <div id="section-values" class="px-3 py-2 flex flex-col space-y-2">
                     @foreach ($sensorValues as $value)
-                        <div class="bg-gray-400 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7)}}rem] flex justify-between items-start" data-id="{{ $value->sensor_id }}">
+                        <div class="bg-gray-400 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7) }}rem] flex justify-between items-start"
+                            data-id="{{ $value->sensor_id }}">
                             <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
-                            <div class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[5rem] flex flex-col items-center justify-center">
+                            <div
+                                class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[5rem] flex flex-col items-center justify-center">
                                 <span class="text-2xl font-bold sensor-name">{!! $value->sensor->name !!}</span>
                             </div>
-                            <div class="section-sensor-value transition duration-500 bg-gray-500 text-white flex flex-1 flex-col h-full justify-center items-center">
+                            <div
+                                class="section-sensor-value transition duration-500 bg-gray-500 text-white flex flex-1 flex-col h-full justify-center items-center">
                                 <span class="text-5xl font-bold sensor-value">
                                     <span>{{ $value->value }}</span>
                                 </span>
                             </div>
-                            <div class="section-sensor-unit transition duration-500 bg-gray-400 flex w-[5rem] flex-col h-full justify-between items-center">
+                            <div
+                                class="section-sensor-unit transition duration-500 bg-gray-400 flex w-[5rem] flex-col h-full justify-between items-center">
                                 <span class="mt-3 text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
-                                <button data-id="{{ $value->sensor_id }}" data-isClicked="false" class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 text-white">Highlight</buttond>
+                                <button data-id="{{ $value->sensor_id }}" data-isClicked="false"
+                                    class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 text-white">Highlight
+                                    </buttond>
                             </div>
                         </div>
                     @endforeach
@@ -116,17 +123,18 @@
     </script>
     <script>
         $(document).ready(function() {
-            var seconds = 00; 
-            var tens = 00; 
-            function startTimer () {
-                tens++; 
+            var seconds = 00;
+            var tens = 00;
+
+            function startTimer() {
+                tens++;
                 if (tens > 99) {
                     seconds++;
                     $('#second').html(`0${seconds}`)
                     tens = 0;
                 }
-                
-                if (seconds > 9){
+
+                if (seconds > 9) {
                     $('#second').html(seconds)
                 }
                 setTimeout(startTimer, 10);
@@ -135,9 +143,9 @@
         })
     </script>
     <script>
-        $(document).ready(function(){
-            $(".btn-highlight").click(function(){
-                if($(this).data("isClicked") == "false" || $(this).data("isClicked") == undefined){
+        $(document).ready(function() {
+            $(".btn-highlight").click(function() {
+                if ($(this).data("isClicked") == "false" || $(this).data("isClicked") == undefined) {
                     $(this).html("Cancel")
                     $(this).data("isClicked", "true")
                     $(this).removeClass(['bg-indigo-700']).addClass('bg-gray-700')
@@ -149,7 +157,7 @@
                     sectionName.removeClass(['bg-gray-600']).addClass(['bg-indigo-600'])
                     sectionValue.removeClass(['bg-gray-500']).addClass(['bg-indigo-500'])
                     sectionUnit.removeClass(['bg-gray-400']).addClass(['bg-indigo-400'])
-                }else{
+                } else {
                     $(this).html("Highlight")
                     $(this).data("isClicked", "false")
                     $(this).addClass(['bg-indigo-700']).removeClass('bg-gray-700')
@@ -162,21 +170,23 @@
                     sectionValue.addClass(['bg-gray-500']).removeClass(['bg-indigo-500'])
                     sectionUnit.addClass(['bg-gray-400']).removeClass(['bg-indigo-400'])
                 }
-                
+
             })
         })
     </script>
     <script>
-        $(document).ready(function(){
-            $('#btn-close').click(function(){
+        $(document).ready(function() {
+            $('#btn-close').click(function() {
                 $.ajax({
-                    url : `{{ url('api/cga/finish') }}`,
-                    type : 'PATCH',
-                    dataType : 'json',
-                    data : $(this).serialize(),
-                    success : function(data){
-                        if(data.success){
-                            window.location.href=`{{ url('calibration/manual') }}`
+                    url: `{{ url('api/cga/finish') }}`,
+                    type: 'PATCH',
+                    dataType: 'json',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        if (data.success) {
+                            setTimeout(() => {
+                                window.location.href = `{{ url('calibration/manual') }}`
+                            }, 5000);
                         }
                     }
                 })
