@@ -14,10 +14,11 @@ class Sensor extends Model
      * @var array
      */
     protected $fillable = [
-        'unit_id', 'code', 'name' , 'formula', 'quality_standard'
+        'unit_id', 'code', 'name', 'read_formula', 'write_formula', 'quality_standard'
     ];
 
-    public function Unit(){
+    public function Unit()
+    {
         return $this->belongsTo(Unit::class);
     }
 }

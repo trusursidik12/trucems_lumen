@@ -22,7 +22,9 @@ class CreateSensorsTable extends Migration
                 ->onDelete('set null');
             $table->string('code')->nullable();
             $table->string('name')->nullable()->comment('Render HTML Value');;
-            $table->string('formula')->nullable();
+            $table->string('read_formula')->nullable();
+            $table->string('write_formula')->nullable();
+            $table->string('quality_standard')->nullable();
             $table->timestamps();
         });
     }

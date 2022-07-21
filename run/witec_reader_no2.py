@@ -17,7 +17,7 @@ try:
     # ser.open()
     link_url = "http://localhost/trucems/public/"
     # patch / update data sensor values
-    patch_url_sensor_values = link_url + "api/sensor-value/1"
+    patch_url_sensor_values = link_url + "api/sensor-value/"
     # post data into calibration_logs
     post_url_calibration_logs = link_url + "api/calibration-logs"
     # get data into calibration_logs
@@ -55,13 +55,16 @@ try:
         logf = open("error.log", "w")
         try:
             witec_ser = serial.Serial(portx, bps, timeout=timex)
-            # print("serial is connected!")
+
+            # set data now
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
 
+            # get configurations
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
             json_get_configuration = json.loads(response_configuration.text)
+            # check configurations response
             if(json_get_configuration["success"] == True):
                 # start alarm
                 msg_alarm = bytes.fromhex("50 00 00 00 00 00 55 00")
@@ -82,22 +85,18 @@ try:
                 response_sensor_lists = requests.request(
                     "GET", get_url_sensors, headers=headers, data=get_payload)
                 json_get_sensor = json.loads(response_sensor_lists.text)
-                # print(json_get_sensor)
                 for ch in json_get_sensor:
-                    if(ch['id'] == 1):
-                        read = "17 00"
-                    elif(ch['id'] == 2):
-                        read = "17 00"
-                    else:
-                        read = "17g 00"
-                    msg = bytes.fromhex("0F 00 00 00 00 00 55 00")
+                    msg = bytes.fromhex(str(ch['formula']))
                     result = witec_ser.write(msg)
-                    # print(result)
                     data = str(witec_ser.readlines(1))
-                    # print(data)
+                    print(data)
+                    # start parse data
                     data_value = data.replace("[b'", "").replace(
                         "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
+                    # end parse data
+                    # start check sensors is online
                     if(data_value):
+                        # start calibration condition check
                         if(json_get_configuration["data"]["is_calibration"] == 1):
                             round_value = round(float(data_value), 2)
                         else:
@@ -105,61 +104,65 @@ try:
                                 data_value) >= 0 else 0
                             round_value = round(
                                 float(data_value), 2)
+                        # end calibration condition check
                     else:
-                        # value set when the sensor disconnected!
+                        # value set when the sensor is offline!
                         round_value = -2.222
+                    # end check sensors is online
                     # update sensor values
                     patch_payload_sensor_values = 'value='+str(round_value)+''
                     response = requests.request(
-                        "PATCH", patch_url_sensor_values, headers=headers, data=patch_payload_sensor_values)
+                        "PATCH", patch_url_sensor_values + str(ch['id']), headers=headers, data=patch_payload_sensor_values)
+
+                    # start calibration
+                    # start is zero calibration
+                    if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
+
+                        msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
+                        result = witec_ser.write(msg)
+                        data = str(witec_ser.readlines(1))
+
+                        patch_payload_configuration = 'target_value=""'
+                        response = requests.request(
+                            "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
+                    # end is zero calibration
+                    # is span calibration
+                    if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != ''):
+
+                        response_calibration_logs = requests.request(
+                            "GET", get_url_calibration_logs, headers=headers, data=get_payload)
+                        json_get_calibation_logs = json.loads(
+                            response_calibration_logs.text)
+
+                        n = float_to_hex(
+                            json_get_configuration["data"]["target_value"])[2:]
+                        m = str(n)
+
+                        # reverse
+                        def little(string):
+                            t = bytearray.fromhex(string)
+                            t.reverse()
+                            return ''.join(format(x, '02x') for x in t).upper()
+
+                        k = little(m)
+                        # print(k)
+
+                        value1 = k[0:2]
+                        value2 = k[2:4]
+                        value3 = k[4:6]
+                        value4 = k[6:8]
+
+                        setSpan = "60 02 " + \
+                            str(value1)+" "+str(value2) + " " + \
+                            str(value3)+" "+str(value4)+" 7A 00"
+                        msg = bytes.fromhex(setSpan)
+                        result = witec_ser.write(msg)
+                        data = str(witec_ser.readlines(1))
+                        # print(response_delete.text)
+                    # end is span calibration
+                    # end calibration
                 # end read concentration
-                exit()
 
-                # is zero calibration
-                if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
-                    # print(json_get_configuration)
-
-                    msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
-                    result = witec_ser.write(msg)
-                    data = str(witec_ser.readlines(1))
-
-                    patch_payload_configuration = 'target_value=""'
-                    response = requests.request(
-                        "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
-
-                # is span calibration
-                if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != ''):
-
-                    response_calibration_logs = requests.request(
-                        "GET", get_url_calibration_logs, headers=headers, data=get_payload)
-                    json_get_calibation_logs = json.loads(
-                        response_calibration_logs.text)
-
-                    n = float_to_hex(
-                        json_get_configuration["data"]["target_value"])[2:]
-                    m = str(n)
-
-                    # reverse
-                    def little(string):
-                        t = bytearray.fromhex(string)
-                        t.reverse()
-                        return ''.join(format(x, '02x') for x in t).upper()
-
-                    k = little(m)
-                    # print(k)
-
-                    value1 = k[0:2]
-                    value2 = k[2:4]
-                    value3 = k[4:6]
-                    value4 = k[6:8]
-
-                    setSpan = "60 02 " + \
-                        str(value1)+" "+str(value2) + " " + \
-                        str(value3)+" "+str(value4)+" 7A 00"
-                    msg = bytes.fromhex(setSpan)
-                    result = witec_ser.write(msg)
-                    data = str(witec_ser.readlines(1))
-                    # print(response_delete.text)
             # else:
                 # print(json_get_configuration)
             time.sleep(1)

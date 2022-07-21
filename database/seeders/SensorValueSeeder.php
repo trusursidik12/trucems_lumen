@@ -22,6 +22,14 @@ class SensorValueSeeder extends Seeder
             [
                 'sensor_id' => 1,
                 'value' => 0,
+            ],
+            [
+                'sensor_id' => 2,
+                'value' => 0,
+            ],
+            [
+                'sensor_id' => 3,
+                'value' => 0,
             ]
         ]);
     }
