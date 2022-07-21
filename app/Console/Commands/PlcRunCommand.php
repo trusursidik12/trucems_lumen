@@ -21,6 +21,7 @@ class PlcRunCommand extends Command
     public $calibrationSteps;
     public $maintenanceSteps;
     public $blowback;
+    public $cga;
     public $timer = 5;
     public $isConnect;
     public function __construct()
@@ -55,7 +56,7 @@ class PlcRunCommand extends Command
         }
         // return true;
     }
-    public function flipFlopCalMt($d, $timer = 5, $loop = 2)
+    public function flipFlopCalMt($d, $timer = 15, $loop = 1)
     {
         for ($i = 1; $i <= $loop; $i++) {
             $this->sendQuery($d, "FF00");
@@ -186,6 +187,21 @@ class PlcRunCommand extends Command
                 }
                 $plc->update(['is_maintenance' => 0]);
                 return true;
+            } else if ($plc->is_cga == 1) {
+                if ($plc->d_off == 0) {
+                    $this->switchAll('0000');
+                    for ($i = 0; $i <= 7; $i++) {
+                        $this->sendQuery($i, ($i == 0 or $i == 2 or $i == 5 or $i == 6 ? 'FF00' : '0000'));
+                    }
+                    $plc->update(['d_off' => 1]);
+                }
+                return true;
+            } else if ($plc->is_cga == 2) {
+                for ($i = 0; $i <= 7; $i++) {
+                    $this->sendQuery($i, ($i == 7 ? 'FF00' : '0000'));
+                }
+                $plc->update(['is_cga' => 0]);
+                return true;
             } else {
                 return false;
             }
@@ -247,9 +263,9 @@ class PlcRunCommand extends Command
             ['d' => 3, 'data' => 'flipflop', 'sleep' => 2, 'loop' => 9, 'type' => 'sampling'], //sampling
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+            ['d' => 6, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 0, 'data' => 'FF00', 'sleep' => $timer],
             ['d' => 2, 'data' => 'FF00', 'sleep' => $timer],
@@ -269,12 +285,28 @@ class PlcRunCommand extends Command
         $this->blowback = [
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+            ['d' => 6, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
         ];
+        $this->cga = [
+            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+            ['d' => 0, 'data' => 'FF00', 'sleep' => $timer],
+            ['d' => 2, 'data' => 'FF00', 'sleep' => $timer],
+            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer,], //blowback
+            ['d' => 6, 'data' => 'FF00', 'sleep' => $timer,], //blowback
+        ];
+        // $this->blowback = [
+        //     ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+        //     ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
+        //     ['d' => 5, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+        //     ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
+        //     ['d' => 6, 'data' => 'flipflop', 'sleep' => $timer, 'loop' => 2, 'type' => 'blowback'], //blowback
+        //     ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+        //     ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
+        // ];
         $this->runPLC($initStep);
         sleep(5);
         $this->runPLC($startStep);

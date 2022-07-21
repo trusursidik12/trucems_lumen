@@ -130,7 +130,7 @@ try:
 
                     # start calibration
                     # start is zero calibration
-                    if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != ''):
+                    if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != None):
                         msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
                         result = witec_ser.write(msg)
                         data = str(witec_ser.readlines(1))
@@ -140,7 +140,7 @@ try:
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     # end is zero calibration
                     # is span calibration
-                    if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != ''):
+                    if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != None):
                         # start check to select parameters to calibration
                         if(json_get_configuration["data"]["sensor_id"] == ch['id']):
                             response_calibration_logs = requests.request(
@@ -184,11 +184,15 @@ try:
 
             # check configurations response
             if(json_get_configuration["success"] == True):
-                # value set when the USB Port disconnected!
-                round_value = -1.111
-                patch_payload_sensor_values = 'value='+str(round_value)+''
-                response = requests.request(
-                    "PATCH", patch_url_sensor_values, headers=headers, data=patch_payload_sensor_values)
+                # start read concentration
+                response_sensor_lists = requests.request(
+                    "GET", get_url_sensors, headers=headers, data=get_payload)
+                json_get_sensor = json.loads(response_sensor_lists.text)
+                for ch in json_get_sensor:
+                    round_value = -1.111
+                    patch_payload_sensor_values = 'value='+str(round_value)+''
+                    response = requests.request(
+                        "PATCH", patch_url_sensor_values + str(ch['id']), headers=headers, data=patch_payload_sensor_values)
             # else:
                 # print(json_get_configuration)
             logf.write("Error "+timestamp+" : \n"+str(e))
