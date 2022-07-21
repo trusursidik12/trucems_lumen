@@ -146,6 +146,8 @@ try:
                                 json_get_configuration["data"]["target_value"])[2:]
                             m = str(n)
 
+                            k = little(m)
+
                             # start parse
                             value1 = k[0:2]
                             value2 = k[2:4]
