@@ -8,10 +8,10 @@
         </div>
         <form action="" class="bg-gray-300 h-[88vh]  rounded-tl-3xl rounded-br-3xl" id="form">
             <div class="flex justify-between items-start">
-                <a href="{{ url('/') }}" role="button"
+                <button onclick="return window.location.href='{{ url('/') }}'" type="button" role="button"
                     class="rounded-tl-3xl rounded-br-3xl px-5 py-4 bg-red-500 text-white">
                     Back
-                </a>
+                </button>
                 <div>
                     <button id="btn-show-cga" type="button" class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
                         CGA
@@ -121,6 +121,7 @@
             //
             $('#btn-start-cga').click(function() {
                 $(this).html(`CGA...`)
+                $('button').prop('disabled', true)
                 $.ajax({
                     url: `{{ url('api/cga') }}`,
                     type: 'PATCH',
@@ -131,6 +132,8 @@
                                 window.location.href =
                                     `{{ url('cga/process') }}`
                             }, 5000);
+                        }else{
+                            $('button').prop('disabled', false)
                         }
                     }
                 })

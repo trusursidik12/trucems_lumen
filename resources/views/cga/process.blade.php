@@ -10,7 +10,7 @@
         <div class="flex justify-between space-x-3">
             <div class="w-full bg-gray-300 rounded-tl-3xl rounded-br-3xl">
                 <div class="flex justify-between">
-                    <button type="button" class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
+                    <button type="button" id="btn-close" class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
                         Close
                     </button>
                    <div>
@@ -163,6 +163,23 @@
                     sectionUnit.addClass(['bg-gray-400']).removeClass(['bg-indigo-400'])
                 }
                 
+            })
+        })
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#btn-close').click(function(){
+                $.ajax({
+                    url : `{{ url('api/cga/finish') }}`,
+                    type : 'PATCH',
+                    dataType : 'json',
+                    data : $(this).serialize(),
+                    success : function(data){
+                        if(data.success){
+                            window.location.href=`{{ url('calibration/manual') }}`
+                        }
+                    }
+                })
             })
         })
     </script>
