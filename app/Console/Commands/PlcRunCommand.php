@@ -244,7 +244,7 @@ class PlcRunCommand extends Command
 
     public function handle()
     {
-        Plc::find(1)->update(['is_calibration' => 0, 'is_maintenance' => 0, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
+        Plc::find(1)->update(['is_calibration' => 0, 'is_maintenance' => 0, 'is_cga' => 0, 'd_off' => 0, 'd0' => 0, 'd1' => 0, 'd2' => 0, 'd3' => 0, 'd4' => 0, 'd5' => 0, 'd6' => 0, 'd7' => 0]);
         Configuration::find(1)->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0]);
         // $this->info('PLC Command is running... [Ctrl+C] to stop it');
         $timer = 3;
@@ -289,13 +289,6 @@ class PlcRunCommand extends Command
             ['d' => 6, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
-        ];
-        $this->cga = [
-            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
-            ['d' => 0, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 2, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer,], //blowback
-            ['d' => 6, 'data' => 'FF00', 'sleep' => $timer,], //blowback
         ];
         // $this->blowback = [
         //     ['d' => -1, 'data' => '0000', 'sleep' => $timer],
