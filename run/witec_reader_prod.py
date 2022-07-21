@@ -140,9 +140,9 @@ try:
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     # end is zero calibration
                     # is span calibration
-                    print(json_get_configuration["data"]["sensor_id"])
-                    print(ch['id'])
-                    exit()
+                    # print(json_get_configuration["data"]["sensor_id"])
+                    # print(ch['id'])
+                    # exit()
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != None):
                         # start check to select parameters to calibration
                         if(json_get_configuration["data"]["sensor_id"] == ch['id']):
@@ -167,6 +167,10 @@ try:
                             msg = bytes.fromhex(ch['write_formula'])
                             result = witec_ser.write(msg)
                             data = str(witec_ser.readlines(1))
+
+                            patch_payload_configuration = 'target_value=""'
+                            response = requests.request(
+                                "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                         # start check to select parameters to calibration
                     # end is span calibration
                     # end calibration
