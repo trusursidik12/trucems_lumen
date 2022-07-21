@@ -22,14 +22,12 @@
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>
                     <div id="section-values">
-                        @foreach ($sensorValues as $value)
-                            <div class="flex justify-between items-center px-3 section-value"
-                                data-sensor-id="{{ $value->sensor_id }}">
-                                <span class="text-xl sensor-name">{!! $value->sensor->name !!}</span>
-                                <span class="text-8xl font-bold text-indigo-700 sensor-value"></span>
-                                <span class="text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
-                            </div>
-                        @endforeach
+                        <div class="flex justify-between items-center px-3 section-value"
+                            data-sensor-id="{{ $sensorValue->sensor_id }}">
+                            <span class="text-xl sensor-name">{!! $sensorValue->sensor->name !!}</span>
+                            <span class="text-8xl font-bold text-indigo-700 sensor-value"></span>
+                            <span class="text-xl sensor-unit">{{ $sensorValue->sensor->unit->name }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="w-1/2" id="section-right">

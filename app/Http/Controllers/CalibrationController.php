@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CalibrationLog;
 use App\Models\Configuration;
+use App\Models\Sensor;
 use App\Models\SensorValue;
 
 class CalibrationController extends Controller
@@ -16,7 +17,8 @@ class CalibrationController extends Controller
             $type = ($calibrationLog->calibration_type == "2" ? "span" : "zero");
             return redirect(url("calibration/manual/" . $type . "/process"));
         }
-        return view('calibration.manual', compact('config'));
+        $sensors = Sensor::get();
+        return view('calibration.manual', compact('config', 'sensors'));
     }
     public function logs()
     {
@@ -27,9 +29,8 @@ class CalibrationController extends Controller
     {
         $type = strtoupper($type);
         $mode = strtoupper($mode);
-        $sensorValues = SensorValue::limit(10)->get();
-        $calibrationLog = CalibrationLog::latest('id')->first();
-        $calibrationType = ($type == "SPAN" ? 2 : 1);
-        return view('calibration.process', compact('type', 'mode', 'sensorValues', 'calibrationLog'));
+        $config = Configuration::find(1);
+        $sensorValue = SensorValue::where(['sensor_id' => $config->sensor_id])->first();
+        return view('calibration.process', compact('type', 'mode', 'sensorValue'));
     }
 }

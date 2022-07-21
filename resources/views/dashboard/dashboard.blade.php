@@ -18,15 +18,22 @@
                         mg/m<sup>3</sup>
                     </button>
                 </div>
-                <div id="section-values" class="px-3">
+                <div id="section-values" class="px-3 py-2 flex flex-col space-y-2">
                     @foreach ($sensorValues as $value)
-                        <div class="flex justify-between items-start space-x-3">
+                        <div class="bg-gray-400 h-[7rem] flex justify-between items-start" data-id="{{ $value->sensor_id }}">
                             <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
-                            <span class="text-2xl sensor-name pt-9">{!! $value->sensor->name !!}</span>
-                            <span class="text-8xl font-bold sensor-value h-64 flex items-center pt-16">
-                                <span>{{ $value->value }}</span>
-                            </span>
-                            <span class="text-2xl sensor-unit">{{ $value->sensor->unit->name }}</span>
+                            <div class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[5rem] flex flex-col items-center justify-center">
+                                <span class="text-2xl font-bold sensor-name">{!! $value->sensor->name !!}</span>
+                            </div>
+                            <div class="section-sensor-value transition duration-500 bg-gray-500 text-white flex flex-1 flex-col h-full justify-center items-center">
+                                <span class="text-5xl font-bold sensor-value">
+                                    <span>{{ $value->value }}</span>
+                                </span>
+                            </div>
+                            <div class="section-sensor-unit transition duration-500 bg-gray-400 flex w-[5rem] flex-col h-full justify-between items-center">
+                                <span class="mt-3 text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
+                                <button data-id="{{ $value->sensor_id }}" data-isClicked="false" class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 text-white">Highlight</buttond>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -295,6 +302,38 @@
                         }
                     }
                 })
+            })
+        })
+    </script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-highlight").click(function(){
+                if($(this).data("isClicked") == "false" || $(this).data("isClicked") == undefined){
+                    $(this).html("Cancel")
+                    $(this).data("isClicked", "true")
+                    $(this).removeClass(['bg-indigo-700']).addClass('bg-gray-700')
+                    let sensorId = $(this).data('id')
+                    let section = $(`div[data-id="${sensorId}"]`)
+                    let sectionName = section.find('.section-sensor-name')
+                    let sectionValue = section.find('.section-sensor-value')
+                    let sectionUnit = section.find('.section-sensor-unit')
+                    sectionName.removeClass(['bg-gray-600']).addClass(['bg-indigo-600'])
+                    sectionValue.removeClass(['bg-gray-500']).addClass(['bg-indigo-500'])
+                    sectionUnit.removeClass(['bg-gray-400']).addClass(['bg-indigo-400'])
+                }else{
+                    $(this).html("Highlight")
+                    $(this).data("isClicked", "false")
+                    $(this).addClass(['bg-indigo-700']).removeClass('bg-gray-700')
+                    let sensorId = $(this).data('id')
+                    let section = $(`div[data-id="${sensorId}"]`)
+                    let sectionName = section.find('.section-sensor-name')
+                    let sectionValue = section.find('.section-sensor-value')
+                    let sectionUnit = section.find('.section-sensor-unit')
+                    sectionName.addClass(['bg-gray-600']).removeClass(['bg-indigo-600'])
+                    sectionValue.addClass(['bg-gray-500']).removeClass(['bg-indigo-500'])
+                    sectionUnit.addClass(['bg-gray-400']).removeClass(['bg-indigo-400'])
+                }
+                
             })
         })
     </script>

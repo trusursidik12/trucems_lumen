@@ -22,7 +22,9 @@ class SetCalibrationController extends Controller
     public function getRealtimeValue()
     {
         try {
-            $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
+            $config = Configuration::select('sensor_id')->find(1);
+            $sensorValues = SensorValue::where(['sensor_id' => $config->sensor_id])
+                ->with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
                 ->orderBy("id", "desc")->get();
             return response()->json([
                 'success' => true,
@@ -36,10 +38,11 @@ class SetCalibrationController extends Controller
         }
     }
 
-    public function calibrationStart()
+    public function calibrationStart($sensorId, Request $request)
     {
+        $calibrationType = $request->calibration_type;
         $config = Configuration::find(1);
-        $config->update(['is_calibration' => 1]);
+        $config->update(['is_calibration' => 1, 'sensor_id' => $sensorId, 'calibration_type' => $calibrationType]);
         return response()->json(["success" => true, "message" => 'Calibration Start']);
     }
 
@@ -72,7 +75,7 @@ class SetCalibrationController extends Controller
     public function closeCalibration()
     {
         $config = Configuration::first();
-        $config->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0]);
+        $config->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0, 'sensor_id' => null]);
         return response()->json(["success" => true, "message" => 'Calibration Stoped']);
     }
 }

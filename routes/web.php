@@ -63,7 +63,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     /**
      * Start Calibration
      */
-    $router->post('/calibration-start', 'API\SetCalibrationController@calibrationStart');
+    $router->post('/calibration-start/{sensorId}', 'API\SetCalibrationController@calibrationStart');
     $router->post('/calibration-set-value/{type}', 'API\SetCalibrationController@offsetAndGain');
     $router->post('/calibration-stop', 'API\SetCalibrationController@closeCalibration');
 

@@ -31,32 +31,35 @@
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="type">
-            <div class="flex justify-between space-x-3 items-center pt-[13vh]" id="section-form">
+            @foreach ($sensors as $sensor)
+            <div class="flex justify-between space-x-3 items-center" id="section-form">
                 <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
-                    <button id="btn_zero" type="button"
-                        class="btn-start disabled:bg-gray-500  rounded w-full py-4 h-56 text-xl font-bold bg-indigo-500 text-white">
-                        Zero Calibration
+                    <button data-sensorId="{{ $sensor->id }}" type="button"
+                        class="btn-start btn_zero disabled:bg-gray-500 w-full py-4 h-[7rem] text-xl font-bold bg-indigo-500 text-white">
+                        {!! $sensor->name !!} ZERO Calibration
                     </button>
                 </div>
                 <div class="w-1/2 px-6 py-3">
-                    <button data-type="span" id="btn_span" type="button"
-                        class="btn-start disabled:bg-gray-500  rounded w-full py-4 h-56 text-xl font-bold bg-indigo-500 text-white">
-                        SPAN Calibration
+                    <button data-sensorId="{{ $sensor->id }}" data-type="span" type="button"
+                        class="btn-start btn_span disabled:bg-gray-500 w-full py-4 h-[7rem] text-xl font-bold bg-indigo-500 text-white">
+                        {!! $sensor->name !!} SPAN Calibration
                     </button>
                 </div>
             </div>
+            @endforeach
         </form>
     </div>
 @endsection
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#btn_zero').click(function() {
+            $('.btn_zero').click(function() {
+                let sensorId = $(this).attr("data-sensorId")
                 $.ajax({
-                    url: `{{ url('api/calibration-start') }}`,
+                    url: `{{ url('api/calibration-start') }}/${sensorId}`,
                     type: 'POST',
                     dataType: 'json',
+                    data : {calibration_type : 1},
                     success: function(data) {
                         if (data.success) {
                             window.location.href =
@@ -65,11 +68,13 @@
                     }
                 })
             })
-            $('#btn_span').click(function() {
+            $('.btn_span').click(function() {
+                let sensorId = $(this).attr("data-sensorId")
                 $.ajax({
-                    url: `{{ url('api/calibration-start') }}`,
+                    url: `{{ url('api/calibration-start') }}/${sensorId}`,
                     type: 'POST',
                     dataType: 'json',
+                    data : {calibration_type : 2},
                     success: function(data) {
                         if (data.success) {
                             window.location.href =
