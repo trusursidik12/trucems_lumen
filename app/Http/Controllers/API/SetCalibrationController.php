@@ -74,8 +74,7 @@ class SetCalibrationController extends Controller
     public function closeCalibration()
     {
         $config = Configuration::first();
-        $config->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0, 'sensor_id' => null]);
+        $config->update(['is_calibration' => 0, 'is_blowback' => 0, 'calibration_type' => 0, 'sensor_id' => null, 'target_value']);
         return response()->json(["success" => true, "message" => 'Calibration Stoped']);
     }
-
 }
