@@ -189,7 +189,9 @@ class PlcRunCommand extends Command
                 return true;
             } else if ($plc->is_cga == 1) {
                 if ($plc->d_off == 0) {
-                    $this->switchAll('0000');
+                    for ($i = 0; $i <= 7; $i++) {
+                        $this->sendQuery($i, '0000');
+                    }
                     for ($i = 0; $i <= 7; $i++) {
                         $this->sendQuery($i, ($i == 0 or $i == 2 or $i == 5 or $i == 6 ? 'FF00' : '0000'));
                     }
