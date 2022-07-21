@@ -1,2 +1,0 @@
-Error 2022-07-18 15:25:43 : 
-could not open port '/dev/ttyWITEC': FileNotFoundError(2, 'The system cannot find the path specified.', None, 3)
