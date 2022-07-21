@@ -49,7 +49,7 @@ class CGAController extends Controller
     {
         try {
             $plc = Plc::find(1);
-            $plc->update(['is_cga' => 2, 'd_off' => 1, 'is_calibration' => 1]);
+            $plc->update(['is_cga' => 2]);
             return response()->json(['success' => true, 'message' => 'CGA was update to finished!']);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);

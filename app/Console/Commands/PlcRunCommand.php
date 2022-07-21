@@ -199,7 +199,7 @@ class PlcRunCommand extends Command
                 for ($i = 0; $i <= 7; $i++) {
                     $this->sendQuery($i, ($i == 7 ? 'FF00' : '0000'));
                 }
-                $plc->update(['is_cga' => 0]);
+                $plc->update(['is_calibration' => 1, 'is_cga' => 0, 'd_off' => 1]);
                 return true;
             } else {
                 return false;
