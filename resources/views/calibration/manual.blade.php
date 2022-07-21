@@ -13,7 +13,8 @@
                     Back
                 </button>
                 <div>
-                    <button id="btn-show-cga" type="button" class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
+                    <button id="btn-show-cga" type="button"
+                        class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
                         CGA
                     </button>
                     <button id="btn-show-blowback" type="button"
@@ -132,7 +133,7 @@
                                 window.location.href =
                                     `{{ url('cga/process') }}`
                             }, 5000);
-                        }else{
+                        } else {
                             $('button').prop('disabled', false)
                         }
                     }
