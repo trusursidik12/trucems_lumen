@@ -62,7 +62,7 @@ class SetCalibrationController extends Controller
             if (isset($targetValue)) {
                 $config = Configuration::find(1);
                 $config->update(['calibration_type' => $type, 'target_value' => $targetValue]);
-                CalibrationLog::create(['sensor_id' => 1, 'calibration_type' => $type, 'start_value' => $currentValue, 'target_value' => $targetValue, 'result_value' => ($type == 1 ? $currentValue + 0 : $currentValue / $targetValue)]);
+                CalibrationLog::create(['sensor_id' => $config->sensor_id, 'calibration_type' => $type, 'start_value' => $currentValue, 'target_value' => $targetValue, 'result_value' => ($type == 1 ? $currentValue + 0 : round($currentValue / $targetValue, 3))]);
                 return response()->json(["success" => true, "message" => 'Target Value Has Been Saved']);
             }
             return response()->json(["success" => false, "error" => 'Saving Target Value Failed']);

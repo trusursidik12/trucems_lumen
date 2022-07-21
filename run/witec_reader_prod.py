@@ -131,19 +131,19 @@ try:
                     # start calibration
                     # start is zero calibration
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != None):
-                        msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
-                        result = witec_ser.write(msg)
-                        data = str(witec_ser.readlines(1))
+                        # msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
+                        # result = witec_ser.write(msg)
+                        # data = str(witec_ser.readlines(1))
                         patch_payload_configuration = 'target_value=-1'
-                        print(patch_payload_configuration)
                         response = requests.request(
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
+                        print("zero")
                     # end is zero calibration
                     # is span calibration
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != None):
                         # start check to select parameters to calibration
                         if(json_get_configuration["data"]["sensor_id"] == ch['id']):
-
+                            print("cek span")
                             n = float_to_hex(
                                 json_get_configuration["data"]["target_value"])[2:]
                             m = str(n)
@@ -157,13 +157,15 @@ try:
                             value4 = k[6:8]
                             # end parse
 
-                            msg = bytes.fromhex(ch['write_formula'])
-                            result = witec_ser.write(msg)
-                            data = str(witec_ser.readlines(1))
+                            # msg = bytes.fromhex(ch['write_formula'])
+                            # result = witec_ser.write(msg)
+                            # data = str(witec_ser.readlines(1))
+                            print(ch['write_formula'])
 
                             patch_payload_configuration = 'target_value=-1'
                             response = requests.request(
                                 "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
+                            print("SPAN")
                         # start check to select parameters to calibration
                     # end is span calibration
                     # end calibration
