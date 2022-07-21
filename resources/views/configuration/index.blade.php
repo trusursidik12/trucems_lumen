@@ -13,7 +13,9 @@
                 <a href="{{ url('/') }}" role="button" class="rounded-tl-3xl rounded-br-3xl px-5 py-4 bg-red-500 text-white">
                     Back
                 </a>
-                <span class="bg-indigo-700 px-5 py-4"></span>
+                <a href="{{ url("sensors") }}" class="bg-indigo-700 px-5 py-4 text-white">
+                    Sensors &rarr;
+                </a>
            </div>
             <div id="error-msg" class="px-4">
             </div>

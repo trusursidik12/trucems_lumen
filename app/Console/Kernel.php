@@ -20,9 +20,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         StopAppCommand::class,
         DemoCommand::class,
-        PlcCommand::class,
         PlcRunCommand::class,
-        PlcDemoCommand::class,
     ];
 
     /**

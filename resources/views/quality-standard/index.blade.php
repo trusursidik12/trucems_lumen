@@ -8,7 +8,9 @@
                 <a href="{{ url('/') }}" role="button" class="rounded-tl-3xl rounded-br-3xl px-5 py-4 bg-red-500 text-white">
                     Back
                 </a>
-                <span class="bg-indigo-700 px-5 py-4"></span>
+                <span class="bg-indigo-700 px-5 py-4 text-white">
+                    Baku Mutu
+                </span>
 
             </div>
             <div class="px-6 py-3">
