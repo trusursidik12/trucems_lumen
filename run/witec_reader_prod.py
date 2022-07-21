@@ -147,8 +147,10 @@ try:
                             n = float_to_hex(
                                 json_get_configuration["data"]["target_value"])[2:]
                             m = str(n)
-
+                            print(
+                                json_get_configuration["data"]["target_value"])
                             k = little(m)
+                            print(k)
 
                             # start parse
                             value1 = k[0:2]
@@ -157,9 +159,9 @@ try:
                             value4 = k[6:8]
                             # end parse
 
-                            msg = bytes.fromhex(ch['write_formula'])
-                            result = witec_ser.write(msg)
-                            data = str(witec_ser.readlines(1))
+                            # msg = bytes.fromhex(ch['write_formula'])
+                            # result = witec_ser.write(msg)
+                            # data = str(witec_ser.readlines(1))
                             print(ch['write_formula'])
 
                             patch_payload_configuration = 'target_value=-1'
