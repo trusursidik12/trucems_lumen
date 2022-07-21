@@ -42,9 +42,9 @@ try:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     # port on linux
-    portx = "/dev/ttyWITEC"
+    # portx = "/dev/ttyWITEC"
     # port on windows
-    # portx = "COM11"
+    portx = "COM11"
     bps = 115200
     # time-out,None: Always wait for the operation, 0 to return the request result immediately, and the other values are waiting time-out.(In seconds)
     timex = 1
@@ -134,22 +134,15 @@ try:
                         msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
                         result = witec_ser.write(msg)
                         data = str(witec_ser.readlines(1))
-
-                        patch_payload_configuration = 'target_value=""'
+                        patch_payload_configuration = 'target_value=-1'
+                        print(patch_payload_configuration)
                         response = requests.request(
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                     # end is zero calibration
                     # is span calibration
-                    # print(json_get_configuration["data"]["sensor_id"])
-                    # print(ch['id'])
-                    # exit()
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != None):
                         # start check to select parameters to calibration
                         if(json_get_configuration["data"]["sensor_id"] == ch['id']):
-                            response_calibration_logs = requests.request(
-                                "GET", get_url_calibration_logs, headers=headers, data=get_payload)
-                            json_get_calibation_logs = json.loads(
-                                response_calibration_logs.text)
 
                             n = float_to_hex(
                                 json_get_configuration["data"]["target_value"])[2:]
@@ -168,7 +161,7 @@ try:
                             result = witec_ser.write(msg)
                             data = str(witec_ser.readlines(1))
 
-                            patch_payload_configuration = 'target_value=""'
+                            patch_payload_configuration = 'target_value=-1'
                             response = requests.request(
                                 "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
                         # start check to select parameters to calibration
@@ -208,6 +201,6 @@ try:
 except Exception as e:
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-    # print("[X]  Not connected ", e)
+    print("[X]  Not connected ", e)
     logf.write("Error "+timestamp+" : \n".format(str(e)))
     logf.close()
