@@ -11,14 +11,14 @@
             <div class="w-full bg-gray-300 rounded-tl-3xl rounded-br-3xl">
                 <div class="flex justify-between">
                     <button type="button" id="btn-close"
-                        class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white">
+                        class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white disabled:bg-gray-500">
                         Close
                     </button>
                     <div>
-                        <button class="px-5 py-4 bg-indigo-700 text-white" id="timer">
+                        <button class="px-5 py-4 bg-indigo-700 disabled:bg-gray-500 text-white" id="timer">
                             <span id="second">0</span> sec
                         </button>
-                        <button type="button" id="btn-switch" class="px-5 py-4 bg-indigo-700 text-white">
+                        <button type="button" id="btn-switch" class="px-5 py-4 bg-indigo-700 disabled:bg-gray-500 text-white">
                             mg/m<sup>3</sup>
                         </button>
                     </div>
@@ -42,7 +42,7 @@
                                 class="section-sensor-unit transition duration-500 bg-gray-400 flex w-[5rem] flex-col h-full justify-between items-center">
                                 <span class="mt-3 text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
                                 <button data-id="{{ $value->sensor_id }}" data-isClicked="false"
-                                    class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 text-white">Highlight
+                                    class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 disabled:bg-gray-500 text-white">Highlight
                                     </buttond>
                             </div>
                         </div>
@@ -177,6 +177,8 @@
     <script>
         $(document).ready(function() {
             $('#btn-close').click(function() {
+                $(this).html('Loading...')
+                $('button').prop('disabled', true)
                 $.ajax({
                     url: `{{ url('api/cga/finish') }}`,
                     type: 'PATCH',
@@ -187,6 +189,9 @@
                             setTimeout(() => {
                                 window.location.href = `{{ url('calibration/manual') }}`
                             }, 5000);
+                        }else{
+                            $(this).html('Close')
+                            $('button').prop('disabled', false)
                         }
                     }
                 })

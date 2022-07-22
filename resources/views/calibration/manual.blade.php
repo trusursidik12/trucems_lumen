@@ -48,6 +48,8 @@
                 </div>
             </div>
             <div class="h-[12rem] hidden"></div>
+            <div class="h-[20rem] hidden"></div>
+            <div class="h-[7rem] hidden"></div>
             @foreach ($sensors as $sensor)
                 <div class="flex justify-between space-x-3 items-center" id="section-form">
                     <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
