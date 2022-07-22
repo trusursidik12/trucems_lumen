@@ -24,8 +24,8 @@
                             data-id="{{ $value->sensor_id }}">
                             <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
                             <div
-                                class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[5rem] flex flex-col items-center justify-center">
-                                <span class="text-2xl font-bold sensor-name">{!! $value->sensor->name !!}</span>
+                                class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[9rem] flex flex-col items-center justify-center">
+                                <span class="text-2xl font-bold sensor-name px-2">{!! $value->sensor->name !!}</span>
                             </div>
                             <div
                                 class="section-sensor-value transition duration-500 bg-gray-500 text-white flex flex-1 flex-col h-full justify-center items-center">
