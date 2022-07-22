@@ -123,13 +123,12 @@
                         $('#concentrate').html('')
                         let sensorValues = data.data
                         sensorValues.map(function(value,index) {
-                            concentrate = Math.round((0.0409 * value.value * 34.08) * 1000) / 1000
-                            // $('#concentrate').append(`${concentrate} mg/m<sup>3</sup>`)
+                            concentrate = eval(value.sensor.unit_formula)
                             // Formula is (0.0409 * concentrate * 34.08)
                             // * 1000 and / 1000 is for rounding 3 decimal places
                             // Set Quality Standard
                             let line = `line${index+1}`
-                            chartQualityStandard.options.plugins.annotation.annotations[line].label.content = `Baku Mutu ${value.sensor.code.toUpperCase()} - ${value.sensor.quality_standard} mg/m³`
+                            chartQualityStandard.options.plugins.annotation.annotations[line].label.content = `Baku Mutu ${value.sensor.code.toUpperCase()} : ${value.sensor.quality_standard} mg/m³`
                             chartQualityStandard.options.plugins.annotation.annotations[line].yMin = value.sensor.quality_standard
                             chartQualityStandard.options.plugins.annotation.annotations[line].yMax = value.sensor.quality_standard
                             // Set Concentrate Value

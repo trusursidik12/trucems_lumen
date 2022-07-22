@@ -102,8 +102,7 @@
                             let sensorValues = data.data
                             sensorValues.map(function(value) {
                                 if (unit === "mg/m3") {
-                                    concentrate = Math.round((0.0409 * value.value * 34.08) *
-                                        1000) / 1000
+                                    concentrate = eval(value.sensor.unit_formula)
                                     // Formula is (0.0409 * concentrate * 34.08)
                                     // * 1000 and / 1000 is for rounding 3 decimal places
                                 } else {
