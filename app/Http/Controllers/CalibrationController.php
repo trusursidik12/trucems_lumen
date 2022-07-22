@@ -31,7 +31,11 @@ class CalibrationController extends Controller
         $type = strtoupper($type);
         $mode = strtoupper($mode);
         $config = Configuration::find(1);
-        $sensorValue = SensorValue::where(['sensor_id' => $config->sensor_id])->first();
-        return view('calibration.process', compact('type', 'mode', 'sensorValue'));
+        if($type == "ZERO"){
+            $sensorValues = SensorValue::get();
+        }else{
+            $sensorValues = SensorValue::where(['sensor_id' => $config->sensor_id])->first();
+        }
+        return view('calibration.process', compact('type', 'mode', 'sensorValues'));
     }
 }

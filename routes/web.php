@@ -65,7 +65,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
      * Set Calibration
      */
     $router->patch('/set-calibration/{mode}/{type}', 'API\SetCalibrationController@setCalibration');
-    $router->get('/calibration/get-realtime-value', 'API\SetCalibrationController@getRealtimeValue');
+    $router->get('/calibration/get-realtime-value/{type}', 'API\SetCalibrationController@getRealtimeValue');
 
     /**
      * Start Calibration

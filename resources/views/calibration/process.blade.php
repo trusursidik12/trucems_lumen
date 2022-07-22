@@ -22,12 +22,24 @@
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>
                     <div id="section-values">
+                        @if ($type == "ZERO")
+                            @foreach ($sensorValues as $value)
+                                <div class="flex justify-between items-center px-3 section-value border-b border-gray-400 py-2"
+                                    data-sensor-id="{{ $value->sensor_id }}">
+                                    <span class="text-xl sensor-name">{!! $value->sensor->name !!}</span>
+                                    <span class="text-7xl font-bold text-indigo-700 sensor-value"></span>
+                                    <span class="text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
+                                </div>
+                            @endforeach
+                        @else
                         <div class="flex justify-between items-center px-3 section-value"
-                            data-sensor-id="{{ $sensorValue->sensor_id }}">
-                            <span class="text-xl sensor-name">{!! $sensorValue->sensor->name !!}</span>
+                            data-sensor-id="{{ $sensorValues->sensor_id }}">
+                            <span class="text-xl sensor-name">{!! $sensorValues->sensor->name !!}</span>
                             <span class="text-8xl font-bold text-indigo-700 sensor-value"></span>
-                            <span class="text-xl sensor-unit">{{ $sensorValue->sensor->unit->name }}</span>
+                            <span class="text-xl sensor-unit">{{ $sensorValues->sensor->unit->name }}</span>
                         </div>
+                        @endif
+                       
                     </div>
                 </div>
                 <div class="w-1/2" id="section-right">
@@ -45,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full px-3">
+            <div class="w-full px-3 mt-2">
                 <div id="error-msg"></div>
                 <form id="form" class="mx-auto max-w-screen-md text-center">
                     <input type="hidden" id="current_value" name="current_value" value="">
@@ -143,7 +155,7 @@
             function getRealtimeValue() {
                 let random = Math.floor(Math.random() * 100)
                 $.ajax({
-                    url: `{{ url('api/calibration/get-realtime-value') }}?t=${random}`,
+                    url: `{{ url('api/calibration/get-realtime-value/'.($type == "ZERO" ? 1 : 2)) }}?t=${random}`,
                     type: 'get',
                     dataType: 'json',
                     data: $(this).serialize(),
@@ -157,7 +169,7 @@
                                     `.section-value[data-sensor-id=${value.sensor_id}]`)
                                 div.find('.sensor-value').html(`${value.value}`)
                                 $('#current_value').val(value.value)
-                                $('.last-value').html(`${value.value}`)
+                                // $('.last-value').html(`${value.value}`)
                             })
                         }
                     }
@@ -178,11 +190,11 @@
                     success: function(data) {
                         if (data.success) {
                             $('#error-msg').html(`
-                            <p class="rounded p-4 font-medium text-white bg-green-500 my-4">${data.message}!</p>
+                            <p class="rounded px-4 py-1 font-medium text-white bg-green-500 my-4">${data.message}!</p>
                             `)
                         } else {
                             $('#error-msg').html(`
-                            <p class="rounded p-4 font-medium text-white bg-red-500 my-4">${data.error}!</p>
+                            <p class="rounded px-4 py-1 font-medium text-white bg-red-500 my-4">${data.error}!</p>
                             `)
                         }
                         setTimeout(() => {

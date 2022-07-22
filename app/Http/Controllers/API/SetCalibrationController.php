@@ -18,13 +18,18 @@ class SetCalibrationController extends Controller
      * @param Request $request
      * @return json
      */
-    public function getRealtimeValue()
+    public function getRealtimeValue($type=2)
     {
         try {
-            $config = Configuration::select('sensor_id')->find(1);
-            $sensorValues = SensorValue::where(['sensor_id' => $config->sensor_id])
-                ->with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
+            if($type == 2){
+                $config = Configuration::select('sensor_id')->find(1);
+                $sensorValues = SensorValue::where(['sensor_id' => $config->sensor_id])
+                    ->with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
+                    ->orderBy("id", "desc")->get();
+            }else{
+                $sensorValues = SensorValue::with(['sensor:id,unit_id,code,name', 'sensor.unit:id,name'])
                 ->orderBy("id", "desc")->get();
+            }
             return response()->json([
                 'success' => true,
                 'sensor_values' => $sensorValues,

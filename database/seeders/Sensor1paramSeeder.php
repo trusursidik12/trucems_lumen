@@ -27,5 +27,6 @@ class Sensor1ParamSeeder extends Seeder
                 'quality_standard' => 100 // 20 m/g = Recovery, 40 m/g lime klin)
             ],
         ]);
+        $this->call(SensorValue1ParamSeeder::class);
     }
 }
