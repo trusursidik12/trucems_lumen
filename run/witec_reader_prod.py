@@ -79,7 +79,6 @@ try:
                 msg_alarm = bytes.fromhex("50 00 00 00 00 00 55 00")
                 result = witec_ser.write(msg_alarm)
                 data_alarm = str(witec_ser.readlines(1))
-                print(data_alarm)
                 data_value_alarm = data_alarm.replace("[b'", "").replace(
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                 if(data_value_alarm):
@@ -96,11 +95,11 @@ try:
                     "GET", get_url_sensors, headers=headers, data=get_payload)
                 json_get_sensor = json.loads(response_sensor_lists.text)
                 for ch in json_get_sensor:
-                    msg = bytes.fromhex("0F 00 00 00 00 00 55 00")
+                    msg = bytes.fromhex(ch['read_formula'])
                     result = witec_ser.write(msg)
                     data_conc = str(witec_ser.readlines(1))
-                    # start parse data
                     print(data_conc)
+                    # start parse data
                     data_value = data_conc.replace("[b'", "").replace(
                         "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                     # end parse data
@@ -135,7 +134,7 @@ try:
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != None):
                         msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
                         result = witec_ser.write(msg)
-                        data = str(witec_ser.readlines(1))
+                        data_zero = str(witec_ser.readlines(1))
                         patch_payload_configuration = 'target_value=-1'
                         response = requests.request(
                             "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
@@ -161,7 +160,7 @@ try:
                                 "BB", str(value2)).replace("CC", str(value3)).replace("DD", str(value4))
                             msg = bytes.fromhex(formula)
                             result = witec_ser.write(msg)
-                            data = str(witec_ser.readlines(1))
+                            data_span = str(witec_ser.readlines(1))
 
                             patch_payload_configuration = 'target_value=-1'
                             response = requests.request(
