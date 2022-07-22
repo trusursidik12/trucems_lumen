@@ -29,9 +29,9 @@ class PlcSeeder extends Seeder
             'd6' => 0,
             'd7' => 0,
             'sleep_sampling' => 5,
-            'sleep_blowback' => 5,
+            'sleep_blowback' => 30,
             'loop_sampling' => 36,
-            'loop_blowback' => 2,
+            'loop_blowback' => 1,
         ]);
     }
 }

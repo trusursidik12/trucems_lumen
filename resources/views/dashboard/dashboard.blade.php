@@ -20,21 +20,25 @@
                 </div>
                 <div id="section-values" class="px-3 py-2 flex flex-col space-y-2">
                     @foreach ($sensorValues as $value)
-                        {{-- <div class="bg-gray-400 h-[7rem] flex justify-between items-start" data-id="{{ $value->sensor_id }}"> --}}
-                        {{-- <div class="bg-gray-400 h-[20rem] flex justify-between items-start" data-id="{{ $value->sensor_id }}"> --}}
-                        <div class="bg-gray-400 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7)}}rem] flex justify-between items-start" data-id="{{ $value->sensor_id }}">
+                        <div class="bg-gray-400 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7) }}rem] flex justify-between items-start"
+                            data-id="{{ $value->sensor_id }}">
                             <input type="hidden" name="sensor_id" class="sensor_id" value="{{ $value->sensor_id }}">
-                            <div class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[5rem] flex flex-col items-center justify-center">
+                            <div
+                                class="section-sensor-name transition duration-500 bg-gray-600 text-white h-full w-[5rem] flex flex-col items-center justify-center">
                                 <span class="text-2xl font-bold sensor-name">{!! $value->sensor->name !!}</span>
                             </div>
-                            <div class="section-sensor-value transition duration-500 bg-gray-500 text-white flex flex-1 flex-col h-full justify-center items-center">
+                            <div
+                                class="section-sensor-value transition duration-500 bg-gray-500 text-white flex flex-1 flex-col h-full justify-center items-center">
                                 <span class="text-5xl font-bold sensor-value">
                                     <span>{{ $value->value }}</span>
                                 </span>
                             </div>
-                            <div class="section-sensor-unit transition duration-500 bg-gray-400 flex w-[5rem] flex-col h-full justify-between items-center">
+                            <div
+                                class="section-sensor-unit transition duration-500 bg-gray-400 flex w-[5rem] flex-col h-full justify-between items-center">
                                 <span class="mt-3 text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
-                                <button data-id="{{ $value->sensor_id }}" data-isClicked="false" class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 text-white">Highlight</buttond>
+                                <button data-id="{{ $value->sensor_id }}" data-isClicked="false"
+                                    class="w-full btn-highlight px-2 py-3 text-sm bg-indigo-700 text-white">Highlight
+                                    </buttond>
                             </div>
                         </div>
                     @endforeach
@@ -54,9 +58,9 @@
                         class="{{ $plc->is_calibration == 1 ? '' : 'hide' }} active">
                         Calibration
                     </button>
-                    <button type="button" id="btn-start-mt" data-status="{{ ($plc->is_maintenance == 1) ? 0 : 1 }}"
-                        class="{{ ($plc->is_maintenance == 1) ? 'deactive' : '' }}">
-                        {{ ($plc->is_maintenance == 1) ? 'Stop Maintenance' : 'Start Maintenance' }}
+                    <button type="button" id="btn-start-mt" data-status="{{ $plc->is_maintenance == 1 ? 0 : 1 }}"
+                        class="{{ $plc->is_maintenance == 1 ? 'deactive' : '' }}">
+                        {{ $plc->is_maintenance == 1 ? 'Stop Maintenance' : 'Start Maintenance' }}
                     </button>
                     <button onclick="return window.location.href=`{{ url('api/relay') }}`" id="btn-relay-test-menu"
                         class="{{ $plc->is_maintenance == 1 ? '' : 'hide' }} active">
@@ -65,7 +69,6 @@
                     <button onclick="return window.location.href=`{{ url('configurations') }}`">Configurations</button>
                     <button onclick="return window.location.href=`{{ url('calibration/logs') }}`">Calibration
                         Logs</button>
-                    {{-- <a href="{{ url("settings") }}">Setting</a> --}}
                     <button onclick="return window.location.href=`{{ url('quality-standards') }}`">Baku Mutu</button>
                 </nav>
             </div>
@@ -194,7 +197,7 @@
                                         .addClass('active')
                                     $('#btn-start-cems').html('Start CEMS')
                                 }
-                            }, 5000);
+                            }, 30000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cems').attr('data-status', "1")
@@ -225,7 +228,8 @@
                         if (data.success) {
                             setTimeout(() => {
                                 $('button').prop('disabled', false)
-                                if (data.data.is_calibration == 0 || data.data.is_calibration == 2) {
+                                if (data.data.is_calibration == 0 || data.data
+                                    .is_calibration == 2) {
                                     $('#btn-start-cal').attr('data-status', "1")
                                     $('#btn-start-cal').removeClass('deactive')
                                     $('#btn-start-cal').html('Start Calibration')
@@ -237,7 +241,7 @@
                                     $('#btn-start-cal').html('Stop Calibration')
                                     $('#btn-cal-menu').removeClass('hide')
                                 }
-                            }, 10000);
+                            }, 15000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cal').attr('data-status', "1")
@@ -268,7 +272,8 @@
                         if (data.success) {
                             setTimeout(() => {
                                 $('button').prop('disabled', false)
-                                if (data.data.is_maintenance == 0 || data.data.is_maintenance == 2) {
+                                if (data.data.is_maintenance == 0 || data.data
+                                    .is_maintenance == 2) {
                                     $('#btn-start-mt').attr('data-status', "1")
                                     $('#btn-start-mt').removeClass('deactive')
                                     $('#btn-start-mt').html('Start Maintenance')
@@ -289,7 +294,7 @@
                                     $('#btn-start-cems').html('Start CEMS')
                                     $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, {{ env('APP_ENV') == "local" ? 1000 : 30000 }});
+                            }, {{ env('APP_ENV') == 'local' ? 1000 : 30000 }});
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")
@@ -308,9 +313,9 @@
         })
     </script>
     <script>
-        $(document).ready(function(){
-            $(".btn-highlight").click(function(){
-                if($(this).data("isClicked") == "false" || $(this).data("isClicked") == undefined){
+        $(document).ready(function() {
+            $(".btn-highlight").click(function() {
+                if ($(this).data("isClicked") == "false" || $(this).data("isClicked") == undefined) {
                     $(this).html("Cancel")
                     $(this).data("isClicked", "true")
                     $(this).removeClass(['bg-indigo-700']).addClass('bg-gray-700')
@@ -322,7 +327,7 @@
                     sectionName.removeClass(['bg-gray-600']).addClass(['bg-indigo-600'])
                     sectionValue.removeClass(['bg-gray-500']).addClass(['bg-indigo-500'])
                     sectionUnit.removeClass(['bg-gray-400']).addClass(['bg-indigo-400'])
-                }else{
+                } else {
                     $(this).html("Highlight")
                     $(this).data("isClicked", "false")
                     $(this).addClass(['bg-indigo-700']).removeClass('bg-gray-700')
@@ -335,7 +340,7 @@
                     sectionValue.addClass(['bg-gray-500']).removeClass(['bg-indigo-500'])
                     sectionUnit.addClass(['bg-gray-400']).removeClass(['bg-indigo-400'])
                 }
-                
+
             })
         })
     </script>
