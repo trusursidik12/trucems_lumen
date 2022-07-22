@@ -6,7 +6,7 @@ use App\Models\Sensor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-class Sensor1paramSeeder extends Seeder
+class Sensor1ParamSeeder extends Seeder
 {
     /**
      * Run the database seeds.
