@@ -18,7 +18,8 @@ class CalibrationController extends Controller
             return redirect(url("calibration/manual/" . $type . "/process"));
         }
         $sensors = Sensor::get();
-        return view('calibration.manual', compact('config', 'sensors'));
+        $count = $sensors->count();
+        return view('calibration.manual', compact('config', 'sensors', 'count'));
     }
     public function logs()
     {
