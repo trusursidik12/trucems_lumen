@@ -78,7 +78,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            if (localStorage.getItem("unit") === undefined) {
+            if (localStorage.getItem("unit") === undefined || localStorage.getItem("unit") == null) {
                 localStorage.setItem("unit", "ppm")
             }
 
