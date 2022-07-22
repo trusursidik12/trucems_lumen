@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ url('sweetalert2/sweetalert2.min.css') }}">
     <style>
         #KioskBoard-VirtualKeyboard {
-            height: 36vh;
+            height: 46vh;
         }
     </style>
 @endsection
@@ -18,7 +18,7 @@
             class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>Close</button>
             <span class="bg-indigo-700 px-5 py-4"></span>
            </div>
-            <div class="flex justify-content-betwen items-center px-4 pt-16">
+            <div class="flex justify-content-betwen items-center px-4">
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>
                     <div id="section-values">
