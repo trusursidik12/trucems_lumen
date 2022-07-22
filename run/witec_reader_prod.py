@@ -95,7 +95,7 @@ try:
                     "GET", get_url_sensors, headers=headers, data=get_payload)
                 json_get_sensor = json.loads(response_sensor_lists.text)
                 for ch in json_get_sensor:
-                    msg = bytes.fromhex(str(ch['read_formula']))
+                    msg = bytes.fromhex("0F 00 00 00 00 00 55 00")
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
                     # start parse data
