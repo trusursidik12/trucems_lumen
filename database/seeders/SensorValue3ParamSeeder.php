@@ -7,7 +7,7 @@ use App\Models\SensorValue;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-class SensorValueSeeder extends Seeder
+class SensorValue3ParamSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -21,15 +21,15 @@ class SensorValueSeeder extends Seeder
         SensorValue::insert([
             [
                 'sensor_id' => 1,
-                'value' => 0,
+                'value' => 0.01,
             ],
             [
                 'sensor_id' => 2,
-                'value' => 0,
+                'value' => 0.02,
             ],
             [
                 'sensor_id' => 3,
-                'value' => 0,
+                'value' => 0.03,
             ]
         ]);
     }

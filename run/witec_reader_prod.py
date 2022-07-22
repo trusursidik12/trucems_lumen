@@ -98,6 +98,7 @@ try:
                     msg = bytes.fromhex(str(ch['read_formula']))
                     result = witec_ser.write(msg)
                     data = str(witec_ser.readlines(1))
+                    print(data)
                     # start parse data
                     data_value = data.replace("[b'", "").replace(
                         "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
