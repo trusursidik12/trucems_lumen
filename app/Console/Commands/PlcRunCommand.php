@@ -262,7 +262,8 @@ class PlcRunCommand extends Command
             ['d' => 3, 'data' => 'flipflop', 'sleep' => 2, 'loop' => 9, 'type' => 'sampling'], //sampling
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
+            // ['d' => 5, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
+            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer], //blowback
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
             ['d' => 6, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
@@ -284,7 +285,8 @@ class PlcRunCommand extends Command
         $this->blowback = [
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 1, 'data' => 'FF00', 'sleep' => $timer],
-            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
+            // ['d' => 5, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
+            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer], //blowback
             ['d' => 3, 'data' => 'FF00', 'sleep' => $timer],
             ['d' => 6, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
