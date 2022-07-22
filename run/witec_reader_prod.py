@@ -78,8 +78,9 @@ try:
                 # start alarm
                 msg_alarm = bytes.fromhex("50 00 00 00 00 00 55 00")
                 result = witec_ser.write(msg_alarm)
-                data = str(witec_ser.readlines(1))
-                data_value_alarm = data.replace("[b'", "").replace(
+                data_alarm = str(witec_ser.readlines(1))
+                print(data_alarm)
+                data_value_alarm = data_alarm.replace("[b'", "").replace(
                     "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                 if(data_value_alarm):
                     round_value_alarm = round(float(data_value_alarm), 3)
@@ -97,9 +98,10 @@ try:
                 for ch in json_get_sensor:
                     msg = bytes.fromhex("0F 00 00 00 00 00 55 00")
                     result = witec_ser.write(msg)
-                    data = str(witec_ser.readlines(1))
+                    data_conc = str(witec_ser.readlines(1))
                     # start parse data
-                    data_value = data.replace("[b'", "").replace(
+                    print(data_conc)
+                    data_value = data_conc.replace("[b'", "").replace(
                         "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                     # end parse data
                     # start check sensors is online
