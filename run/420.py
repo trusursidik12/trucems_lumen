@@ -36,22 +36,24 @@ while True:
             else:
                 result = client.write_coils(0, [0], unit=1)
 
-            response_configuration = requests.request(
+            response_value = requests.request(
                 "GET", url + "sensor-value-logs", headers=headers, data=get_payload)
-            json_get = json.loads(response_configuration.text)
-            value = float(json_get["data"][0]["value"])
-            if(value < 0):
-                value = 0
-            else:
-                value = value
-            fix_value = int(((0.16 * value) + 4) * 1000)
-            if(fix_value > 4000 and fix_value < 20000):
+            json_get = json.loads(response_value.text)
+            for dv in json_get['data']:
+                value = float(dv['value'])
+                sensor_id = dv['sensor_id'] - 1
+                if(value < 0):
+                    value = 0
+                else:
+                    value = value
+                fix_value = int(((0.16 * value) + 4) * 1000)
                 # digital to analog 4~20
-                write = client.write_register(0, fix_value, unit=2)
-            elif(fix_value < 4000):
-                write = client.write_register(0, 4000, unit=2)
-            elif(fix_value > 20000):
-                write = client.write_register(0, 20000, unit=2)
+                if(fix_value > 4000 and fix_value < 20000):
+                    write = client.write_register(sensor_id, fix_value, unit=2)
+                elif(fix_value < 4000):
+                    write = client.write_register(sensor_id, 4000, unit=2)
+                elif(fix_value > 20000):
+                    write = client.write_register(sensor_id, 20000, unit=2)
         except Exception as e:
             do_nothing = ''
     else:
