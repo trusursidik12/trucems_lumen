@@ -43,16 +43,6 @@
                                 class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
                         </span>
                     </div>
-                    <div class="flex my-2 justify-between items-center">
-                        <span class="w-2/2">
-                            <span class="uppercase font-semibold text-2xl">Baku Mutu <small class="font-thin text-xs lowercase">(mg/m<sup>3</sup>)</small></span>
-                        </span>
-                        <span class="w-1/3">
-                            <input type="number" required min="1" name="quality_standard" data-kioskboard-type="numpad"
-                                data-kioskboard-placement="bottom" value="{{ $sensor->quality_standard }}"
-                                class="js-virtual-keyboard rounded px-3 py-2 h-14 text-2xl outline-none w-full">
-                        </span>
-                    </div>
                 </div>
                 <div class="w-1/2 px-6 py-3 border-l-2 border-gray-400">
                     <div class="flex my-2 justify-between items-center">

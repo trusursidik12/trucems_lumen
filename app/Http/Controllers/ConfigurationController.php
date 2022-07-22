@@ -14,8 +14,7 @@ class ConfigurationController extends Controller
     public function index()
     {
         $plc = Plc::find(1);
-        $sensor = Sensor::find(1);
-        return view('configuration.index', compact('plc', 'sensor'));
+        return view('configuration.index', compact('plc'));
     }
     public function update(Request $request)
     {
