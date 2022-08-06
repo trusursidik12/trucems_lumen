@@ -199,7 +199,7 @@ class PlcRunCommand extends Command
                 for ($i = 0; $i <= 7; $i++) {
                     $this->sendQuery($i, ($i == 7 ? 'FF00' : '0000'));
                 }
-                $plc->update(['is_calibration' => 1, 'is_cga' => 0, 'd_off' => 1]);
+                $plc->update(['is_calibration' => 1, 'is_cga' => 0, 'd_off' => 0]);
                 return true;
             } else {
                 return false;
@@ -291,6 +291,11 @@ class PlcRunCommand extends Command
             ['d' => 6, 'data' => 'FF00', 'sleep' => $timer, 'type' => 'blowback'], //blowback
             ['d' => -1, 'data' => '0000', 'sleep' => $timer],
             ['d' => 7, 'data' => 'FF00', 'sleep' => $timer],
+        ];
+        $this->cga = [
+            ['d' => -1, 'data' => '0000', 'sleep' => $timer],
+            ['d' => 0, 'data' => 'FF00', 'sleep' => $timer],
+            ['d' => 5, 'data' => 'FF00', 'sleep' => $timer],
         ];
         // $this->blowback = [
         //     ['d' => -1, 'data' => '0000', 'sleep' => $timer],

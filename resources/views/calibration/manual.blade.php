@@ -15,7 +15,7 @@
                 <div>
                     <button id="btn-show-cga" type="button"
                         class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
-                        CGA
+                        Mode CGA
                     </button>
                     <button id="btn-show-blowback" type="button"
                         class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
@@ -37,7 +37,7 @@
                             <div class="text-red-500"></div>
                             <button type="button" id="btn-start-cga"
                                 class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
-                                Start CGA
+                                Start Mode CGA
                             </button>
                             <button type="button" id="btn-cancel-cga"
                                 class="disabled:bg-gray-500 px-5 py-4 bg-red-500 text-white">

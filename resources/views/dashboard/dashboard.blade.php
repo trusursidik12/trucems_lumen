@@ -197,7 +197,7 @@
                                         .addClass('active')
                                     $('#btn-start-cems').html('Start CEMS')
                                 }
-                            }, 30000);
+                            }, 40000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cems').attr('data-status', "1")
@@ -241,7 +241,7 @@
                                     $('#btn-start-cal').html('Stop Calibration')
                                     $('#btn-cal-menu').removeClass('hide')
                                 }
-                            }, 15000);
+                            }, 30000);
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-cal').attr('data-status', "1")
