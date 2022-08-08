@@ -135,7 +135,7 @@ try:
                             getNo2 = requests.request(
                                 "GET", link_url+"api/sensor-value/3", headers=headers)
                             no2 = json.loads(getNo2.text)
-                            round_value = no2['value'] + round_value
+                            round_value = round(no2['value'] + round_value, 2)
                             patch_payload_sensor_values = 'value=' + \
                                 str(round_value)+''
                             response = requests.request(
@@ -144,7 +144,7 @@ try:
                             getNo = requests.request(
                                 "GET", link_url+"api/sensor-value/1", headers=headers)
                             no = json.loads(getNo.text)
-                            round_value = no['value'] + round_value
+                            round_value = round(no['value'] + round_value, 2)
                             patch_payload_sensor_values = 'value=' + \
                                 str(round_value)+''
                             response = requests.request(
@@ -191,7 +191,7 @@ try:
                 # end read concentration
             # else:
                 # print(json_get_configuration)
-            time.sleep(1)
+            time.sleep(2)
             witec_ser.close()  # Close serial port
         except serial.serialutil.SerialException as e:
             # set data now
