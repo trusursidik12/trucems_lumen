@@ -21,4 +21,7 @@ class Sensor extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+    public function SensorValues(){
+        return $this->belongsTo(SensorValue::class);
+    }
 }

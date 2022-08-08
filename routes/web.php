@@ -84,6 +84,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
      * List Sensors
      */
     $router->get('/sensor-lists', 'API\SensorsController@index');
+    $router->get('/sensor-value/{sensorId}', 'API\SensorsController@getById');
 
     /**
      * Calibration Logs

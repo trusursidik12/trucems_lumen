@@ -94,20 +94,16 @@ try:
                 response_sensor_lists = requests.request(
                     "GET", get_url_sensors, headers=headers, data=get_payload)
                 json_get_sensor = json.loads(response_sensor_lists.text)
-                data_value = []
                 for ch in json_get_sensor:
-                    if(ch['read_formula'] == "nox"):
-                        data_value[[ch['sensor_id']]] = data_value[1] + data_value[3]                        
-                    else:
-                        msg = bytes.fromhex(ch['read_formula'])
-                        result = witec_ser.write(msg)
-                        data_conc = str(witec_ser.readlines(1))
-                        # start parse data
-                        data_value[ch['sensor_id']] = data_conc.replace("[b'", "").replace(
-                            "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
+                    msg = bytes.fromhex(ch['read_formula'])
+                    result = witec_ser.write(msg)
+                    data_conc = str(witec_ser.readlines(1))
+                    # start parse data
+                    data_value = data_conc.replace("[b'", "").replace(
+                        "\\r\\n']", "").replace("[]", "").replace("\\x00']", "")
                         # end parse data
                     # start check sensors is online
-                    if(data_value[ch['sensor_id']]):
+                    if(data_value):
                         # start get plc status
                         response_plc_status = requests.request(
                             "GET", get_url_plc_status, headers=headers, data=get_payload)
@@ -116,22 +112,39 @@ try:
                         # end get plc status
 
                         if(json_get_plc_status["data"]["is_calibration"] == 1):
-                            round_value = round(float(data_value[ch['sensor_id']]), 2)
+                            round_value = round(float(data_value), 2)
                         else:
-                            data_value[ch['sensor_id']] = data_value[ch['sensor_id']] if float(
-                                data_value[ch['sensor_id']]) >= 0 else 0
+                            data_value = data_value if float(
+                                data_value) >= 0 else 0
                             round_value = round(
-                                float(data_value[ch['sensor_id']]), 2)
+                                float(data_value), 2)
                         # end calibration condition check
                     else:
                         # value set when the sensor is offline!
                         round_value = -2.222
                     # end check sensors is online
                     # update sensor values
-                    patch_payload_sensor_values = 'value='+str(round_value)+''
-                    response = requests.request(
-                        "PATCH", patch_url_sensor_values + str(ch['id']), headers=headers, data=patch_payload_sensor_values)
+                    if(ch['code'] != "nox"):
+                        patch_payload_sensor_values = 'value='+str(round_value)+''
+                        response = requests.request(
+                            "PATCH", patch_url_sensor_values + str(ch['id']), headers=headers, data=patch_payload_sensor_values)
 
+                        if(ch['code'] == "no"):
+                            getNo2 = requests.request(
+                                "GET", link_url+"api/sensor-value/3", headers=headers)
+                            no2 = json.loads(getNo2)
+                            round_value = no2['value'] + round_value
+                            patch_payload_sensor_values = 'value='+str(round_value)+''
+                            response = requests.request(
+                                "PATCH", patch_url_sensor_values + str(4), headers=headers, data=patch_payload_sensor_values)
+                        if(ch['code'] == "no2"):
+                            getNo2 = requests.request(
+                                "GET", link_url+"api/sensor-value/1", headers=headers)
+                            no2 = json.loads(getNo2)
+                            round_value = no2['value'] + round_value
+                            patch_payload_sensor_values = 'value='+str(round_value)+''
+                            response = requests.request(
+                                "PATCH", patch_url_sensor_values + str(4), headers=headers, data=patch_payload_sensor_values)
                     # start calibration
                     # start is zero calibration
                     if(json_get_configuration["data"]["is_calibration"] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != None):
