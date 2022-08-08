@@ -44,6 +44,15 @@ class Sensor3ParamSeeder extends Seeder
                 'read_formula' => '0F 01 00 00 00 00 55 00', //ch4
                 'write_formula' => '60 03 AA BB CC DD 7A 00', //ch4
                 'quality_standard' => 100 // 20 m/g = Recovery, 40 m/g lime klin)
+            ],
+            [
+                'unit_id' => 1,
+                'code' => 'nox',
+                'name' => 'NO<sub>x</sub>',
+                'unit_formula' => 'Math.round(value.value * (46/22.4) * 100) / 100',
+                'read_formula' => 'nox', //ch4
+                'write_formula' => '', //ch4
+                'quality_standard' => 100 // 20 m/g = Recovery, 40 m/g lime klin)
             ]
         ]);
         $this->call(SensorValue3ParamSeeder::class);

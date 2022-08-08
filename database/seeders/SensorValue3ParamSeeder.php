@@ -30,6 +30,10 @@ class SensorValue3ParamSeeder extends Seeder
             [
                 'sensor_id' => 3,
                 'value' => 0.03,
+            ],
+            [
+                'sensor_id' => 4,
+                'value' => 0.04,
             ]
         ]);
     }
