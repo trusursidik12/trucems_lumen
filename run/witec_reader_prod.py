@@ -128,20 +128,20 @@ try:
                         patch_payload_sensor_values = 'value='+str(round_value)+''
                         response = requests.request(
                             "PATCH", patch_url_sensor_values + str(ch['id']), headers=headers, data=patch_payload_sensor_values)
-
+                        
                         if(ch['code'] == "no"):
                             getNo2 = requests.request(
                                 "GET", link_url+"api/sensor-value/3", headers=headers)
-                            no2 = json.loads(getNo2)
+                            no2 = json.loads(getNo2.text)
                             round_value = no2['value'] + round_value
                             patch_payload_sensor_values = 'value='+str(round_value)+''
                             response = requests.request(
                                 "PATCH", patch_url_sensor_values + str(4), headers=headers, data=patch_payload_sensor_values)
                         if(ch['code'] == "no2"):
-                            getNo2 = requests.request(
+                            getNo = requests.request(
                                 "GET", link_url+"api/sensor-value/1", headers=headers)
-                            no2 = json.loads(getNo2)
-                            round_value = no2['value'] + round_value
+                            no = json.loads(getNo.text)
+                            round_value = no['value'] + round_value
                             patch_payload_sensor_values = 'value='+str(round_value)+''
                             response = requests.request(
                                 "PATCH", patch_url_sensor_values + str(4), headers=headers, data=patch_payload_sensor_values)
