@@ -54,13 +54,13 @@
                 <div class="flex justify-between space-x-3 items-center" id="section-form">
                     <div class="w-1/2 px-6 py-3 border-r-2 border-gray-400">
                         <button data-sensorId="{{ $sensor->id }}" type="button"
-                            class="btn-start btn_zero disabled:bg-gray-500 w-full py-4 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7)}}rem] text-xl font-bold bg-indigo-500 text-white">
+                            class="btn-start btn_zero disabled:bg-gray-500 w-full py-4 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7) }}rem] text-xl font-bold bg-indigo-500 text-white">
                             {!! $sensor->name !!} ZERO Calibration
                         </button>
                     </div>
                     <div class="w-1/2 px-6 py-3">
                         <button data-sensorId="{{ $sensor->id }}" data-type="span" type="button"
-                            class="btn-start btn_span disabled:bg-gray-500 w-full py-4 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7)}}rem] text-xl font-bold bg-indigo-500 text-white">
+                            class="btn-start btn_span disabled:bg-gray-500 w-full py-4 h-[{{ $count == 1 ? 20 : ($count == 2 ? 12 : 7) }}rem] text-xl font-bold bg-indigo-500 text-white">
                             {!! $sensor->name !!} SPAN Calibration
                         </button>
                     </div>
