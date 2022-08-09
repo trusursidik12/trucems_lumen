@@ -13,33 +13,35 @@
     <div class="px-6 py-3 bg-gray-200 rounded">
 
         <div class="h-[88vh] bg-gray-300 rounded-tl-3xl rounded-br-3xl">
-           <div class="flex justify-between">
-            <button id="btn_close"
-            class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>Close</button>
-            <span class="bg-indigo-700 px-5 py-4"></span>
-           </div>
+            <div class="flex justify-between">
+                <button id="btn_close"
+                    class="px-5 py-4 bg-red-500 rounded-tl-3xl rounded-br-3xl text-white disabled:bg-gray-500"{{ @$calibrationLog->result_value == null && !empty($calibrationLog) ? 'disabled' : '' }}>Close</button>
+                <span class="bg-indigo-700 px-5 py-4"></span>
+            </div>
             <div class="flex justify-content-betwen items-center px-4">
                 <div class="w-1/2 border-r border-gray-400 block items-center" id="section-left">
                     <p class="block font-semibold text-sm text-indigo-700 last-avg">Current Value :</p>
                     <div id="section-values">
-                        @if ($type == "ZERO")
+                        @if ($type == 'ZERO')
                             @foreach ($sensorValues as $value)
-                                <div class="flex justify-between items-center px-3 section-value border-b border-gray-400 py-2"
-                                    data-sensor-id="{{ $value->sensor_id }}">
-                                    <span class="text-xl sensor-name">{!! $value->sensor->name !!}</span>
-                                    <span class="text-7xl font-bold text-indigo-700 sensor-value"></span>
-                                    <span class="text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
-                                </div>
-                            @endforeach
+                                @if ($value->sensor_id != 4)
+                                    <div class="flex justify-between items-center px-3 section-value border-b border-gray-400 py-2"
+                                        data-sensor-id="{{ $value->sensor_id }}">
+                                        <span class="text-xl sensor-name">{!! $value->sensor->name !!}</span>
+                                        <span class="text-7xl font-bold text-indigo-700 sensor-value"></span>
+                                        <span class="text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
                         @else
-                        <div class="flex justify-between items-center px-3 section-value"
-                            data-sensor-id="{{ $sensorValues->sensor_id }}">
-                            <span class="text-xl sensor-name">{!! $sensorValues->sensor->name !!}</span>
-                            <span class="text-8xl font-bold text-indigo-700 sensor-value"></span>
-                            <span class="text-xl sensor-unit">{{ $sensorValues->sensor->unit->name }}</span>
-                        </div>
+                            <div class="flex justify-between items-center px-3 section-value"
+                                data-sensor-id="{{ $sensorValues->sensor_id }}">
+                                <span class="text-xl sensor-name">{!! $sensorValues->sensor->name !!}</span>
+                                <span class="text-8xl font-bold text-indigo-700 sensor-value"></span>
+                                <span class="text-xl sensor-unit">{{ $sensorValues->sensor->unit->name }}</span>
+                            </div>
                         @endif
-                       
+
                     </div>
                 </div>
                 <div class="w-1/2" id="section-right">
@@ -155,7 +157,7 @@
             function getRealtimeValue() {
                 let random = Math.floor(Math.random() * 100)
                 $.ajax({
-                    url: `{{ url('api/calibration/get-realtime-value/'.($type == "ZERO" ? 1 : 2)) }}?t=${random}`,
+                    url: `{{ url('api/calibration/get-realtime-value/' . ($type == 'ZERO' ? 1 : 2)) }}?t=${random}`,
                     type: 'get',
                     dataType: 'json',
                     data: $(this).serialize(),
