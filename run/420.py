@@ -6,7 +6,7 @@ from time import sleep
 
 
 port = '/dev/ttyANALOG'
-# port = 'COM5'
+# port = 'COM9'
 baudrate = 9600
 client = ModbusClient(
     method='rtu', port=port, baudrate=baudrate, parity='N', timeout=1
@@ -40,20 +40,22 @@ while True:
                 "GET", url + "sensor-value-logs", headers=headers, data=get_payload)
             json_get = json.loads(response_value.text)
             for dv in json_get['data']:
-                value = float(dv['value'])
-                sensor_id = dv['sensor_id'] - 1
-                if(value < 0):
-                    value = 0
-                else:
-                    value = value
-                fix_value = int(((0.16 * value) + 4) * 1000)
-                # digital to analog 4~20
-                if(fix_value > 4000 and fix_value < 20000):
-                    write = client.write_register(sensor_id, fix_value, unit=2)
-                elif(fix_value < 4000):
-                    write = client.write_register(sensor_id, 4000, unit=2)
-                elif(fix_value > 20000):
-                    write = client.write_register(sensor_id, 20000, unit=2)
+                if(dv['sensor_id'] != 4):
+                    value = float(dv['value'])  # 272 ex
+                    sensor_id = dv['sensor_id'] - 1
+                    if(value < 0):
+                        value = 0
+                    else:
+                        value = value
+                    fix_value = int(((0.008 * value) + 4) * 1000)
+                    # digital to analog 4~20
+                    if(fix_value > 4000 and fix_value < 20000):
+                        write = client.write_register(
+                            sensor_id, fix_value, unit=2)
+                    elif(fix_value < 4000):
+                        write = client.write_register(sensor_id, 4000, unit=2)
+                    elif(fix_value > 20000):
+                        write = client.write_register(sensor_id, 20000, unit=2)
         except Exception as e:
             do_nothing = ''
     else:
