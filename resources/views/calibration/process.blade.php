@@ -31,8 +31,8 @@
                                         <span class="text-7xl font-bold text-indigo-700 sensor-value"></span>
                                         <span class="text-xl sensor-unit">{{ $value->sensor->unit->name }}</span>
                                     </div>
-                                @endforeach
-                            @endif
+                                @endif
+                            @endforeach
                         @else
                             <div class="flex justify-between items-center px-3 section-value"
                                 data-sensor-id="{{ $sensorValues->sensor_id }}">

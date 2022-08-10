@@ -219,6 +219,7 @@ try:
             logf.write("Error "+timestamp+" : \n"+str(e))
             logf.close()
             time.sleep(5)
+        time.sleep(2)
 except Exception as e:
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
