@@ -294,7 +294,7 @@
                                     $('#btn-start-cems').html('Start CEMS')
                                     $('#btn-relay-test-menu').removeClass('hide')
                                 }
-                            }, {{ env('APP_ENV') == 'local' ? 1000 : 30000 }});
+                            }, {{ env('APP_ENV') == 'local' ? 1000 : 45000 }});
                         } else {
                             $('button').prop('disabled', false)
                             $('#btn-start-mt').attr('data-status', "1")

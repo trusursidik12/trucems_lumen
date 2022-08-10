@@ -22,6 +22,8 @@ class CGAController extends Controller
     {
         try {
             $plc = Plc::find(1);
+            $plc->update(['is_calibration' => 0]);
+            sleep(3);
             $plc->update(['is_cga' => 1, 'd_off' => 0, 'is_calibration' => 0]);
             return response()->json(["success" => true, "message" => "Start CGA!"]);
         } catch (\Illuminate\Validation\ValidationException $e) {
