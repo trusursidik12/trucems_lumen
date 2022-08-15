@@ -52,6 +52,8 @@ class CGAController extends Controller
         try {
             $plc = Plc::find(1);
             $plc->update(['is_cga' => 2]);
+            $config = Configuration::find(1);
+            $config->update(['calibration_type' => 0, 'sensor_id' => 0, 'target_value' => null]);
             return response()->json(['success' => true, 'message' => 'CGA was update to finished!']);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
