@@ -1,5 +1,14 @@
 @extends('layouts.theme')
 @section('title', 'CGA Process')
+@section('css')
+    <link rel="stylesheet" href="{{ url('js/kioskboard/kioskboard-2.2.0.min.css') }}">
+    <link rel="stylesheet" href="{{ url('sweetalert2/sweetalert2.min.css') }}">
+    <style>
+        #KioskBoard-VirtualKeyboard {
+            height: 46vh;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="px-6 py-3 bg-gray-200 rounded">
         <div class="flex justify-between space-x-3">
@@ -43,7 +52,7 @@
                             <div id="span-form" class="hidden flex-row space-x-3 items-center">
                                 <form id="form_adjust_span">
                                     <div class="text-red-500"></div>
-                                    <select name="sensor_id" class="px-5 py-4 rounded w-1/8">
+                                    <select name="sensor_id" id="sensorid_value" class="px-5 py-4 rounded w-1/8">
                                         <option value="">SELECT</option>
                                         @foreach ($sensorValues as $list)
                                             @if ($list->sensor_id != 4)
@@ -51,9 +60,10 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    <input type="text" name="target_value" value="" data-kioskboard-type="keyboard"
-                                        data-kioskboard-specialcharacters="false" data-kioskboard-key-capslock="false"
-                                        class="js-virtual-keyboard px-5 py-4 rounded" placeholder="Target Value">
+                                    <input type="text" name="target_value" id="targetvalue_value" value=""
+                                        data-kioskboard-type="keyboard" data-kioskboard-specialcharacters="false"
+                                        data-kioskboard-key-capslock="false" class="js-virtual-keyboard px-5 py-4 rounded"
+                                        placeholder="Target Value">
                                     <button type="submit" id="btn-start-blowback"
                                         class="disabled:bg-gray-500 px-5 py-4 bg-indigo-700 text-white">
                                         SET SPAN
@@ -201,6 +211,8 @@
                 $('#btn-show-adjust-zero').removeClass('hidden')
                 $('#btn-switch').removeClass('hidden')
                 $('#timer').removeClass('hidden')
+                $('#sensorid_value').val('')
+                $('#targetvalue_value').val('')
                 $('#span-form').addClass('hidden').removeClass('flex')
             })
 
