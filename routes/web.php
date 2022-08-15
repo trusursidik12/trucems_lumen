@@ -61,11 +61,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/cga', 'API\CGAController@checkRemaining');
     $router->patch('/cga', 'API\CGAController@setCGA');
     $router->patch('/cga/finish', 'API\CGAController@finishCGA');
+
+    /**
+     * Set Calibration
+     */
+    $router->post('/adjust-set-value-zero', 'API\SetCalibrationController@offsetCGA');
+    $router->post('/adjust-set-value-span', 'API\SetCalibrationController@spanCGA');
+
     /**
      * Set Calibration
      */
     $router->patch('/set-calibration/{mode}/{type}', 'API\SetCalibrationController@setCalibration');
     $router->get('/calibration/get-realtime-value/{type}', 'API\SetCalibrationController@getRealtimeValue');
+
 
     /**
      * Start Calibration
