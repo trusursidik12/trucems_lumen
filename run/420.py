@@ -47,6 +47,7 @@ while True:
                         value = 0
                     else:
                         value = value
+                    #fix_value = int(((0.16 * value) + 4) * 1000)
                     fix_value = int(((0.008 * value) + 4) * 1000)
                     # digital to analog 4~20
                     if(fix_value > 4000 and fix_value < 20000):

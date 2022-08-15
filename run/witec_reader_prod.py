@@ -69,6 +69,13 @@ try:
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
 
+            # start get plc status
+            response_cga_status = requests.request(
+                "GET", get_url_plc_status, headers=headers, data=get_payload)
+            json_get_cga_status = json.loads(
+                response_cga_status.text)
+            # end get plc status
+
             # get configurations
             response_configuration = requests.request(
                 "GET", get_url_configuration, headers=headers, data=get_payload)
@@ -188,6 +195,46 @@ try:
                         # start check to select parameters to calibration
                     # end is span calibration
                     # end calibration
+
+                    # start calibration from CGA Mode
+                    # start is zero calibration
+                    if(json_get_cga_status['data']['is_cga'] == 1 and json_get_configuration["data"]["calibration_type"] == 1 and json_get_configuration["data"]["target_value"] != None):
+                        msg = bytes.fromhex("11 00 00 00 00 00 7A 00")
+                        result = witec_ser.write(msg)
+                        data_zero = str(witec_ser.readlines(1))
+                        patch_payload_configuration = 'target_value=-1'
+                        response = requests.request(
+                            "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
+                    # end is zero calibration
+                    # is span calibration
+                    if(json_get_cga_status['data']['is_cga'] == 1 and json_get_configuration["data"]["calibration_type"] == 2 and json_get_configuration["data"]["target_value"] != None):
+                        # start check to select parameters to calibration
+                        if(json_get_configuration["data"]["sensor_id"] == ch['id']):
+                            n = float_to_hex(
+                                json_get_configuration["data"]["target_value"])[2:]
+                            m = str(n)
+
+                            k = little(m)
+
+                            # start parse
+                            value1 = k[0:2]
+                            value2 = k[2:4]
+                            value3 = k[4:6]
+                            value4 = k[6:8]
+                            # end parse
+                            data_formula = ch['write_formula']
+                            formula = data_formula.replace("AA", str(value1)).replace(
+                                "BB", str(value2)).replace("CC", str(value3)).replace("DD", str(value4))
+                            msg = bytes.fromhex(formula)
+                            result = witec_ser.write(msg)
+                            data_span = str(witec_ser.readlines(1))
+
+                            patch_payload_configuration = 'target_value=-1'
+                            response = requests.request(
+                                "PATCH", patch_url_configuration, headers=headers, data=patch_payload_configuration)
+                        # start check to select parameters to calibration
+                    # end is span calibration
+                    # end calibration from CGA Mode
                 # end read concentration
             # else:
                 # print(json_get_configuration)
