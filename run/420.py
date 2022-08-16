@@ -4,20 +4,18 @@ import json
 import time
 from time import sleep
 
-
 port = '/dev/ttyANALOG'
 # port = 'COM9'
 baudrate = 9600
 client = ModbusClient(
     method='rtu', port=port, baudrate=baudrate, parity='N', timeout=1
 )
-# client = serial.Serial(port, baudrate, timeout=1)
+
 url = "http://localhost/trucems/public/api/"
 get_payload = {}
 headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
 }
-connection = client.connect()
 
 while True:
     # connection = True
@@ -40,15 +38,17 @@ while True:
                 "GET", url + "sensor-value-logs", headers=headers, data=get_payload)
             json_get = json.loads(response_value.text)
             for dv in json_get['data']:
-                if(dv['sensor_id'] != 4):
+                if(dv['sensor_id'] != 3):
                     value = float(dv['value'])  # 272 ex
                     sensor_id = dv['sensor_id'] - 1
                     if(value < 0):
                         value = 0
                     else:
                         value = value
-                    #fix_value = int(((0.16 * value) + 4) * 1000)
-                    fix_value = int(((0.008 * value) + 4) * 1000)
+                    get_analog_formula = requests.request(
+                        "GET", url + "sensor-value" + "/" + str(dv['sensor_id']), headers=headers, data=get_payload)
+                    json_get_qt = json.loads(get_analog_formula.text)
+                    fix_value = eval(json_get_qt['sensor']['analog_formula'])
                     # digital to analog 4~20
                     if(fix_value > 4000 and fix_value < 20000):
                         write = client.write_register(

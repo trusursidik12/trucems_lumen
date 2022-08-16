@@ -14,14 +14,15 @@ class Sensor extends Model
      * @var array
      */
     protected $fillable = [
-        'unit_id', 'code', 'name', 'unit_formula', 'read_formula', 'write_formula', 'quality_standard'
+        'unit_id', 'code', 'name', 'unit_formula', 'read_formula', 'write_formula', 'quality_standard', 'analog_formula'
     ];
 
     public function Unit()
     {
         return $this->belongsTo(Unit::class);
     }
-    public function SensorValues(){
+    public function SensorValues()
+    {
         return $this->belongsTo(SensorValue::class);
     }
 }

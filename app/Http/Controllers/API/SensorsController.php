@@ -17,13 +17,12 @@ class SensorsController extends Controller
     }
     public function getById($sensorId)
     {
-        $values = SensorValue::with('sensor:id,code')->where('sensor_id', $sensorId)->first();
+        $values = SensorValue::with('sensor:id,code,analog_formula')->where('sensor_id', $sensorId)->first();
         return response()->json($values);
     }
     public function getNOx()
     {
-        $values = SensorValue::whereIn('sensor_id', [1,3])->sum("value");
+        $values = SensorValue::whereIn('sensor_id', [1, 3])->sum("value");
         return response()->json(["nox" => $values]);
     }
-    
 }

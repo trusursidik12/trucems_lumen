@@ -7,26 +7,30 @@ use Illuminate\Http\Request;
 
 class SensorController extends Controller
 {
-    public function index(){
-        $sensors = Sensor::limit(10)->orderBy("id","desc")->get();
+    public function index()
+    {
+        $sensors = Sensor::limit(10)->orderBy("id", "desc")->get();
         return view('sensors.index', compact('sensors'));
     }
-    public function edit($sensorId){
+    public function edit($sensorId)
+    {
         $sensor = Sensor::find($sensorId);
         return view('sensors.edit', compact('sensor'));
     }
-    public function update($sensorId, Request $request){
-        try{
+    public function update($sensorId, Request $request)
+    {
+        try {
             $sensor = Sensor::find($sensorId);
             $column = $this->validate($request, [
                 'name' => 'required',
                 'code' => 'required',
                 'quality_standard' => 'required|numeric',
+                'analog_formula' => 'required',
             ]);
             $sensor->update($column);
-            return response()->json(['success'=>true, 'message' => 'Sensor was updated!']);
-        }catch(\Illuminate\Validation\ValidationException $e){
-            return response()->json(['success'=>false, 'message' => $e->getMessage()]);
+            return response()->json(['success' => true, 'message' => 'Sensor was updated!']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }
